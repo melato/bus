@@ -1,0 +1,40 @@
+** DEFINITIONS
+Route
+  - A bus route with a direction
+  - has list of stops, with coordinates
+  - has schedule
+
+Schedule
+  - contains departure information from the route start
+
+** CLASSES
+
+RouteManager
+  - get list of RouteDescription
+  - get waypoints of all stops
+  - each waypoint has links that are route ids
+  - get a route by id
+
+BusRoute
+	name, title
+	get Schedule
+	get GPX file with a Route that has all stops
+
+Schedule
+	get times for a particular day
+	
+** FILES
+${data.dir}/routes/${route}.xml
+	route file
+	contain name, title, schedule
+
+${data.dir}/gpx/${route}.gpx
+  gpx file
+	contain name, title, stop waypoints
+
+${data.dir}/routes.xml
+	route index
+	contains summary information (name, title) of all routes
+
+${data.dir}/stops.gpx
+	contains waypoints of all stops, with links to the route names

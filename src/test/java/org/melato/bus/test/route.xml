@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<routes>
+<route name="304" direction="out">
+  <title>Route Title</title>
+  <schedule days_bitmap="62">
+    <time value="5:00"/>
+    <time value="5:35"/>
+  </schedule>
+  <schedule days_bitmap="65">
+    <time value="6:00"/>
+  </schedule>
+</route>
+</routes>

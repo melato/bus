@@ -1,0 +1,27 @@
+android application:
+
+*** On board
+- Distance to destination
+- ETA to destination
+- Name of current/next stop
+
+**List of stops
+- centered on nearest stop
+- time/expected time
+- path distance from here
+- Select destination, for easy reference
+*** Waiting for bus
+- When will it get here?
+- What is the schedule?
+- How far is the start?
+
+*** Looking for a bus
+- Where is the nearest bus stop?
+
+
+*** Use Cases
+* List of stops
+- Display list of routes
+- Select a route
+- Display list of stops
+  for each stop display distance and time
