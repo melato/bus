@@ -23,6 +23,10 @@ public class Schedule {
     return Integer.parseInt(time.substring(0,p)) * 60 + Integer.parseInt(time.substring(p+1));
   }
     
+  /** Create an empty schedule. */
+  public Schedule() {
+  }
+
   public Schedule(DaySchedule[] schedules) {
     super();
     this.schedules = schedules;

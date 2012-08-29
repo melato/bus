@@ -8,7 +8,7 @@ import org.melato.xml.XMLTag;
 import org.xml.sax.SAXException;
 
 /**
- * XML element handler for route
+ * XML element handler for stop
  * @author Alex Athanasopoulos
  */
 public class StopHandler extends XMLMappingHandler {

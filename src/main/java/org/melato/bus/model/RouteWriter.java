@@ -49,6 +49,7 @@ public class RouteWriter {
     for( DaySchedule daySchedule: schedule.getSchedules() ) {
       xml.tagOpen( SCHEDULE, false );
       xml.tagAttribute(DAYS, String.valueOf(daySchedule.getDays()));
+      xml.tagClose();
       xml.println();
       for( int time: daySchedule.getTimes() ) {
         xml.tagOpen( TIME, false );

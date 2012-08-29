@@ -27,13 +27,14 @@ public class RouteHandler extends XMLMappingHandler {
   public RouteHandler() {
     setHandler( RouteWriter.TITLE, titleHandler );
     setHandler( RouteWriter.SCHEDULE, scheduleHandler );
-    setHandler( RouteWriter.STOPS, stopHandler );
+    //setHandler( RouteWriter.STOPS, stopHandler );
   }
   
   @Override
   public void start(XMLTag tag) throws SAXException {
     route = new Route();
     route.setName(tag.getRequiredAttribute(RouteWriter.NAME));
+    route.setDirection(tag.getRequiredAttribute(RouteWriter.DIRECTION));
     super.start(tag);
   }
   @Override
