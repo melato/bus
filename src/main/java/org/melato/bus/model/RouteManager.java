@@ -103,14 +103,18 @@ public class RouteManager {
     return loadRoute(route.qualifiedName());
   }
 
-  GPX loadGPX(Route route) {
+  public GPX loadGPX(String qualifiedName) {
     try {
-      URL url = makeUrl( GPX_DIR, route.qualifiedName() + ".gpx" );
+      URL url = makeUrl( GPX_DIR, qualifiedName + ".gpx" );
       GPXParser parser = new GPXParser();
       return parser.parse(url.openStream());
     } catch( IOException e ) {
       throw new RuntimeException(e);
     }
+  }
+
+  public GPX loadGPX(Route route) {
+    return loadGPX(route.qualifiedName());
   }
 
   public GPX loadAllStops() {
