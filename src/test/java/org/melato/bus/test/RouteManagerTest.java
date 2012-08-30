@@ -17,7 +17,7 @@ public class RouteManagerTest {
     URL url = getClass().getResource("data/");
     RouteManager routeManager = new RouteManager(url);
     Point target = new Point(37.98581f, 23.739164f);
-    List<Waypoint> near = routeManager.fildNearbyStops(target, 50);
+    List<Waypoint> near = routeManager.findNearbyStops(target, 50);
     Assert.assertEquals(1, near.size());
   }
 }

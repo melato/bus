@@ -133,7 +133,7 @@ public class RouteManager {
     }
   }
   
-  public List<Waypoint> fildNearbyStops(Point point, float distance) {
+  public List<Waypoint> findNearbyStops(Point point, float distance) {
     List<Waypoint> result = new ArrayList<Waypoint>();
     iterateAllStops(new NearbyFilter(point, distance, result));
     return result;
