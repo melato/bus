@@ -8,6 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.melato.bus.model.RouteManager;
+import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
@@ -19,5 +20,13 @@ public class RouteManagerTest {
     Point target = new Point(37.98581f, 23.739164f);
     List<Waypoint> near = routeManager.findNearbyStops(target, 50);
     Assert.assertEquals(1, near.size());
+  }
+  @Test public void testGPXRoute() throws Exception {
+    URL url = getClass().getResource("data/");
+    RouteManager routeManager = new RouteManager(url);
+    GPX gpx = routeManager.loadGPX("021-1");
+    Assert.assertEquals(1, gpx.getRoutes().size());
+    List<Waypoint> waypoints = gpx.getRoutes().get(0).path.getWaypoints();
+    Assert.assertTrue(waypoints.size() > 2 );
   }
 }
