@@ -1,13 +1,18 @@
 package org.melato.bus.model;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
+import org.melato.gpx.Point;
+import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
 
 
@@ -23,20 +28,39 @@ public class RouteManager {
   public static final String ROUTES_DIR = "routes";
   public static final String GPX_DIR = "gpx";
   
-  private File  dataDir;
+  private URL dataUrl;
   private List<Route> routes;
   
   public RouteManager(File dataDir) {
     super();
-    this.dataDir = dataDir;
+     try {
+      this.dataUrl = dataDir.toURI().toURL();
+    } catch (MalformedURLException e) {
+      throw new RuntimeException( e );
+    }   
   }
 
+  public RouteManager(URL dataUrl) {
+    super();
+    this.dataUrl = dataUrl;
+  }
+
+  private URL makeUrl(String file ) throws MalformedURLException {
+    URL url = new URL(dataUrl, file );
+    return url;    
+  }
+  
+  private URL makeUrl(String dir, String file ) throws MalformedURLException {
+    URL url = new URL(dataUrl, dir + "/" + file );      
+    return url;    
+  }
+  
   public List<Route> getRoutes() {
     if ( routes == null ) {
-      File file = new File(dataDir, ROUTES_FILE);
       routes = Collections.emptyList();
       try {
-        routes = RouteHandler.parse(new FileInputStream(file));
+        URL url = makeUrl( ROUTES_FILE );
+        routes = RouteHandler.parse(url.openStream());
         for( Route route: routes ) {
           route.routeManager = this;
           route.schedule = null;          
@@ -51,13 +75,12 @@ public class RouteManager {
   }
 
   Route loadRoute(Route route) {
-    File file = new File(dataDir, ROUTES_DIR);
-    file = new File(file, route.qualifiedName() + ".xml" );
     //System.out.println( "loading " + file );
     try {
-      List<Route> routes = RouteHandler.parse(new FileInputStream(file));
+      URL url = makeUrl( ROUTES_DIR, route.qualifiedName() + ".xml" );
+      List<Route> routes = RouteHandler.parse(url.openStream());
       if ( routes.isEmpty() ) {
-        throw new RuntimeException( "Cannot load " + file );
+        throw new RuntimeException( "Cannot load " + url );
       }
       // assume there is only one route in the file.  Return the first one.
       return routes.get(0);
@@ -69,14 +92,38 @@ public class RouteManager {
   }
 
   GPX loadGPX(Route route) {
-    File file = new File(dataDir, GPX_DIR);
-    file = new File(file, route.qualifiedName() + ".gpx" );
     try {
+      URL url = makeUrl( GPX_DIR, route.qualifiedName() + ".gpx" );
       GPXParser parser = new GPXParser();
-      return parser.parse(file);
+      return parser.parse(url.openStream());
+    } catch( IOException e ) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public GPX loadAllStops() {
+    try {
+      URL url = makeUrl( STOPS_FILE );
+      GPXParser parser = new GPXParser();
+      return parser.parse(url.openStream());
     } catch( IOException e ) {
       throw new RuntimeException(e);
     }
   }
   
+  public void iterateAllStops(Collection<Waypoint> collector) {
+    try {
+      URL url = makeUrl( STOPS_FILE );
+      GPXParser parser = new GPXParser();
+      parser.parseWaypoints(url.openStream(), collector);
+    } catch( IOException e ) {
+      throw new RuntimeException(e);
+    }
+  }
+  
+  public List<Waypoint> fildNearbyStops(Point point, float distance) {
+    List<Waypoint> result = new ArrayList<Waypoint>();
+    iterateAllStops(new NearbyFilter(point, distance, result));
+    return result;
+  }
 }

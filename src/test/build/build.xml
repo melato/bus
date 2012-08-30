@@ -1,0 +1,36 @@
+<project name="bus.test"
+	xmlns:ant="antlib:org.melato.ant"
+	xmlns:oasa="antlib:org.melato.oasa"
+	default="index"
+	>
+
+	<property name="data.dir" value="../java/org/melato/bus/test/data"/>
+	<property name="route.dir" value="${data.dir}/routes"/>
+	<property name="gpx.dir" value="${data.dir}/gpx"/>
+	<property name="routes" value="${data.dir}/routes.xml"/>
+	<property name="stops" value="${data.dir}/stops.gpx"/>
+
+	<ant:app/>
+
+	<target name="stop.index"
+		description="collect all waypoints into a single stops GPX file">
+		<oasa:stop.index
+			outputFile="${stops}">
+			<fileset dir="${gpx.dir}" includes="*.gpx"/>
+		</oasa:stop.index>
+	</target>
+
+	<target name="route.index"
+		description="creates routes.xml from routes/*.xml">
+		<oasa:route.index
+			indexFile="${routes}"
+			>
+			<fileset dir="${route.dir}" includes="*.xml"/>
+		</oasa:route.index>
+	</target>
+
+	<target name="index" depends="route.index,stop.index"
+		description="creates routes.xml and stops.gpx">
+	</target>
+
+</project>

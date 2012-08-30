@@ -10,9 +10,10 @@ Schedule
 ** CLASSES
 
 RouteManager
-  - get list of RouteDescription
+  + get list of RouteDescription
+  - get nearby waypoints
   - get waypoints of all stops
-  - each waypoint has links that are route ids
+  - get routes for stop waypoint
   - get a route by id
 
 BusRoute

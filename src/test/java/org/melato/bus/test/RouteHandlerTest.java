@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 
 public class RouteHandlerTest {
   @Test public void xmlTest() throws IOException, SAXException {
-    try {
       List<Route> routes = RouteHandler.parse( getClass().getResourceAsStream( "route.xml"));
       Assert.assertEquals(1, routes.size());
       Route route = routes.get(0);
@@ -41,9 +40,5 @@ public class RouteHandlerTest {
       times = schedule.getTimes(Calendar.SUNDAY);
       Assert.assertEquals( 1, times.length );
       Assert.assertEquals( 360, times[0] );
-      
-    } catch( Exception e ) {
-      e.printStackTrace();
-    }
   }
 }

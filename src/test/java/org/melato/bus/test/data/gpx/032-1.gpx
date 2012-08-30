@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="melato.org - http://melato.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<rte><rtept lat="37.982197" lon="23.775047"><name>ΑΦΕΤΗΡΙΑ</name>
+<sym>200035</sym>
+</rtept>
+<rtept lat="37.98248" lon="23.772564"><name>ΓΡΑΜΜΟΥ</name>
+<sym>200089</sym>
+</rtept>
+<rtept lat="37.98227" lon="23.77056"><name>ΠΑΛ.ΤΕΡΜΑ</name>
+<sym>200036</sym>
+</rtept>
+<rtept lat="37.98388" lon="23.768528"><name>ΝΟΣΟΚΟΜΕΙΟ ΠΑΙΔΩΝ</name>
+<sym>060706</sym>
+</rtept>
+<rtept lat="37.98317" lon="23.765194"><name>ΛΑΙΚΟ</name>
+<sym>060709</sym>
+</rtept>
+<rtept lat="37.98211" lon="23.762932"><name>ΟΤΕ</name>
+<sym>060710</sym>
+</rtept>
+<rtept lat="37.980816" lon="23.759884"><name>ΑΛΕΞ</name>
+<sym>060711</sym>
+</rtept>
+<rtept lat="37.97952" lon="23.756905"><name>ΚΑΦΕΝΕΙΟ</name>
+<sym>060712</sym>
+</rtept>
+<rtept lat="37.97844" lon="23.753263"><name>ΙΛIΣΙΑ</name>
+<sym>060713</sym>
+</rtept>
+<rtept lat="37.979443" lon="23.74644"><name>ΜΑΡΑΣΛΕΙΟΣ</name>
+<sym>060107</sym>
+</rtept>
+</rte>
+</gpx>
