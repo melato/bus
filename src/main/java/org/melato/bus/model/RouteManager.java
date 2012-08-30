@@ -74,10 +74,18 @@ public class RouteManager {
     return routes;
   }
 
-  Route loadRoute(Route route) {
-    //System.out.println( "loading " + file );
+  public Route getRoute( String qualifiedName ) {
+    for( Route route: getRoutes() ) {
+      if (qualifiedName.equals(route.qualifiedName()))
+          return route;
+    }
+    return null;    
+  }
+
+  public Route loadRoute( String qualifiedName ) {
     try {
-      URL url = makeUrl( ROUTES_DIR, route.qualifiedName() + ".xml" );
+      URL url = makeUrl( ROUTES_DIR, qualifiedName + ".xml" );
+      //System.out.println( "loading " + url );
       List<Route> routes = RouteHandler.parse(url.openStream());
       if ( routes.isEmpty() ) {
         throw new RuntimeException( "Cannot load " + url );
@@ -89,6 +97,10 @@ public class RouteManager {
     } catch( SAXException e ) {
       throw new RuntimeException(e);
     }
+  }
+    
+  Route loadRoute(Route route) {
+    return loadRoute(route.qualifiedName());
   }
 
   GPX loadGPX(Route route) {
