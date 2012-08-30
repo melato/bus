@@ -86,5 +86,11 @@ public class Route implements Cloneable {
   }
   public void setStops(String[] stops) {
     this.stops = stops;
-  }    
+  }
+
+  @Override
+  public String toString() {
+    return qualifiedName() + " " + title;
+  }
+  
 }
