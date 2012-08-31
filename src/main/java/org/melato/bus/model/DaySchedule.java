@@ -10,7 +10,9 @@ import java.util.GregorianCalendar;
  * May apply to several days of the week if they all have the same schedule every day. */
 public class DaySchedule {
   public static final int SUNDAY = 1;
-  public static final int SATURDAY = 1 << 6;
+  public static final int MONDAY_FRIDAY = 62;
+  public static final int SATURDAY = 64;
+  public static final int SATURDAY_SUNDAY = 65;
   /** times are stored as minutes from midnight. */
   private int[] times;
   private int   days;  // days is a bitmap, bit 0 = sunday, bit 6 = saturday

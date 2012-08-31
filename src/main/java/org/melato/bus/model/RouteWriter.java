@@ -1,5 +1,9 @@
 package org.melato.bus.model;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.melato.xml.XMLWriter;
 
 /**
@@ -26,6 +30,17 @@ public class RouteWriter {
   public RouteWriter() {
   }
 
+  public void begin(XMLWriter xml) {
+    xml.printHeader();
+    xml.tagOpen(RouteWriter.ROUTES);
+    xml.println();
+  }
+  
+  public void end(XMLWriter xml) {
+    xml.tagEnd(RouteWriter.ROUTES);
+    xml.println();
+  }
+  
   private void writeStops(Route route, XMLWriter xml) {
     if ( route.getStops() == null )
       return;
@@ -88,6 +103,19 @@ public class RouteWriter {
 
   public void setIncludeSchedule(boolean includeSchedule) {
     this.includeSchedule = includeSchedule;
+  }
+
+  public void writeRoutes(List<Route> routes, File file) throws IOException {
+    XMLWriter xml = new XMLWriter(file);
+    try {
+      begin(xml);
+      for( Route route: routes ) {
+        write(route, xml);
+      }
+      end(xml);
+    } finally {
+      xml.close();
+    }
   }
   
 }

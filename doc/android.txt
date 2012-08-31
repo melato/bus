@@ -28,16 +28,19 @@ android application:
   for each stop display distance and time
 
 *** Activities ***
-- RoutesActivity
-	- displays a list of routes to select from
-	- selecting a route goes to the Schedule activity
++ RoutesActivity
+	+ displays a list of routes to select from
+	+ selecting a route goes to the Schedule activity
 
-- ScheduleActivity
-	- displays the schedule of a route for the current day
++ ScheduleActivity
+	+ displays the schedule of a route for the current day
 
-- NearbyActivity
-	- displays nearby stops and routes
-	- selecting a route goes to the Schedule activity
++ NearbyActivity
+	+ displays nearby stops and routes
+	+ selecting a route goes to the Schedule activity
+
++ StopsActivity
+    - displays list of route stops for the current route
 
 - TrackActivity
     - displays list of nearby stops on the current route,

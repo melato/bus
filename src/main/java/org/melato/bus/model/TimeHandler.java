@@ -3,6 +3,7 @@ package org.melato.bus.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.melato.util.IntArrays;
 import org.melato.xml.XMLMappingHandler;
 import org.melato.xml.XMLTag;
 import org.xml.sax.SAXException;

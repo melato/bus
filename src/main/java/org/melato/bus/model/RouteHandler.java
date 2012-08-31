@@ -1,5 +1,7 @@
 package org.melato.bus.model;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -54,6 +56,13 @@ public class RouteHandler extends XMLMappingHandler {
     routesHandler.setHandler(RouteWriter.ROUTE, routeHandler);    
     XMLDelegator.parse(root, in);
     return routeHandler.getRoutes();
+  }
+  public static List<Route> parse(File file) throws IOException {
+    try {
+      return parse(new FileInputStream(file));
+    } catch(SAXException e ) {
+      throw new IOException(e);
+    }
   }
   public List<Route> getRoutes() {
     return routes;

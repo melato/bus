@@ -36,9 +36,12 @@ public class Schedule {
     return schedules;
   }
   
+  public DaySchedule getSchedule(Date date) {
+    return DaySchedule.findSchedule(schedules, date);    
+  }
   /** Get the schedule times for a given day of the week. */
   public int[] getTimes( Date date ) {
-    DaySchedule schedule = DaySchedule.findSchedule(schedules, date);
+    DaySchedule schedule = getSchedule(date);
     if ( schedule == null ) {
       return new int[0];
     }

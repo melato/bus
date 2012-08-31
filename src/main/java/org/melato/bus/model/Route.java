@@ -8,7 +8,7 @@ import org.melato.gpx.GPX;
  * @author Alex Athanasopoulos
  *
  */
-public class Route implements Cloneable {
+public class Route implements Cloneable, Comparable<Route> {
   /** The short bus line codename, usually numeric, e.g. "304" */
   private String      name; // e.g. "304"
   /** The longer descriptive title of the bus line. */
@@ -92,5 +92,49 @@ public class Route implements Cloneable {
   public String toString() {
     return qualifiedName() + " " + title;
   }
+
+  @Override
+  public int compareTo(Route r) {
+    int d = name.length() - r.name.length();
+    if ( d != 0 )
+      return d;
+    d = name.compareTo(r.name);
+    if ( d != 0 )
+      return d;
+    return direction.compareTo(r.direction);
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((direction == null) ? 0 : direction.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Route other = (Route) obj;
+    if (direction == null) {
+      if (other.direction != null)
+        return false;
+    } else if (!direction.equals(other.direction))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
+  }
+  
+  
   
 }

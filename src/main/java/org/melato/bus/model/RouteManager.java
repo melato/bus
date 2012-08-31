@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.melato.bus.log.Log;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
+import org.melato.log.Log;
 import org.xml.sax.SAXException;
 
 
