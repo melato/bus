@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.melato.bus.log.Log;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
@@ -138,6 +139,7 @@ public class RouteManager {
   }
   
   public List<Waypoint> findNearbyStops(Point point, float distance) {
+    Log.info( "RouteManager.findNearbyStops: " + point );
     List<Waypoint> result = new ArrayList<Waypoint>();
     iterateAllStops(new NearbyFilter(point, distance, result));
     return result;

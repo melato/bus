@@ -17,6 +17,7 @@ android application:
 
 *** Looking for a bus
 - Where is the nearest bus stop?
+- What are the nearby bus routes?
 
 
 *** Use Cases
@@ -25,3 +26,20 @@ android application:
 - Select a route
 - Display list of stops
   for each stop display distance and time
+
+*** Activities ***
+- RoutesActivity
+	- displays a list of routes to select from
+	- selecting a route goes to the Schedule activity
+
+- ScheduleActivity
+	- displays the schedule of a route for the current day
+
+- NearbyActivity
+	- displays nearby stops and routes
+	- selecting a route goes to the Schedule activity
+
+- TrackActivity
+    - displays list of nearby stops on the current route,
+	with distance from the start and time
+	- time is tracked time or estimated time
