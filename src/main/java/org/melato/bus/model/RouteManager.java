@@ -1,20 +1,16 @@
 package org.melato.bus.model;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import org.melato.bus.model.xml.XmlRouteStorage;
 import org.melato.gpx.GPX;
-import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Log;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -24,52 +20,30 @@ import org.xml.sax.SAXException;
  *
  */
 public class RouteManager {
-  public static final String ROUTES_FILE = "routes.xml";
-  public static final String STOPS_FILE = "stops.gpx";
-  public static final String ROUTES_DIR = "routes";
-  public static final String GPX_DIR = "gpx";
-  
-  private URL dataUrl;
+  private RouteStorage storage;  
   private List<Route> routes;
-  
+    
+  public RouteManager(RouteStorage storage) {
+    super();
+    this.storage = storage;
+  }
+
   public RouteManager(File dataDir) {
     super();
-     try {
-      this.dataUrl = dataDir.toURI().toURL();
-    } catch (MalformedURLException e) {
-      throw new RuntimeException( e );
-    }   
+    storage = new XmlRouteStorage(dataDir);
   }
 
   public RouteManager(URL dataUrl) {
     super();
-    this.dataUrl = dataUrl;
+    storage = new XmlRouteStorage(dataUrl);
   }
 
-  private URL makeUrl(String file ) throws MalformedURLException {
-    URL url = new URL(dataUrl, file );
-    return url;    
-  }
-  
-  private URL makeUrl(String dir, String file ) throws MalformedURLException {
-    URL url = new URL(dataUrl, dir + "/" + file );      
-    return url;    
-  }
-  
   public List<Route> getRoutes() {
     if ( routes == null ) {
-      routes = Collections.emptyList();
-      try {
-        URL url = makeUrl( ROUTES_FILE );
-        routes = RouteHandler.parse(url.openStream());
-        for( Route route: routes ) {
-          route.routeManager = this;
-          route.schedule = null;          
-        }
-      } catch( IOException e ) {
-        throw new RuntimeException(e);
-      } catch( SAXException e ) {
-        throw new RuntimeException(e);
+      routes = storage.loadRoutes();
+      for( Route route: routes ) {
+        route.routeManager = this;
+        route.schedule = null;          
       }
     }
     return routes;
@@ -84,20 +58,7 @@ public class RouteManager {
   }
 
   public Route loadRoute( String qualifiedName ) {
-    try {
-      URL url = makeUrl( ROUTES_DIR, qualifiedName + ".xml" );
-      //System.out.println( "loading " + url );
-      List<Route> routes = RouteHandler.parse(url.openStream());
-      if ( routes.isEmpty() ) {
-        throw new RuntimeException( "Cannot load " + url );
-      }
-      // assume there is only one route in the file.  Return the first one.
-      return routes.get(0);
-    } catch( IOException e ) {
-      throw new RuntimeException(e);
-    } catch( SAXException e ) {
-      throw new RuntimeException(e);
-    }
+    return storage.loadRoute(qualifiedName);
   }
     
   Route loadRoute(Route route) {
@@ -105,37 +66,15 @@ public class RouteManager {
   }
 
   public GPX loadGPX(String qualifiedName) {
-    try {
-      URL url = makeUrl( GPX_DIR, qualifiedName + ".gpx" );
-      GPXParser parser = new GPXParser();
-      return parser.parse(url.openStream());
-    } catch( IOException e ) {
-      throw new RuntimeException(e);
-    }
+    return storage.loadGPX(qualifiedName);
   }
 
   public GPX loadGPX(Route route) {
     return loadGPX(route.qualifiedName());
   }
 
-  public GPX loadAllStops() {
-    try {
-      URL url = makeUrl( STOPS_FILE );
-      GPXParser parser = new GPXParser();
-      return parser.parse(url.openStream());
-    } catch( IOException e ) {
-      throw new RuntimeException(e);
-    }
-  }
-  
   public void iterateAllStops(Collection<Waypoint> collector) {
-    try {
-      URL url = makeUrl( STOPS_FILE );
-      GPXParser parser = new GPXParser();
-      parser.parseWaypoints(url.openStream(), collector);
-    } catch( IOException e ) {
-      throw new RuntimeException(e);
-    }
+    storage.iterateAllStops(collector);
   }
   
   public List<Waypoint> findNearbyStops(Point point, float distance) {
