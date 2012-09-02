@@ -1,8 +1,9 @@
 package org.melato.bus.model;
 
+import java.util.Comparator;
 
-
-public class Alphanumeric {
+public class AlphanumericComparator implements Comparator<String> {
+  public static final AlphanumericComparator INSTANCE = new AlphanumericComparator(); 
   private static int findDigitsEnd(String s, int start) {
     int len = s.length();
     for( int i = start; i < len; i++ ) {
@@ -22,7 +23,8 @@ public class Alphanumeric {
    * @param y
    * @return
    */
-  public static int compare(String s1, String s2) {
+  @Override
+  public int compare(String s1, String s2) {
     int len1 = s1.length();
     int len2 = s2.length();
     for( int i = 0; i < len1 && i < len2; i++ ) {
@@ -50,5 +52,4 @@ public class Alphanumeric {
     }
     return len1 - len2;
   }
-
 }

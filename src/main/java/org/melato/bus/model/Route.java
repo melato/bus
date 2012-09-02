@@ -110,10 +110,10 @@ public class Route implements Cloneable, Comparable<Route> {
 
   @Override
   public int compareTo(Route r) {
-    int d = Alphanumeric.compare(name, r.name);
+    int d = AlphanumericComparator.INSTANCE.compare(name, r.name);
     if ( d != 0 )
       return d;
-    return Alphanumeric.compare(direction, r.direction);
+    return AlphanumericComparator.INSTANCE.compare(direction, r.direction);
   }
 
   @Override
