@@ -10,6 +10,7 @@ android application:
 - time/expected time
 - path distance from here
 - Select destination, for easy reference
+
 *** Waiting for bus
 - When will it get here?
 - What is the schedule?
@@ -46,3 +47,9 @@ android application:
     - displays list of nearby stops on the current route,
 	with distance from the start and time
 	- time is tracked time or estimated time
+
+- StopActivity
+	- displays information about one stop
+	- how far is the stop from the beginning of the route
+	- how far is it from the current location
+	- when is the expected time of arrival (ETA)

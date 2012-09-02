@@ -80,7 +80,7 @@ public class RouteManager {
   public List<Waypoint> findNearbyStops(Point point, float distance) {
     Log.info( "RouteManager.findNearbyStops: " + point );
     List<Waypoint> result = new ArrayList<Waypoint>();
-    iterateAllStops(new NearbyFilter(point, distance, result));
+    storage.iterateNearbyStops(point, distance, result);
     return result;
   }
 }
