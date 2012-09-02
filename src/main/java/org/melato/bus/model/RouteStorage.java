@@ -16,6 +16,5 @@ public interface RouteStorage {
   List<Route> loadRoutes();
   Route loadRoute( String qualifiedName );
   GPX loadGPX(String qualifiedName);
-  void iterateAllStops(Collection<Waypoint> collector);
   void iterateNearbyStops(Point point, float distance, Collection<Waypoint> collector);
 }
