@@ -36,6 +36,7 @@ public class RouteHandler extends XMLMappingHandler {
   public void start(XMLTag tag) throws SAXException {
     route = new Route();
     route.setName(tag.getRequiredAttribute(RouteWriter.NAME));
+    route.setLabel(tag.getRequiredAttribute(RouteWriter.LABEL));
     route.setDirection(tag.getRequiredAttribute(RouteWriter.DIRECTION));
     super.start(tag);
   }

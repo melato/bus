@@ -14,6 +14,7 @@ public class RouteWriter {
   public static final String ROUTES = "routes";
   public static final String ROUTE = "route";
   public static final String NAME = "name";
+  public static final String LABEL = "label";
   public static final String DIRECTION = "direction";
   public static final String TITLE = "title";
   public static final String SCHEDULE = "schedule";
@@ -80,6 +81,7 @@ public class RouteWriter {
   public void write(Route route, XMLWriter xml) {
     xml.tagOpen( ROUTE, false );
     xml.tagAttribute( NAME, route.getName() );
+    xml.tagAttribute( LABEL, route.getLabel() );
     xml.tagAttribute( DIRECTION, route.getDirection() );
     xml.tagClose();
     xml.println();

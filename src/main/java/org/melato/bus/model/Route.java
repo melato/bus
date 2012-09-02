@@ -9,8 +9,14 @@ import org.melato.gpx.GPX;
  *
  */
 public class Route implements Cloneable, Comparable<Route> {
-  /** The short bus line codename, usually numeric, e.g. "304" */
+  /** The internal name, e.g. 301b */
   private String      name; // e.g. "304"
+  
+  /** The label that the user sees, e.g. "301B"
+   * The label is usually name in uppercase.
+   * */
+  private String label;
+  
   /** The longer descriptive title of the bus line. */
   private String      title; // e.g. "Γραμμή 304 ΣΤ. ΝΟΜΙΣΜΑΤΟΚΟΠΕΙΟ - ΑΡΤΕΜΙΣ (ΒΡΑΥΡΩΝΑ)"
   /** The direction of the route, "1" for outgoing, "2" for incoming.  */
@@ -43,6 +49,15 @@ public class Route implements Cloneable, Comparable<Route> {
   public void setName(String name) {
     this.name = name;
   }
+  
+  public String getLabel() {
+    return label;
+  }
+
+  public void setLabel(String label) {
+    this.label = label;
+  }
+
   public String getTitle() {
     return title;
   }
