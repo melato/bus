@@ -3,7 +3,6 @@ package org.melato.bus.model;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.melato.bus.model.xml.XmlRouteStorage;
@@ -73,10 +72,6 @@ public class RouteManager {
     return loadGPX(route.qualifiedName());
   }
 
-  public void iterateAllStops(Collection<Waypoint> collector) {
-    storage.iterateAllStops(collector);
-  }
-  
   public List<Waypoint> findNearbyStops(Point point, float distance) {
     Log.info( "RouteManager.findNearbyStops: " + point );
     List<Waypoint> result = new ArrayList<Waypoint>();
