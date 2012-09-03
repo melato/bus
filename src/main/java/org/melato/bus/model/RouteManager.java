@@ -1,6 +1,8 @@
 package org.melato.bus.model;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class RouteManager {
     super();
     this.storage = storage;
   }
-
+  
   public RouteManager(File dataDir) {
     super();
     storage = new XmlRouteStorage(dataDir);
@@ -72,6 +74,9 @@ public class RouteManager {
     return loadGPX(route.qualifiedName());
   }
 
+  public String getUri( Route route ) {
+    return storage.getUri(route);
+  }
   /**
    * Load marker information:
    * - waypoint (location, name)

@@ -12,6 +12,11 @@ public class Schedule {
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
+  /**
+   * format a schedule time
+   * @param time The time in minutes since midnight.
+   * @return
+   */
   public static String formatTime(int time) {
     return d2Format.format(time/60) + ":" + d2Format.format(time%60);
   }

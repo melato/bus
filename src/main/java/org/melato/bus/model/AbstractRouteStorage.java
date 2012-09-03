@@ -21,4 +21,11 @@ public abstract class AbstractRouteStorage implements RouteStorage {
       Collection<Waypoint> collector) {
     throw new UnsupportedOperationException();
   }
+
+  @Override
+  public String getUri(Route route) {
+    return null;
+  }
+
+  
 }

@@ -18,4 +18,5 @@ public interface RouteStorage {
   GPX loadGPX(String qualifiedName);
   MarkerInfo loadMarker(String symbol);
   void iterateNearbyStops(Point point, float distance, Collection<Waypoint> collector);
+  String getUri(Route route);
 }
