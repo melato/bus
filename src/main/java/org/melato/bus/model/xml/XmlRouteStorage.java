@@ -1,3 +1,4 @@
+
 package org.melato.bus.model.xml;
 
 import java.io.File;
@@ -8,17 +9,17 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.melato.bus.model.AbstractRouteStorage;
 import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteHandler;
-import org.melato.bus.model.RouteStorage;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
 
-public class XmlRouteStorage implements RouteStorage {
+public class XmlRouteStorage extends AbstractRouteStorage {
   public static final String ROUTES_FILE = "routes.xml";
   public static final String STOPS_FILE = "stops.gpx";
   public static final String ROUTES_DIR = "routes";

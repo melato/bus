@@ -72,6 +72,18 @@ public class RouteManager {
     return loadGPX(route.qualifiedName());
   }
 
+  /**
+   * Load marker information:
+   * - waypoint (location, name)
+   * - linked routes
+   * - 
+   * @param symbol
+   * @return
+   */
+  public MarkerInfo loadMarker(String symbol) {
+    return storage.loadMarker(symbol);
+  }
+  
   public List<Waypoint> findNearbyStops(Point point, float distance) {
     Log.info( "RouteManager.findNearbyStops: " + point );
     List<Waypoint> result = new ArrayList<Waypoint>();
