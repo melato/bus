@@ -105,7 +105,7 @@ public class Route implements Cloneable, Comparable<Route> {
 
   @Override
   public String toString() {
-    return qualifiedName() + " " + title;
+    return label + "-" + direction + " " + title;
   }
 
   @Override
