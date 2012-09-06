@@ -10,9 +10,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.melato.bus.model.AbstractRouteStorage;
+import org.melato.bus.model.Id;
 import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteHandler;
+import org.melato.bus.model.RouteId;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
@@ -63,9 +65,13 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     }
   }
 
-  public Route loadRoute( String qualifiedName ) {
+  public Route loadRoute(Id routeId) {
+    return loadRoute((RouteId) routeId);
+  }
+  
+  public Route loadRoute(RouteId routeId) {
     try {
-      URL url = makeUrl( ROUTES_DIR, qualifiedName + ".xml" );
+      URL url = makeUrl( ROUTES_DIR, routeId + ".xml" );
       //System.out.println( "loading " + url );
       List<Route> routes = RouteHandler.parse(url.openStream());
       if ( routes.isEmpty() ) {
@@ -82,9 +88,9 @@ public class XmlRouteStorage extends AbstractRouteStorage {
 
 
   @Override
-  public GPX loadGPX(String qualifiedName) {
+  public GPX loadGPX(Id routeId) {
     try {
-      URL url = makeUrl( GPX_DIR, qualifiedName + ".gpx" );
+      URL url = makeUrl( GPX_DIR, routeId + ".gpx" );
       GPXParser parser = new GPXParser();
       return parser.parse(url.openStream());
     } catch( FileNotFoundException e ) {
@@ -110,5 +116,4 @@ public class XmlRouteStorage extends AbstractRouteStorage {
       Collection<Waypoint> collector) {
     iterateAllStops(new NearbyFilter(point, distance, collector));
   }
-
 }

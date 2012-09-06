@@ -1,8 +1,6 @@
 package org.melato.bus.model;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,28 +48,33 @@ public class RouteManager {
     return routes;
   }
 
-  public Route getRoute( String qualifiedName ) {
+  public Route getRoute(Id routeId) {
     for( Route route: getRoutes() ) {
-      if (qualifiedName.equals(route.qualifiedName()))
+      if (routeId.equals(route.getId()))
           return route;
     }
     return null;    
   }
 
-  public Route loadRoute( String qualifiedName ) {
-    return storage.loadRoute(qualifiedName);
-  }
-    
-  Route loadRoute(Route route) {
-    return loadRoute(route.qualifiedName());
+  public Route loadRoute(Id routeId) {
+    return storage.loadRoute(routeId);
   }
 
-  public GPX loadGPX(String qualifiedName) {
-    return storage.loadGPX(qualifiedName);
+  
+  public Route loadRoute(RouteId routeId) {
+    return storage.loadRoute(routeId);
+  }
+
+  Route loadRoute(Route route) {
+    return loadRoute(route.getId());
+  }
+
+  public GPX loadGPX(Id routeId) {
+    return storage.loadGPX(routeId);
   }
 
   public GPX loadGPX(Route route) {
-    return loadGPX(route.qualifiedName());
+    return loadGPX(route.getId());
   }
 
   public String getUri( Route route ) {

@@ -18,7 +18,7 @@ public class RouteHandlerTest {
       List<Route> routes = RouteHandler.parse( getClass().getResourceAsStream( "route.xml"));
       Assert.assertEquals(1, routes.size());
       Route route = routes.get(0);
-      Assert.assertEquals("304b", route.getName());
+      Assert.assertEquals("304b", route.getRouteId().getName());
       Assert.assertEquals("304B", route.getLabel());
       Assert.assertEquals("Route Title", route.getTitle());
       Schedule schedule = route.getSchedule();

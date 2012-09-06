@@ -1,7 +1,5 @@
 package org.melato.bus.test;
 
-import java.util.Comparator;
-
 import junit.framework.Assert;
 
 import org.junit.Test;

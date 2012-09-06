@@ -9,8 +9,8 @@ import org.melato.gpx.GPX;
  *
  */
 public class Route implements Cloneable, Comparable<Route> {
-  /** The internal name, e.g. 301b */
-  private String      name; // e.g. "304"
+  private Id  id;
+  private RouteId routeId;
   
   /** The label that the user sees, e.g. "301B"
    * The label is usually name in uppercase.
@@ -19,8 +19,6 @@ public class Route implements Cloneable, Comparable<Route> {
   
   /** The longer descriptive title of the bus line. */
   private String      title; // e.g. "Γραμμή 304 ΣΤ. ΝΟΜΙΣΜΑΤΟΚΟΠΕΙΟ - ΑΡΤΕΜΙΣ (ΒΡΑΥΡΩΝΑ)"
-  /** The direction of the route, "1" for outgoing, "2" for incoming.  */
-  private String      direction;
   /** The schedule of the route  */
   Schedule    schedule;
   /** A plain sequence of stop names for the route.  More extensive GPX information may be available elsewhere. */
@@ -28,6 +26,16 @@ public class Route implements Cloneable, Comparable<Route> {
   
   RouteManager routeManager;  
   
+  
+  public Route() {
+    super();
+  }
+
+  public Route(Id id) {
+    super();
+    this.id = id;
+  }
+
   @Override
   public Route clone() {
     try {
@@ -35,19 +43,6 @@ public class Route implements Cloneable, Comparable<Route> {
     } catch( CloneNotSupportedException e ) {
       throw new RuntimeException(e);
     }
-  }
-  
-  public static String qualifiedName(String name, String direction ) {
-    return name + "-" + direction; 
-  }
-  public String qualifiedName() {
-    return qualifiedName(getName(), getDirection());
-  }
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
   }
   
   public String getLabel() {
@@ -65,10 +60,7 @@ public class Route implements Cloneable, Comparable<Route> {
     this.title = title;
   }
   public String getDirection() {
-    return direction;
-  }
-  public void setDirection(String direction) {
-    this.direction = direction;
+    return routeId.getDirection();
   }
   private RouteManager getRouteManager() {
     if ( routeManager == null ) {
@@ -103,25 +95,44 @@ public class Route implements Cloneable, Comparable<Route> {
     this.stops = stops;
   }
 
+  public String getQualifiedLabel() {
+    return label + "-" + getDirection();
+  }
+  
   @Override
   public String toString() {
-    return label + "-" + direction + " " + title;
+    return getQualifiedLabel() + " " + title;
   }
 
   @Override
   public int compareTo(Route r) {
-    int d = AlphanumericComparator.INSTANCE.compare(name, r.name);
+    int d = AlphanumericComparator.INSTANCE.compare(label, r.label);
     if ( d != 0 )
       return d;
-    return AlphanumericComparator.INSTANCE.compare(direction, r.direction);
+    return AlphanumericComparator.INSTANCE.compare(getDirection(), r.getDirection());
+  }
+  
+  public Id getId() {
+    return id;
+  }
+
+  public void setId(Id id) {
+    this.id = id;
+  }
+  
+  public RouteId getRouteId() {
+    return routeId;
+  }
+
+  public void setRouteId(RouteId routeId) {
+    this.routeId = routeId;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((direction == null) ? 0 : direction.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
 
@@ -134,19 +145,11 @@ public class Route implements Cloneable, Comparable<Route> {
     if (getClass() != obj.getClass())
       return false;
     Route other = (Route) obj;
-    if (direction == null) {
-      if (other.direction != null)
+    if (id == null) {
+      if (other.id != null)
         return false;
-    } else if (!direction.equals(other.direction))
-      return false;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
+    } else if (!id.equals(other.id))
       return false;
     return true;
   }
-  
-  
-  
 }

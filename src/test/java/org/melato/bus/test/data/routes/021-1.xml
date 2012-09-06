@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes>
-<route name="021" direction="1">
+<route name="021" label="021" direction="1">
 <title>Γραμμή 021 ΚΑΝΙΓΓΟΣ - ΓΚΥΖΗ</title>
 <schedule days_bitmap="62">
 <time value="05:15"/>

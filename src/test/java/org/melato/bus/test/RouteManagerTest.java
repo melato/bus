@@ -7,6 +7,8 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.melato.bus.model.Route;
+import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
@@ -24,7 +26,9 @@ public class RouteManagerTest {
   @Test public void testGPXRoute() throws Exception {
     URL url = getClass().getResource("data/");
     RouteManager routeManager = new RouteManager(url);
-    GPX gpx = routeManager.loadGPX("021-1");
+    List<Route> routes = routeManager.getRoutes();
+    Assert.assertEquals(2, routes.size());
+    GPX gpx = routeManager.loadGPX(new RouteId("021", "1"));
     Assert.assertEquals(1, gpx.getRoutes().size());
     List<Waypoint> waypoints = gpx.getRoutes().get(0).path.getWaypoints();
     Assert.assertTrue(waypoints.size() > 2 );

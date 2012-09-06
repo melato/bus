@@ -79,10 +79,10 @@ public class RouteWriter {
   }
   
   public void write(Route route, XMLWriter xml) {
-    xml.tagOpen( ROUTE, false );
-    xml.tagAttribute( NAME, route.getName() );
+    xml.tagOpen( ROUTE, false );    
+    xml.tagAttribute( NAME, route.getRouteId().getName() );
     xml.tagAttribute( LABEL, route.getLabel() );
-    xml.tagAttribute( DIRECTION, route.getDirection() );
+    xml.tagAttribute( DIRECTION, route.getRouteId().getDirection() );
     xml.tagClose();
     xml.println();
     xml.tagOpen( TITLE);
