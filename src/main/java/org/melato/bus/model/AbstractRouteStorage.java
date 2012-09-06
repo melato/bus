@@ -23,7 +23,7 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   }
 
   @Override
-  public String getUri(Route route) {
+  public String getUri(RouteId routeId) {
     return null;
   }
 

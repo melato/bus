@@ -65,10 +65,6 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     }
   }
 
-  public Route loadRoute(Id routeId) {
-    return loadRoute((RouteId) routeId);
-  }
-  
   public Route loadRoute(RouteId routeId) {
     try {
       URL url = makeUrl( ROUTES_DIR, routeId + ".xml" );
@@ -88,7 +84,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
 
 
   @Override
-  public GPX loadGPX(Id routeId) {
+  public GPX loadGPX(RouteId routeId) {
     try {
       URL url = makeUrl( GPX_DIR, routeId + ".gpx" );
       GPXParser parser = new GPXParser();

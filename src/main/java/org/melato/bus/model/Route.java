@@ -112,6 +112,8 @@ public class Route implements Cloneable, Comparable<Route> {
     return AlphanumericComparator.INSTANCE.compare(getDirection(), r.getDirection());
   }
   
+  /** This is an internal id, used internally only by the route database.
+   * */
   public Id getId() {
     return id;
   }
@@ -120,6 +122,8 @@ public class Route implements Cloneable, Comparable<Route> {
     this.id = id;
   }
   
+  /** This is an external route id, used for storing in caches, etc.
+   * */
   public RouteId getRouteId() {
     return routeId;
   }

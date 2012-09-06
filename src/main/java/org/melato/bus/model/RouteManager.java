@@ -9,7 +9,6 @@ import org.melato.bus.model.xml.XmlRouteStorage;
 import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
-import org.melato.log.Log;
 
 
 /**
@@ -48,37 +47,36 @@ public class RouteManager {
     return routes;
   }
 
-  public Route getRoute(Id routeId) {
+  public Route getRoute(RouteId routeId) {
+    boolean logged = false;
     for( Route route: getRoutes() ) {
-      if (routeId.equals(route.getId()))
+      if ( ! logged ) {
+        logged = true;
+      }
+      if (routeId.equals(route.getRouteId()))
           return route;
     }
     return null;    
   }
-
-  public Route loadRoute(Id routeId) {
-    return storage.loadRoute(routeId);
-  }
-
   
   public Route loadRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
 
   Route loadRoute(Route route) {
-    return loadRoute(route.getId());
+    return loadRoute(route.getRouteId());
   }
 
-  public GPX loadGPX(Id routeId) {
+  public GPX loadGPX(RouteId routeId) {
     return storage.loadGPX(routeId);
   }
 
   public GPX loadGPX(Route route) {
-    return loadGPX(route.getId());
+    return loadGPX(route.getRouteId());
   }
 
   public String getUri( Route route ) {
-    return storage.getUri(route);
+    return storage.getUri(route.getRouteId());
   }
   /**
    * Load marker information:
@@ -93,7 +91,6 @@ public class RouteManager {
   }
   
   public List<Waypoint> findNearbyStops(Point point, float distance) {
-    Log.info( "RouteManager.findNearbyStops: " + point );
     List<Waypoint> result = new ArrayList<Waypoint>();
     storage.iterateNearbyStops(point, distance, result);
     return result;
