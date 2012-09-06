@@ -95,13 +95,13 @@ public class Route implements Cloneable, Comparable<Route> {
     this.stops = stops;
   }
 
-  public String getQualifiedLabel() {
-    return label + "-" + getDirection();
+  public String getFullTitle() {
+    return getLabel() + " " + getTitle();
   }
   
   @Override
   public String toString() {
-    return getQualifiedLabel() + " " + title;
+    return getFullTitle();
   }
 
   @Override
@@ -136,7 +136,7 @@ public class Route implements Cloneable, Comparable<Route> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((routeId == null) ? 0 : routeId.hashCode());
     return result;
   }
 
@@ -149,11 +149,12 @@ public class Route implements Cloneable, Comparable<Route> {
     if (getClass() != obj.getClass())
       return false;
     Route other = (Route) obj;
-    if (id == null) {
-      if (other.id != null)
+    if (routeId == null) {
+      if (other.routeId != null)
         return false;
-    } else if (!id.equals(other.id))
+    } else if (!routeId.equals(other.routeId))
       return false;
     return true;
   }
+
 }
