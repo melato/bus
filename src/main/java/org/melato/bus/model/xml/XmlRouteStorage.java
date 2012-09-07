@@ -28,7 +28,10 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   public static final String GPX_DIR = "gpx";
   private URL dataUrl;
   
+  private List<Route> routes;
+  
   public XmlRouteStorage(File dataDir) {
+    
     super();
      try {
       this.dataUrl = dataDir.toURI().toURL();
