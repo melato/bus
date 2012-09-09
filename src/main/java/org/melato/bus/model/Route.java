@@ -1,6 +1,7 @@
 package org.melato.bus.model;
 
 import org.melato.gpx.GPX;
+import org.melato.log.Log;
 
 /**
  * Contains basic information about a bus route in a certain direction,
@@ -20,7 +21,7 @@ public class Route implements Cloneable, Comparable<Route> {
   /** The longer descriptive title of the bus line. */
   private String      title; // e.g. "Γραμμή 304 ΣΤ. ΝΟΜΙΣΜΑΤΟΚΟΠΕΙΟ - ΑΡΤΕΜΙΣ (ΒΡΑΥΡΩΝΑ)"
   /** The schedule of the route  */
-  Schedule    schedule;
+  private Schedule    schedule;
   /** A plain sequence of stop names for the route.  More extensive GPX information may be available elsewhere. */
   private String[]    stops = new String[0];
   
@@ -68,15 +69,12 @@ public class Route implements Cloneable, Comparable<Route> {
     }
     return routeManager;
   }
+  
   public Schedule getSchedule() {
     if ( schedule == null ) {
-      Route route = getRouteManager().loadRoute(this);
-      if ( route != null ) {
-        this.schedule = route.schedule;
-      } else {
-        this.schedule = new Schedule();
-      }
+      schedule = getRouteManager().loadSchedule(getRouteId());
     }
+    Log.info("Route.getSchedule: " + schedule );
     return schedule;
   }
   

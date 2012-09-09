@@ -6,6 +6,8 @@ import java.util.List;
 import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
+import org.melato.log.Clock;
+import org.melato.log.Log;
 
 
 /**
@@ -23,9 +25,14 @@ public class RouteManager {
   }
   
   public List<Route> getRoutes() {
-    return storage.loadRoutes();
+    Clock clock = new Clock("getRoutes");
+    try {
+      return storage.loadRoutes();
+    } finally {
+      Log.info(clock);
+    }
   }
-
+  
   public Route getRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
@@ -34,8 +41,9 @@ public class RouteManager {
     return storage.loadRoute(routeId);
   }
 
-  Route loadRoute(Route route) {
-    return loadRoute(route.getRouteId());
+  public Schedule loadSchedule(RouteId routeId) {
+    Log.info( "RouteManager.loadSchedule: " + routeId );
+    return storage.loadSchedule(routeId);
   }
 
   public GPX loadGPX(RouteId routeId) {

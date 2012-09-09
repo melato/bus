@@ -15,6 +15,7 @@ import org.melato.gpx.Waypoint;
 public interface RouteStorage {
   List<Route> loadRoutes();
   Route loadRoute(RouteId routeId);
+  Schedule loadSchedule(RouteId routeId);
   GPX loadGPX(RouteId routeId);
   MarkerInfo loadMarker(String symbol);
   void iterateNearbyStops(Point point, float distance, Collection<Waypoint> collector);

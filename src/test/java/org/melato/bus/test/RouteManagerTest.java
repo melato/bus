@@ -28,7 +28,7 @@ public class RouteManagerTest {
     URL url = getClass().getResource("data/");
     RouteManager routeManager = new RouteManager(new XmlRouteStorage(url));
     List<Route> routes = routeManager.getRoutes();
-    Assert.assertEquals(2, routes.size());
+    Assert.assertEquals(4, routes.size());
     GPX gpx = routeManager.loadGPX(new RouteId("021", "1"));
     Assert.assertEquals(1, gpx.getRoutes().size());
     List<Waypoint> waypoints = gpx.getRoutes().get(0).path.getWaypoints();

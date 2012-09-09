@@ -70,4 +70,14 @@ public class Schedule {
     int minute = cal.get(Calendar.MINUTE);
     return hour * 60 + minute;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder buf = new StringBuilder("Schedule:");
+    for( DaySchedule ds: schedules ) {
+      buf.append( " " + ds.getDays() + "=" + ds.getTimes().length);
+    }
+    return buf.toString();
+  }
+  
 }

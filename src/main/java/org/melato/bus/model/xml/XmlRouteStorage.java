@@ -10,11 +10,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.melato.bus.model.AbstractRouteStorage;
-import org.melato.bus.model.Id;
 import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteHandler;
 import org.melato.bus.model.RouteId;
+import org.melato.bus.model.Schedule;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Point;
@@ -83,6 +83,12 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     } catch( SAXException e ) {
       throw new RuntimeException(e);
     }
+  }
+
+
+  @Override
+  public Schedule loadSchedule(RouteId routeId) {
+    throw new UnsupportedOperationException();
   }
 
 
