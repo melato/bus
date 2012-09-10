@@ -46,6 +46,10 @@ public class RouteManager {
     return storage.loadSchedule(routeId);
   }
 
+  public Schedule loadSchedule(Route route) {
+    return loadSchedule(route.getRouteId());
+  }
+
   public GPX loadGPX(RouteId routeId) {
     return storage.loadGPX(routeId);
   }

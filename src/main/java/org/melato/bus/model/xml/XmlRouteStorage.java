@@ -12,7 +12,6 @@ import java.util.List;
 import org.melato.bus.model.AbstractRouteStorage;
 import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
-import org.melato.bus.model.RouteHandler;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.Schedule;
 import org.melato.gpx.GPX;
@@ -57,7 +56,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   public List<Route> loadRoutes() {
     try {
       URL url = makeUrl( ROUTES_FILE );
-      List<Route> routes = RouteHandler.parse(url.openStream());
+      List<Route> routes = RouteHandler.parseRoutes(url.openStream());
       return routes;
     } catch( IOException e ) {
       throw new RuntimeException(e);
@@ -70,7 +69,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     try {
       URL url = makeUrl( ROUTES_DIR, routeId + ".xml" );
       //System.out.println( "loading " + url );
-      List<Route> routes = RouteHandler.parse(url.openStream());
+      List<Route> routes = RouteHandler.parseRoutes(url.openStream());
       if ( routes.isEmpty() ) {
         throw new RuntimeException( "Cannot load " + url );
       }
@@ -86,8 +85,20 @@ public class XmlRouteStorage extends AbstractRouteStorage {
 
   @Override
   public Schedule loadSchedule(RouteId routeId) {
-    Route route = loadRoute(routeId);
-    return route.getSchedule();
+    try {
+      URL url = makeUrl( ROUTES_DIR, routeId + ".xml" );
+      //System.out.println( "loading " + url );
+      List<ScheduledRoute> routes = ScheduledRouteHandler.parseScheduledRoutes(url.openStream());
+      if ( routes.isEmpty() ) {
+        throw new RuntimeException( "Cannot load " + url );
+      }
+      // assume there is only one route in the file.  Return the first one.
+      return routes.get(0).getSchedule();
+    } catch( IOException e ) {
+      throw new RuntimeException(e);
+    } catch( SAXException e ) {
+      throw new RuntimeException(e);
+    }
   }
 
 

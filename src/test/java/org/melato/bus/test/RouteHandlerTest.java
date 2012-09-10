@@ -9,19 +9,20 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.Route;
-import org.melato.bus.model.RouteHandler;
 import org.melato.bus.model.Schedule;
+import org.melato.bus.model.xml.ScheduledRoute;
+import org.melato.bus.model.xml.ScheduledRouteHandler;
 import org.xml.sax.SAXException;
 
 public class RouteHandlerTest {
   @Test public void xmlTest() throws IOException, SAXException {
-      List<Route> routes = RouteHandler.parse( getClass().getResourceAsStream( "route.xml"));
-      Assert.assertEquals(1, routes.size());
-      Route route = routes.get(0);
+      List<ScheduledRoute> list = ScheduledRouteHandler.parseScheduledRoutes( getClass().getResourceAsStream( "route.xml"));
+      Assert.assertEquals(1, list.size());
+      Route route = list.get(0).getRoute();
       Assert.assertEquals("304b", route.getRouteId().getName());
       Assert.assertEquals("304B", route.getLabel());
       Assert.assertEquals("Route Title", route.getTitle());
-      Schedule schedule = route.getSchedule();
+      Schedule schedule = list.get(0).getSchedule();
       int[] times = null;
       
       // first test the low level DaySchedule

@@ -1,7 +1,5 @@
 package org.melato.bus.model;
 
-import org.melato.gpx.GPX;
-import org.melato.log.Log;
 
 /**
  * Contains basic information about a bus route in a certain direction,
@@ -20,13 +18,6 @@ public class Route implements Cloneable, Comparable<Route> {
   
   /** The longer descriptive title of the bus line. */
   private String      title; // e.g. "Γραμμή 304 ΣΤ. ΝΟΜΙΣΜΑΤΟΚΟΠΕΙΟ - ΑΡΤΕΜΙΣ (ΒΡΑΥΡΩΝΑ)"
-  /** The schedule of the route  */
-  private Schedule    schedule;
-  /** A plain sequence of stop names for the route.  More extensive GPX information may be available elsewhere. */
-  private String[]    stops = new String[0];
-  
-  RouteManager routeManager;  
-  
   
   public Route() {
     super();
@@ -63,36 +54,7 @@ public class Route implements Cloneable, Comparable<Route> {
   public String getDirection() {
     return routeId.getDirection();
   }
-  private RouteManager getRouteManager() {
-    if ( routeManager == null ) {
-      throw new RuntimeException( "No RouteManager" );
-    }
-    return routeManager;
-  }
   
-  public Schedule getSchedule() {
-    if ( schedule == null ) {
-      schedule = getRouteManager().loadSchedule(getRouteId());
-    }
-    Log.info("Route.getSchedule: " + schedule );
-    return schedule;
-  }
-  
-  public GPX loadGPX() {
-    GPX gpx = getRouteManager().loadGPX(this);
-    return gpx;
-  }
-  
-  public void setSchedule(Schedule schedule) {
-    this.schedule = schedule;
-  }
-  public String[] getStops() {
-    return stops;
-  }
-  public void setStops(String[] stops) {
-    this.stops = stops;
-  }
-
   public String getFullTitle() {
     return getLabel() + " " + getTitle();
   }

@@ -49,7 +49,11 @@ android application:
 	- time is tracked time or estimated time
 
 - StopActivity
-	- displays information about one stop
-	- how far is the stop from the beginning of the route
-	- how far is it from the current location
-	- when is the expected time of arrival (ETA)
+	- displays information about one stop:
+	  - Straight Distance
+	  - Straight Bearing
+	  - Route Distance
+	  - Current Speed
+	  - ETA @ current speed
+	  - ETA @ 30 Km/h
+	  - ETA @ 40 Km/h

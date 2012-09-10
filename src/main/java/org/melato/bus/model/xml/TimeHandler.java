@@ -1,8 +1,9 @@
-package org.melato.bus.model;
+package org.melato.bus.model.xml;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.melato.bus.model.Schedule;
 import org.melato.util.IntArrays;
 import org.melato.xml.XMLMappingHandler;
 import org.melato.xml.XMLTag;
