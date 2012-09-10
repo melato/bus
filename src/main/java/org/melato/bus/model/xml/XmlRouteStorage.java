@@ -28,8 +28,6 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   public static final String GPX_DIR = "gpx";
   private URL dataUrl;
   
-  private List<Route> routes;
-  
   public XmlRouteStorage(File dataDir) {
     
     super();
@@ -88,7 +86,8 @@ public class XmlRouteStorage extends AbstractRouteStorage {
 
   @Override
   public Schedule loadSchedule(RouteId routeId) {
-    throw new UnsupportedOperationException();
+    Route route = loadRoute(routeId);
+    return route.getSchedule();
   }
 
 
