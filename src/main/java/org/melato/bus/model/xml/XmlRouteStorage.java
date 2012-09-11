@@ -103,11 +103,12 @@ public class XmlRouteStorage extends AbstractRouteStorage {
 
 
   @Override
-  public GPX loadGPX(RouteId routeId) {
+  public List<Waypoint> loadWaypoints(RouteId routeId) {
     try {
       URL url = makeUrl( GPX_DIR, routeId + ".gpx" );
       GPXParser parser = new GPXParser();
-      return parser.parse(url.openStream());
+      GPX gpx = parser.parse(url.openStream());
+      return gpx.getRoutes().get(0).getWaypoints();
     } catch( FileNotFoundException e ) {
       System.err.println( e );
       return null;

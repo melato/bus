@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
+import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 import org.melato.log.Log;
@@ -50,8 +51,29 @@ public class RouteManager {
     return loadSchedule(route.getRouteId());
   }
 
+  /**
+   * Get the list or waypoints for the route.
+   * Each waypoint is a route stop.
+   * It defines:
+   *  - lat, lon - The stops coordinates
+   *  - sym - The stop symbol
+   *  - name - The stop label  
+   * */
+  public List<Waypoint> loadWaypoints(RouteId routeId) {
+    return storage.loadWaypoints(routeId);
+  }
+
+  public List<Waypoint> loadWaypoints(Route route) {
+    return storage.loadWaypoints(route.getRouteId());
+  }
+
   public GPX loadGPX(RouteId routeId) {
-    return storage.loadGPX(routeId);
+    List<Waypoint> waypoints = storage.loadWaypoints(routeId);
+    GPX gpx = new GPX();
+    org.melato.gpx.Route rte = new org.melato.gpx.Route();
+    rte.path = new Sequence(waypoints);
+    gpx.getRoutes().add(rte);
+    return gpx;      
   }
 
   public GPX loadGPX(Route route) {
@@ -62,10 +84,7 @@ public class RouteManager {
     return storage.getUri(route.getRouteId());
   }
   /**
-   * Load marker information:
-   * - waypoint (location, name)
-   * - linked routes
-   * - 
+   * Load marker information, which includes all routes that go through the given stop.
    * @param symbol
    * @return
    */
