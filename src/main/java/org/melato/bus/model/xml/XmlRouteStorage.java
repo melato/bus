@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.melato.bus.model.AbstractRouteStorage;
@@ -111,7 +112,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
       return gpx.getRoutes().get(0).getWaypoints();
     } catch( FileNotFoundException e ) {
       System.err.println( e );
-      return null;
+      return Collections.emptyList();
     } catch( IOException e ) {
       throw new RuntimeException(e);
     }
