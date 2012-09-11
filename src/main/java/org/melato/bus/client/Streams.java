@@ -9,15 +9,20 @@ import java.io.OutputStream;
 import java.net.URL;
 
 import org.melato.log.Log;
+import org.melato.progress.ProgressGenerator;
 
 /** Various utilities, mainly for doing I/O */
 public class Streams {
   public static void copy(InputStream in, OutputStream out) throws IOException {
+    ProgressGenerator progress = ProgressGenerator.get();
     byte[] buf = new byte[4096];
+    int total = 0;
     int n;
     try {
       while ((n = in.read(buf)) > 0) {
         out.write(buf, 0, n);
+        total += n;
+        progress.setPosition(total);
       }
     } finally {
       in.close();

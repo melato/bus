@@ -22,12 +22,14 @@ import org.melato.convert.xml.FieldWriter;
 import org.melato.convert.xml.ReflectionHandler;
 import org.melato.convert.xml.ReflectionWriter;
 import org.melato.log.Log;
+import org.melato.progress.ProgressGenerator;
 import org.melato.xml.XMLWriter;
 
 
 /** Checks for and/or downloads database updates. */
 public class PortableUpdateManager {
-  public static final String INDEX_URL = "http://transit.melato.org/updates.xml";
+  public static final String INDEX_URL = "http://x1Sx0kDqz7qJUUZb63kR.melato.org/updates.xml";
+  //public static final String INDEX_URL = "http://transit.melato.org/updates.xml";
   public static final String INSTALLED = "installed-files.xml";
   public static final String AVAILABLE = "available-files.xml";
   
@@ -96,9 +98,18 @@ public class PortableUpdateManager {
       
     }
   }
+  
+  URL getIndexURL() throws MalformedURLException {
+    return new URL(INDEX_URL);
+  }
+  
+  URL getURL(String url) throws MalformedURLException {
+    return new URL( getIndexURL(), url);
+  }
+  
   public void downloadAvailable() throws IOException {
     File file = new File(filesDir, AVAILABLE);
-    URL url = new URL( INDEX_URL );
+    URL url = getIndexURL();
     Log.info( url );
     Log.info( file );
     Streams.copy(url, file);
@@ -166,7 +177,11 @@ public class PortableUpdateManager {
     Log.info("zipFile =" + zipFile);
     URL url;
     try {
-      url = new URL( updateFile.getUrl());
+      url = getURL(updateFile.getUrl());
+      int size = updateFile.getSize();
+      if ( size != 0 ) {
+        ProgressGenerator.get().setLimit(size);
+      }        
       Streams.copy(url, zipFile);
       unzip( zipFile, ROUTES_ENTRY, tmpFile);
       zipFile.delete();

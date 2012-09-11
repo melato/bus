@@ -7,6 +7,7 @@ public class UpdateFile {
   public String url;
   public String expires;
   public String version;
+  public int    size;
   
   public String getName() {
     return name;
@@ -31,6 +32,12 @@ public class UpdateFile {
   }
   public void setVersion(String version) {
     this.version = version;
+  }  
+  public int getSize() {
+    return size;
+  }
+  public void setSize(int size) {
+    this.size = size;
   }
   @Override
   public String toString() {
