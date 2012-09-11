@@ -8,7 +8,10 @@ import org.melato.gpx.Earth;
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 
-/** Maintains information about a bus stop nearby. */
+/** Contains a Waypoint and a distance.
+ * The distance may be the route distance of the waypoint from the beginning of a route,
+ * or the distance between the waypoint and the current location.
+ * */
 public class WaypointDistance implements Comparable<WaypointDistance> {
   private Waypoint  waypoint;
   private float      distance;
