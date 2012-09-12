@@ -8,6 +8,7 @@ import org.melato.gpx.Waypoint;
 /** Maintains information about a bus stop nearby. */
 public class NearbyStop extends WaypointDistance {
   private Route     route;
+  private int       group;
 
   public static class Comparer implements Comparator<NearbyStop> {
 
@@ -28,6 +29,14 @@ public class NearbyStop extends WaypointDistance {
   
   public Route getRoute() {
     return route;
+  }
+
+  public int getGroup() {
+    return group;
+  }
+
+  public void setGroup(int group) {
+    this.group = group;
   }
 
   @Override
