@@ -37,28 +37,37 @@ public class PortableUpdateManager {
   
   private File  filesDir;
   private URL   indexUrl;
-  private File  tmpDir;
     
-  
   public PortableUpdateManager(URL indexUrl, File filesDir) {
     super();
-    this.indexUrl = indexUrl;
-    this.filesDir = filesDir;
+    setIndexUrl(indexUrl);
+    setFilesDir(filesDir);
   }
 
   public PortableUpdateManager(String indexUrl, File filesDir) {
     super();
+    setIndexUrl(indexUrl);
+    setFilesDir(filesDir);
+  }
+
+  protected PortableUpdateManager() {    
+  }
+  
+  
+  protected void setFilesDir(File filesDir) {
+    this.filesDir = filesDir;
+  }
+
+  protected void setIndexUrl(URL indexUrl) {
+    this.indexUrl = indexUrl;
+  }
+
+  protected void setIndexUrl(String indexUrl) {
     try {
       this.indexUrl = new URL(indexUrl);
     } catch (MalformedURLException e) {
       throw new RuntimeException( e );
     }
-    this.filesDir = filesDir;
-  }
-
-  public void setFilesDir(File filesDir) {
-    this.filesDir = filesDir;
-    this.tmpDir = filesDir;
   }
 
   /** Load the index from a local file.
@@ -68,6 +77,7 @@ public class PortableUpdateManager {
       try {
         ReflectionHandler<UpdateFile> reader = new FieldHandler<UpdateFile>(UpdateFile.class, collector);    
         reader.parse(UPDATES_TAG + "/" + FILE_TAG, new FileInputStream(file));
+        Log.info( "readIndex size=" + collector.size());
         return true;
       } catch(Exception e) {
         file.delete();
@@ -116,8 +126,8 @@ public class PortableUpdateManager {
   
   private void downloadAvailable() throws IOException {
     File file = new File(filesDir, AVAILABLE);
-    Log.info( indexUrl );
     Streams.copy(indexUrl, file);
+    Log.info( indexUrl );
   }
   
   /** If the list of available updates is empty, check once a week. */
@@ -150,6 +160,7 @@ public class PortableUpdateManager {
     if ( availableFiles == null ) {
       availableFiles = new ArrayList<UpdateFile>();
       File file = new File(filesDir, AVAILABLE);
+      Log.info( file );
       if ( ! file.exists() || needsRefresh(availableFiles, file.lastModified())) {
         try {
           downloadAvailable();
@@ -238,8 +249,14 @@ public class PortableUpdateManager {
     Streams.copy(zip.getInputStream(entry), new FileOutputStream(destFile));    
   }
   
+  private File getTempFile(File file, String suffix) {
+    File tmpFile = new File(file.getParentFile(), file.getName() + suffix);
+    tmpFile.delete();
+    return tmpFile;
+  }
+  
   public void updateFile(UpdateFile updateFile, File destinationFile) {
-    File tmpFile = new File(tmpDir, destinationFile.getName() + ".tmp");
+    File tmpFile = getTempFile(destinationFile, ".tmp");
     Log.info("update file: " + destinationFile);
     URL url;
     try {
@@ -260,8 +277,8 @@ public class PortableUpdateManager {
 
   public void updateZipedFile(UpdateFile updateFile, String zipEntry, File destinationFile) {
     Log.info("update zip file: " + destinationFile);
-    File zipFile = new File(tmpDir, updateFile.getName());
-    File tmpFile = new File(tmpDir, destinationFile.getName() + ".tmp");
+    File zipFile = getTempFile(destinationFile, ".zip");
+    File tmpFile = getTempFile(destinationFile, ".tmp");
     URL url;
     try {
       url = getURL(updateFile.getUrl());
