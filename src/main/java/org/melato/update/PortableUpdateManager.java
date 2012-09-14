@@ -133,6 +133,13 @@ public class PortableUpdateManager {
   /** If the list of available updates is empty, check once a week. */
   private int DEFAULT_FREQUENCY_HOURS = 24 * 7;
   
+  /**
+   * Return true if any of the updates in the list needs to be rechecked relative 
+   * If 
+   * @param list
+   * @param lastUpdateTime
+   * @return
+   */
   private boolean needsRefresh(Collection<UpdateFile> list, long lastUpdateTime) {
     long now = System.currentTimeMillis();
     boolean hasFiles = false;
@@ -147,6 +154,23 @@ public class PortableUpdateManager {
     }
     return false;
   }
+
+  /**
+   * Check if the list of available updates needs to be refreshed from the server.
+   * @return true if we need to download the list, false otherwise.
+   */
+  public boolean needsRefresh() {
+    availableFiles = new ArrayList<UpdateFile>();
+    File file = new File(filesDir, AVAILABLE);
+    Log.info( file );
+    if ( file.exists() ) {
+      readIndex(AVAILABLE, availableFiles);
+      return needsRefresh(availableFiles, file.lastModified());
+    } else {
+      availableFiles = null;
+      return true;
+    }
+  }
   /**
    * Update our cache of available updates and load it in memory.
    * The AVAILABLE cache file will be updated if:
@@ -157,16 +181,14 @@ public class PortableUpdateManager {
    * In all cases, the available updates will be not-null.
    */
   private void initAvailable() {
-    if ( availableFiles == null ) {
+    if ( availableFiles == null && needsRefresh() ) {
       availableFiles = new ArrayList<UpdateFile>();
       File file = new File(filesDir, AVAILABLE);
       Log.info( file );
-      if ( ! file.exists() || needsRefresh(availableFiles, file.lastModified())) {
-        try {
-          downloadAvailable();
-        } catch (IOException e) {
-          Log.info(e);
-        }
+      try {
+        downloadAvailable();
+      } catch (IOException e) {
+        Log.info(e);
       }
       if ( file.exists() ) {
         readIndex(AVAILABLE, availableFiles);
