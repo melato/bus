@@ -44,7 +44,7 @@ public class Streams {
       in.close();
     }
     file.delete();
-    boolean rename = tmpFile.renameTo(file);
+    tmpFile.renameTo(file);
   }
 
   public static String copyToString(URL url)
