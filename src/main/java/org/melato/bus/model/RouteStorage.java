@@ -22,10 +22,17 @@ public interface RouteStorage {
   List<Waypoint> loadWaypoints(RouteId routeId);
   /** Load information about a single stop. */
   MarkerInfo loadMarker(String symbol);
-  /** Load stops that are near a certain point.
+  /** Iterate over all stops that are within a certain latitude and longitude difference from a point.
    * The waypoint's links should contain the relevant route-ids.
    * */
-  void iterateNearbyStops(Point point, float distance, Collection<Waypoint> collector);
+  void iterateNearbyStops(Point point, float latitudeDifference, float longitudeDifference, Collection<Waypoint> collector);
+  
+  void iterateAllRouteStops(RouteStopCallback callback);
+
+  /** Iterate over all routes that are within a certain latitude and longitude difference from a point.
+   * The waypoint's links should contain the relevant route-ids.
+   * */
+  void iterateNearbyRoutes(Point point, float latitudeDifference, float longitudeDifference, Collection<RouteId> collector);
   /**
    * Return the original web URL for the route at the route provider's web site.
    * @param route

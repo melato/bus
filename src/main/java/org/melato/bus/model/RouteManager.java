@@ -1,14 +1,17 @@
 package org.melato.bus.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.melato.gpx.Earth;
 import org.melato.gpx.GPX;
 import org.melato.gpx.Point;
 import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 import org.melato.log.Log;
+import org.melato.util.AbstractCollector;
 
 
 /**
@@ -91,10 +94,63 @@ public class RouteManager {
   public MarkerInfo loadMarker(String symbol) {
     return storage.loadMarker(symbol);
   }
+
+  static class DistanceFilter extends AbstractCollector<Waypoint> {
+    Collection<Waypoint> result;
+    
+    private Point center;
+    private float distance;
+    
+    public DistanceFilter(List<Waypoint> result, Point center, float distance) {
+      super();
+      this.result = result;
+      this.center = center;
+      this.distance = distance;
+    }
+
+    @Override
+    public boolean add(Waypoint p) {
+      if ( Earth.distance(center, p) < distance ) {
+        result.add(p);
+        size++;
+        return true;
+      }
+      return false;
+    }    
+  }
   
+  public void iterateNearbyRoutes(Point point, float latitudeDifference,
+      float longitudeDifference, Collection<RouteId> collector) {
+    storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
+        collector);
+  }
+
   public List<Waypoint> findNearbyStops(Point point, float distance) {
     List<Waypoint> result = new ArrayList<Waypoint>();
-    storage.iterateNearbyStops(point, distance, result);
+    DistanceFilter filter = new DistanceFilter(result, point, distance);
+    float latDiff = Earth.latitudeForDistance(distance);
+    float lonDiff = Earth.longitudeForDistance(distance, point.getLat());
+    storage.iterateNearbyStops(point, latDiff, lonDiff, filter);
     return result;
   }
+
+  
+
+  public void iterateAllRouteStops(RouteStopCallback callback) {
+    storage.iterateAllRouteStops(callback);
+  }
+
+  public void benchmark() {
+    iterateAllRouteStops(new RouteStopCallback() {
+
+      @Override
+      public void add(RouteId routeId, List<Point> waypoints) {
+      }
+      
+    });
+  }
+
+  public RouteStorage getStorage() {
+    return storage;
+  }  
 }

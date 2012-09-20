@@ -129,8 +129,8 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   }
   
   @Override
-  public void iterateNearbyStops(Point point, float distance,
+  public void iterateNearbyStops(Point point, float latDiff, float lonDiff,
       Collection<Waypoint> collector) {
-    iterateAllStops(new NearbyFilter(point, distance, collector));
+    iterateAllStops(new NearbyFilter(point, latDiff, lonDiff, collector));
   }
 }

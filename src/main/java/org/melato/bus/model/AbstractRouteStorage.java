@@ -1,6 +1,7 @@
 package org.melato.bus.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
@@ -16,16 +17,27 @@ public abstract class AbstractRouteStorage implements RouteStorage {
     throw new UnsupportedOperationException();
   }
 
+  
   @Override
-  public void iterateNearbyStops(Point point, float distance,
+  public void iterateNearbyRoutes(Point point, float latitudeDifference,
+      float longitudeDifference, Collection<RouteId> collector) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void iterateNearbyStops(Point point, float latDiff, float lonDiff,
       Collection<Waypoint> collector) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public String getUri(RouteId routeId) {
-    return null;
+  public void iterateAllRouteStops(RouteStopCallback callback) {
+    throw new UnsupportedOperationException();
   }
 
   
+  @Override
+  public String getUri(RouteId routeId) {
+    return null;
+  }
 }
