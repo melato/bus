@@ -155,6 +155,11 @@ public class PortableUpdateManager {
     return false;
   }
 
+  public boolean isFirstTime() {
+    availableFiles = new ArrayList<UpdateFile>();
+    File file = new File(filesDir, AVAILABLE);
+    return ! file.exists();    
+  }
   /**
    * Check if the list of available updates needs to be refreshed from the server.
    * @return true if we need to download the list, false otherwise.
@@ -299,6 +304,7 @@ public class PortableUpdateManager {
 
   public void updateZipedFile(UpdateFile updateFile, String zipEntry, File destinationFile) {
     Log.info("update zip file: " + destinationFile);
+    destinationFile.getParentFile().mkdirs();
     File zipFile = getTempFile(destinationFile, ".zip");
     File tmpFile = getTempFile(destinationFile, ".tmp");
     URL url;
