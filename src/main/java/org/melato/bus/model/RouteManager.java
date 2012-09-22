@@ -28,7 +28,7 @@ public class RouteManager {
     this.storage = storage;
   }
   
-  public List<Route> getRoutes() {
+  public synchronized List<Route> getRoutes() {
     Clock clock = new Clock("getRoutes");
     try {
       return storage.loadRoutes();
@@ -37,20 +37,20 @@ public class RouteManager {
     }
   }
   
-  public Route getRoute(RouteId routeId) {
+  public synchronized Route getRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
   
-  public Route loadRoute(RouteId routeId) {
+  public synchronized Route loadRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
 
-  public Schedule loadSchedule(RouteId routeId) {
+  public synchronized Schedule loadSchedule(RouteId routeId) {
     Log.info( "RouteManager.loadSchedule: " + routeId );
     return storage.loadSchedule(routeId);
   }
 
-  public Schedule loadSchedule(Route route) {
+  public synchronized Schedule loadSchedule(Route route) {
     return loadSchedule(route.getRouteId());
   }
 
@@ -62,15 +62,15 @@ public class RouteManager {
    *  - sym - The stop symbol
    *  - name - The stop label  
    * */
-  public List<Waypoint> loadWaypoints(RouteId routeId) {
+  public synchronized List<Waypoint> loadWaypoints(RouteId routeId) {
     return storage.loadWaypoints(routeId);
   }
 
-  public List<Waypoint> loadWaypoints(Route route) {
+  public synchronized List<Waypoint> loadWaypoints(Route route) {
     return storage.loadWaypoints(route.getRouteId());
   }
 
-  public GPX loadGPX(RouteId routeId) {
+  public synchronized GPX loadGPX(RouteId routeId) {
     List<Waypoint> waypoints = storage.loadWaypoints(routeId);
     GPX gpx = new GPX();
     org.melato.gpx.Route rte = new org.melato.gpx.Route();
@@ -79,11 +79,11 @@ public class RouteManager {
     return gpx;      
   }
 
-  public GPX loadGPX(Route route) {
+  public synchronized GPX loadGPX(Route route) {
     return loadGPX(route.getRouteId());
   }
 
-  public String getUri( Route route ) {
+  public synchronized String getUri( Route route ) {
     return storage.getUri(route.getRouteId());
   }
   /**
@@ -91,7 +91,7 @@ public class RouteManager {
    * @param symbol
    * @return
    */
-  public MarkerInfo loadMarker(String symbol) {
+  public synchronized MarkerInfo loadMarker(String symbol) {
     return storage.loadMarker(symbol);
   }
 
@@ -119,13 +119,13 @@ public class RouteManager {
     }    
   }
   
-  public void iterateNearbyRoutes(Point point, float latitudeDifference,
+  public synchronized void iterateNearbyRoutes(Point point, float latitudeDifference,
       float longitudeDifference, Collection<RouteId> collector) {
     storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
         collector);
   }
 
-  public List<Waypoint> findNearbyStops(Point point, float distance) {
+  public synchronized List<Waypoint> findNearbyStops(Point point, float distance) {
     List<Waypoint> result = new ArrayList<Waypoint>();
     DistanceFilter filter = new DistanceFilter(result, point, distance);
     float latDiff = Earth.latitudeForDistance(distance);
@@ -136,11 +136,11 @@ public class RouteManager {
 
   
 
-  public void iterateAllRouteStops(RouteStopCallback callback) {
+  public synchronized void iterateAllRouteStops(RouteStopCallback callback) {
     storage.iterateAllRouteStops(callback);
   }
 
-  public void benchmark() {
+  public synchronized void benchmark() {
     iterateAllRouteStops(new RouteStopCallback() {
 
       @Override
