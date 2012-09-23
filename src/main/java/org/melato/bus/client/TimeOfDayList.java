@@ -9,6 +9,7 @@ import org.melato.log.Log;
 
 public class TimeOfDayList extends AbstractList<TimeOfDay> {
   private int[] times;
+  private int   timeOffset;
   private Date  currentTime;
 
   public TimeOfDayList(int[] times, Date currentTime) {
@@ -16,6 +17,11 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
     this.currentTime = currentTime;
     Log.info( "TimeOfDayList times.length=" + times.length );
   }
+  
+  public void setTimeOffset(int timeOffset) {
+    this.timeOffset = timeOffset;
+  }
+
   public TimeOfDayList(Schedule schedule, Date currentTime) {
     this(schedule.getTimes(currentTime), currentTime);
   }
@@ -24,7 +30,7 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
   }
   @Override
   public TimeOfDay get(int location) {
-    return new TimeOfDay(times[location]);
+    return new TimeOfDay(times[location] + timeOffset / 60);
   }
 
   @Override
