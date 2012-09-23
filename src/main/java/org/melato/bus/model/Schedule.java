@@ -21,6 +21,7 @@ public class Schedule {
     return d2Format.format(time/60) + ":" + d2Format.format(time%60);
   }
   
+  /** Parse a hh:mm time and return minutes since midnight.*/
   public static int parseTime(String time) {
     int p = time.indexOf(':');
     if ( p < 0 )
