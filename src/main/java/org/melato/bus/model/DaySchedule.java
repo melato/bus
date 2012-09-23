@@ -13,6 +13,7 @@ public class DaySchedule {
   public static final int MONDAY_FRIDAY = 62;
   public static final int SATURDAY = 64;
   public static final int SATURDAY_SUNDAY = 65;
+  public static final int EVERYDAY = 127;
   /** times are stored as minutes from midnight. */
   private int[] times;
   private int   days;  // days is a bitmap, bit 0 = sunday, bit 6 = saturday
