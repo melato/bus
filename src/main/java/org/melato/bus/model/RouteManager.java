@@ -37,20 +37,20 @@ public class RouteManager {
     }
   }
   
-  public synchronized Route getRoute(RouteId routeId) {
+  public Route getRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
   
-  public synchronized Route loadRoute(RouteId routeId) {
+  public Route loadRoute(RouteId routeId) {
     return storage.loadRoute(routeId);
   }
 
-  public synchronized Schedule loadSchedule(RouteId routeId) {
+  public Schedule loadSchedule(RouteId routeId) {
     Log.info( "RouteManager.loadSchedule: " + routeId );
     return storage.loadSchedule(routeId);
   }
 
-  public synchronized Schedule loadSchedule(Route route) {
+  public Schedule loadSchedule(Route route) {
     return loadSchedule(route.getRouteId());
   }
 
@@ -62,15 +62,15 @@ public class RouteManager {
    *  - sym - The stop symbol
    *  - name - The stop label  
    * */
-  public synchronized List<Waypoint> loadWaypoints(RouteId routeId) {
+  public List<Waypoint> loadWaypoints(RouteId routeId) {
     return storage.loadWaypoints(routeId);
   }
 
-  public synchronized List<Waypoint> loadWaypoints(Route route) {
+  public List<Waypoint> loadWaypoints(Route route) {
     return storage.loadWaypoints(route.getRouteId());
   }
 
-  public synchronized GPX loadGPX(RouteId routeId) {
+  public GPX loadGPX(RouteId routeId) {
     List<Waypoint> waypoints = storage.loadWaypoints(routeId);
     GPX gpx = new GPX();
     org.melato.gpx.Route rte = new org.melato.gpx.Route();
@@ -79,11 +79,11 @@ public class RouteManager {
     return gpx;      
   }
 
-  public synchronized GPX loadGPX(Route route) {
+  public GPX loadGPX(Route route) {
     return loadGPX(route.getRouteId());
   }
 
-  public synchronized String getUri( Route route ) {
+  public String getUri( Route route ) {
     return storage.getUri(route.getRouteId());
   }
   /**
@@ -119,13 +119,13 @@ public class RouteManager {
     }    
   }
   
-  public synchronized void iterateNearbyRoutes(Point point, float latitudeDifference,
+  public void iterateNearbyRoutes(Point point, float latitudeDifference,
       float longitudeDifference, Collection<RouteId> collector) {
     storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
         collector);
   }
 
-  public synchronized List<Waypoint> findNearbyStops(Point point, float distance) {
+  public List<Waypoint> findNearbyStops(Point point, float distance) {
     List<Waypoint> result = new ArrayList<Waypoint>();
     DistanceFilter filter = new DistanceFilter(result, point, distance);
     float latDiff = Earth.latitudeForDistance(distance);
@@ -136,11 +136,11 @@ public class RouteManager {
 
   
 
-  public synchronized void iterateAllRouteStops(RouteStopCallback callback) {
+  public void iterateAllRouteStops(RouteStopCallback callback) {
     storage.iterateAllRouteStops(callback);
   }
 
-  public synchronized void benchmark() {
+  public void benchmark() {
     iterateAllRouteStops(new RouteStopCallback() {
 
       @Override
