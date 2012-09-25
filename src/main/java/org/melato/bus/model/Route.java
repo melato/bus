@@ -8,7 +8,6 @@ package org.melato.bus.model;
  *
  */
 public class Route implements Cloneable, Comparable<Route> {
-  private Id  id;
   private RouteId routeId;
   
   /** The label that the user sees, e.g. "301B"
@@ -21,11 +20,6 @@ public class Route implements Cloneable, Comparable<Route> {
   
   public Route() {
     super();
-  }
-
-  public Route(Id id) {
-    super();
-    this.id = id;
   }
 
   @Override
@@ -70,16 +64,6 @@ public class Route implements Cloneable, Comparable<Route> {
     if ( d != 0 )
       return d;
     return AlphanumericComparator.INSTANCE.compare(getDirection(), r.getDirection());
-  }
-  
-  /** This is an internal id, used internally only by the route database.
-   * */
-  public Id getId() {
-    return id;
-  }
-
-  public void setId(Id id) {
-    this.id = id;
   }
   
   /** This is an external route id, used for storing in caches, etc.

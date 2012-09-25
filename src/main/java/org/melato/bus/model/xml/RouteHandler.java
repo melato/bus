@@ -37,7 +37,6 @@ public class RouteHandler extends XMLMappingHandler {
     String label = tag.getRequiredAttribute(RouteWriter.LABEL);
     String direction = tag.getRequiredAttribute(RouteWriter.DIRECTION);
     RouteId id = new RouteId(name, direction);
-    route.setId(id);
     route.setRouteId(id);
     route.setLabel(label);
     super.start(tag);
