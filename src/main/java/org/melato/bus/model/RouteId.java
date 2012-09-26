@@ -1,12 +1,14 @@
 package org.melato.bus.model;
 
+import java.io.Serializable;
+
 /**
  * A RouteId is a persistent id for the route.
  * It is used as the database id in the XmlRouteModel, and as a cross-database route id.
  * @author Alex Athanasopoulos
  *
  */
-public class RouteId implements Id {
+public class RouteId implements Serializable {
   private static final long serialVersionUID = 1L;
   /** The internal name, e.g. 301b */
   private String  name;

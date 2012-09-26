@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.melato.gpx.Earth;
+import org.melato.gps.Earth;
+import org.melato.gps.Point;
 import org.melato.gpx.GPX;
-import org.melato.gpx.Point;
 import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;

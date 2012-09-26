@@ -13,11 +13,11 @@ import java.util.Set;
 
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
-import org.melato.gpx.Earth;
+import org.melato.gps.Earth;
+import org.melato.gps.Point;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.GPXWriter;
-import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 import org.melato.log.Log;

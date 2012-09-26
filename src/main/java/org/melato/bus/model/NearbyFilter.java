@@ -4,7 +4,7 @@ import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.melato.gpx.Point;
+import org.melato.gps.Point;
 import org.melato.gpx.Waypoint;
 
 public class NearbyFilter extends AbstractCollection<Waypoint> {

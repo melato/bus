@@ -1,5 +1,7 @@
 package org.melato.bus.model;
 
+import java.io.Serializable;
+
 
 /**
  * Contains basic information about a bus route in a certain direction,
@@ -7,7 +9,9 @@ package org.melato.bus.model;
  * @author Alex Athanasopoulos
  *
  */
-public class Route implements Cloneable, Comparable<Route> {
+public class Route implements Cloneable, Serializable, Comparable<Route> {
+  private static final long serialVersionUID = 1L;
+
   private RouteId routeId;
   
   /** The label that the user sees, e.g. "301B"

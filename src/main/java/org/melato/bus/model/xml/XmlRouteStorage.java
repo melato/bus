@@ -15,9 +15,9 @@ import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.Schedule;
+import org.melato.gps.Point;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
-import org.melato.gpx.Point;
 import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
 
