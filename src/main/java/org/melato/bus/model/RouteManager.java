@@ -21,14 +21,18 @@ import org.melato.util.AbstractCollector;
  *
  */
 public class RouteManager {
-  private RouteStorage storage;  
+  private RouteStorage storage;
+  private RouteId cachedRouteId;
+  private Route   cachedRoute;
+  private List<Waypoint> cachedWaypoints;
+  private Schedule cachedSchedule;
     
   public RouteManager(RouteStorage storage) {
     super();
     this.storage = storage;
   }
   
-  public synchronized List<Route> getRoutes() {
+  public List<Route> getRoutes() {
     Clock clock = new Clock("getRoutes");
     try {
       return storage.loadRoutes();
@@ -38,22 +42,49 @@ public class RouteManager {
   }
   
   public Route getRoute(RouteId routeId) {
-    return storage.loadRoute(routeId);
+    synchronized(this) {
+      if ( isCached(routeId) && cachedRoute != null) {
+        return cachedRoute;
+      }
+    }
+    Log.info( "RouteManager.loadRoute: " + routeId );
+    Route route = storage.loadRoute(routeId);
+    synchronized(this) {
+      setCachedRouteId(routeId);
+      cachedRoute = route;
+    }
+    return route;
   }
   
-  public Route loadRoute(RouteId routeId) {
-    return storage.loadRoute(routeId);
-  }
-
-  public Schedule loadSchedule(RouteId routeId) {
+  public Schedule getSchedule(RouteId routeId) {
+    synchronized(this) {
+      if ( isCached(routeId) && cachedSchedule != null) {
+        return cachedSchedule;
+      }
+    }
     Log.info( "RouteManager.loadSchedule: " + routeId );
-    return storage.loadSchedule(routeId);
+    Schedule schedule = storage.loadSchedule(routeId);
+    synchronized(this) {
+      setCachedRouteId(routeId);
+      cachedSchedule = schedule;
+    }
+    return schedule;
   }
 
-  public Schedule loadSchedule(Route route) {
-    return loadSchedule(route.getRouteId());
+  public Schedule getSchedule(Route route) {
+    return getSchedule(route.getRouteId());
   }
 
+  private boolean isCached(RouteId routeId) {
+    return cachedRouteId != null && cachedRouteId.equals(routeId);
+  }
+  private synchronized void setCachedRouteId(RouteId routeId) {
+    if ( ! isCached(routeId)) {
+      cachedRouteId = routeId;
+      cachedWaypoints = null;    
+      cachedSchedule = null;
+    }
+  }
   /**
    * Get the list or waypoints for the route.
    * Each waypoint is a route stop.
@@ -62,16 +93,26 @@ public class RouteManager {
    *  - sym - The stop symbol
    *  - name - The stop label  
    * */
-  public List<Waypoint> loadWaypoints(RouteId routeId) {
-    return storage.loadWaypoints(routeId);
+  public List<Waypoint> getWaypoints(RouteId routeId) {
+    synchronized(this) {
+      if ( isCached(routeId) && cachedWaypoints != null) {
+        return cachedWaypoints;
+      }
+    }
+    List<Waypoint> waypoints = storage.loadWaypoints(routeId);
+    synchronized(this) {
+      setCachedRouteId(routeId);
+      cachedWaypoints = waypoints;
+    }
+    return waypoints;
   }
 
-  public List<Waypoint> loadWaypoints(Route route) {
-    return storage.loadWaypoints(route.getRouteId());
+  public List<Waypoint> getWaypoints(Route route) {
+    return getWaypoints(route.getRouteId());
   }
 
   public GPX loadGPX(RouteId routeId) {
-    List<Waypoint> waypoints = storage.loadWaypoints(routeId);
+    List<Waypoint> waypoints = getWaypoints(routeId);
     GPX gpx = new GPX();
     org.melato.gpx.Route rte = new org.melato.gpx.Route();
     rte.path = new Sequence(waypoints);
