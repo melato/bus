@@ -22,6 +22,7 @@ import org.melato.util.AbstractCollector;
  */
 public class RouteManager {
   private RouteStorage storage;
+  
   private RouteId cachedRouteId;
   private Route   cachedRoute;
   private List<Waypoint> cachedWaypoints;
@@ -81,6 +82,7 @@ public class RouteManager {
   private synchronized void setCachedRouteId(RouteId routeId) {
     if ( ! isCached(routeId)) {
       cachedRouteId = routeId;
+      cachedRoute = null;
       cachedWaypoints = null;    
       cachedSchedule = null;
     }
