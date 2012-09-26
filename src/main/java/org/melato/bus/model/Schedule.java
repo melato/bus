@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 /** A schedule maintains departure information for one route and for all days of the week. */
 public class Schedule {
   private DaySchedule[] schedules;
+  private String comment;
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
@@ -80,5 +81,14 @@ public class Schedule {
     }
     return buf.toString();
   }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
+  }
+
   
 }

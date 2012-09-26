@@ -10,7 +10,8 @@ import org.melato.xml.XMLTag;
 import org.xml.sax.SAXException;
 
 /**
- * XML element handler for route
+ * XML element handler for schedules.
+ * Handles the schedule element, which contains information for one day-schedule.
  * @author Alex Athanasopoulos
  */
 public class ScheduleHandler extends XMLMappingHandler {

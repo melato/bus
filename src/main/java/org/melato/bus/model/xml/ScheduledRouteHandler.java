@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.melato.bus.model.Route;
+import org.melato.bus.model.Schedule;
+import org.melato.xml.XMLStringHandler;
 import org.xml.sax.SAXException;
 
 /**
@@ -15,16 +17,20 @@ import org.xml.sax.SAXException;
  * @author Alex Athanasopoulos
  */
 public class ScheduledRouteHandler extends RouteHandler {
-  List<ScheduledRoute> scheduledRoutes = new ArrayList<ScheduledRoute>();
-  ScheduleHandler scheduleHandler = new ScheduleHandler();
+  private List<ScheduledRoute> scheduledRoutes = new ArrayList<ScheduledRoute>();
+  private ScheduleHandler scheduleHandler = new ScheduleHandler();
+  private XMLStringHandler commentHandler = new XMLStringHandler();
   
   public ScheduledRouteHandler() {
     super();
     setHandler( ScheduledRouteWriter.SCHEDULE, scheduleHandler );
+    setHandler( ScheduledRouteWriter.SCHEDULE_COMMENT, commentHandler );
   }
 
   protected void addRoute(Route route) {
-    ScheduledRoute sr = new ScheduledRoute(route, scheduleHandler.getSchedule());
+    Schedule schedule = scheduleHandler.getSchedule();
+    schedule.setComment(commentHandler.getText());
+    ScheduledRoute sr = new ScheduledRoute(route, schedule);
     scheduledRoutes.add(sr);
   }
   

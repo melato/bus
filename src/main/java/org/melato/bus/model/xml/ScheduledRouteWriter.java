@@ -15,9 +15,16 @@ import org.melato.xml.XMLWriter;
  */
 public class ScheduledRouteWriter extends RouteWriter {
   public static final String SCHEDULE = "schedule";
+  public static final String SCHEDULE_COMMENT = "schedule_comment";
   private void writeSchedules(Schedule schedule, XMLWriter xml) {
     if ( schedule == null ) {
       return;
+    }
+    if ( schedule.getComment() != null ) {
+      xml.println();
+      xml.tagOpen(SCHEDULE_COMMENT);
+      xml.text(schedule.getComment());
+      xml.tagEnd(SCHEDULE_COMMENT);      
     }
     for( DaySchedule daySchedule: schedule.getSchedules() ) {
       xml.println();
