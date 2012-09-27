@@ -2,6 +2,7 @@ package org.melato.bus.model.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.Route;
@@ -56,4 +57,17 @@ public class ScheduledRouteWriter extends RouteWriter {
     end(xml);
     xml.close();
   }
+  public void writeScheduledRoutes(List<ScheduledRoute> routes, File file) throws IOException {
+    XMLWriter xml = new XMLWriter(file);
+    try {
+      begin(xml);
+      for( ScheduledRoute route: routes ) {
+        write(route, xml);
+      }
+      end(xml);
+    } finally {
+      xml.close();
+    }
+  }
+  
 }
