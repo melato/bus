@@ -22,6 +22,7 @@ public class RouteHandlerTest {
       Assert.assertEquals("304b", route.getRouteId().getName());
       Assert.assertEquals("304B", route.getLabel());
       Assert.assertEquals("Route Title", route.getTitle());
+      Assert.assertEquals( 16, route.getColor());
       Schedule schedule = list.get(0).getSchedule();
       int[] times = null;
       

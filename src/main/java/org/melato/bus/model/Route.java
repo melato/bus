@@ -21,6 +21,9 @@ public class Route implements Cloneable, Serializable, Comparable<Route> {
   
   /** The longer descriptive title of the bus line. */
   private String      title; // e.g. "Γραμμή 304 ΣΤ. ΝΟΜΙΣΜΑΤΟΚΟΠΕΙΟ - ΑΡΤΕΜΙΣ (ΒΡΑΥΡΩΝΑ)"
+  private int color = 0x0000ff;
+  private int backgroundColor = 0;
+  private boolean primary;
   
   public Route() {
     super();
@@ -49,6 +52,31 @@ public class Route implements Cloneable, Serializable, Comparable<Route> {
   public void setTitle(String title) {
     this.title = title;
   }
+  
+  public int getColor() {
+    return color;
+  }
+
+  public void setColor(int color) {
+    this.color = color;
+  }
+
+  public int getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public void setBackgroundColor(int backgroundColor) {
+    this.backgroundColor = backgroundColor;
+  }
+
+  public boolean isPrimary() {
+    return primary;
+  }
+
+  public void setPrimary(boolean primary) {
+    this.primary = primary;
+  }
+
   public String getDirection() {
     return routeId.getDirection();
   }

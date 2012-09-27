@@ -36,6 +36,17 @@ public class RouteHandler extends XMLMappingHandler {
     String name = tag.getRequiredAttribute(RouteWriter.NAME);
     String label = tag.getRequiredAttribute(RouteWriter.LABEL);
     String direction = tag.getRequiredAttribute(RouteWriter.DIRECTION);
+    if ( "1".equals( tag.getAttribute(RouteWriter.PRIMARY))) {
+      route.setPrimary(true);
+    }
+    int color = RouteWriter.parseColor(tag.getAttribute(RouteWriter.COLOR));
+    if ( color != -1 ) {
+      route.setColor(color);
+    }
+    color = RouteWriter.parseColor(tag.getAttribute(RouteWriter.BACKGROUND_COLOR));
+    if ( color != -1 ) {
+      route.setBackgroundColor(color);
+    }
     RouteId id = new RouteId(name, direction);
     route.setRouteId(id);
     route.setLabel(label);

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <routes>
-<route name="304b" label="304B" direction="out">
+<route name="304b" label="304B" direction="out" color="#000010">
   <title>Route Title</title>
   <schedule days_bitmap="62">
     <time value="5:00"/>
