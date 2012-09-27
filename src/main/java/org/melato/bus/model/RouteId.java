@@ -15,6 +15,8 @@ public class RouteId implements Serializable {
   /** The direction of the route, "1" for outgoing, "2" for incoming.  */
   private String direction;
     
+  public RouteId() {
+  }
   public RouteId(String name, String direction) {
     super();
     this.name = name;
@@ -25,6 +27,7 @@ public class RouteId implements Serializable {
     name = fields[0];
     direction = fields[1];    
   }
+  
   @Override
   public String toString() {
     return name + "-" + direction;
