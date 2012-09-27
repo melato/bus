@@ -23,6 +23,7 @@ import org.melato.util.AbstractCollector;
 public class RouteManager {
   private RouteStorage storage;
   
+  private List<Route> primaryRoutes;
   private RouteId cachedRouteId;
   private Route   cachedRoute;
   private List<Waypoint> cachedWaypoints;
@@ -40,6 +41,13 @@ public class RouteManager {
     } finally {
       Log.info(clock);
     }
+  }
+  
+  public List<Route> getPrimaryRoutes() {
+    if ( primaryRoutes == null ) {
+      primaryRoutes = storage.loadPrimaryRoutes();
+    }
+    return primaryRoutes;
   }
   
   public Route getRoute(RouteId routeId) {

@@ -14,6 +14,10 @@ import org.melato.gpx.Waypoint;
 public interface RouteStorage {
   /** Load a list of all routes. */
   List<Route> loadRoutes();
+
+  /** Load the primary routes. */
+  List<Route> loadPrimaryRoutes();
+  
   /** Load a single route. */
   Route loadRoute(RouteId routeId);
   /** Load a route's schedule (for all days of the week) */

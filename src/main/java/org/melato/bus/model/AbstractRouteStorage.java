@@ -1,6 +1,7 @@
 package org.melato.bus.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.melato.gps.Point;
@@ -40,4 +41,11 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public String getUri(RouteId routeId) {
     return null;
   }
+
+
+  @Override
+  public List<Route> loadPrimaryRoutes() {
+    return Collections.emptyList();
+  }
+    
 }

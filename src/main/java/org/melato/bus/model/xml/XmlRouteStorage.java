@@ -23,6 +23,7 @@ import org.xml.sax.SAXException;
 
 public class XmlRouteStorage extends AbstractRouteStorage {
   public static final String ROUTES_FILE = "routes.xml";
+  public static final String PRIMARY_ROUTES_FILE = "primary_routes.xml";
   public static final String STOPS_FILE = "stops.gpx";
   public static final String ROUTES_DIR = "routes";
   public static final String GPX_DIR = "gpx";
@@ -54,9 +55,9 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     return url;    
   }
   
-  public List<Route> loadRoutes() {
+  private List<Route> loadRoutes(String filename) {
     try {
-      URL url = makeUrl( ROUTES_FILE );
+      URL url = makeUrl( filename );
       List<Route> routes = RouteHandler.parseRoutes(url.openStream());
       return routes;
     } catch( IOException e ) {
@@ -64,6 +65,14 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     } catch( SAXException e ) {
       throw new RuntimeException(e);
     }
+  }
+
+  public List<Route> loadRoutes() {
+    return loadRoutes(ROUTES_FILE);
+  }
+
+  public List<Route> loadPrimaryRoutes() {
+    return loadRoutes(PRIMARY_ROUTES_FILE);
   }
 
   public Route loadRoute(RouteId routeId) {
