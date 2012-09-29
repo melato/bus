@@ -132,5 +132,9 @@ public class Route implements Cloneable, Serializable, Comparable<Route> {
       return false;
     return true;
   }
+  
+  public boolean isSameColor(Route route) {
+    return color == route.color && backgroundColor == route.backgroundColor;
+  }
 
 }
