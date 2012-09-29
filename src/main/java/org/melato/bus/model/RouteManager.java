@@ -1,8 +1,11 @@
 package org.melato.bus.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.melato.gps.Earth;
 import org.melato.gps.Point;
@@ -13,7 +16,6 @@ import org.melato.log.Clock;
 import org.melato.log.Log;
 import org.melato.util.AbstractCollector;
 
-
 /**
  * Provides read-access to routes, backed by a pluggable route database (RouteStorage).
  * For use on Java SE or Android
@@ -23,7 +25,9 @@ import org.melato.util.AbstractCollector;
 public class RouteManager {
   private RouteStorage storage;
   
+  private List<Route> allRoutes;
   private List<Route> primaryRoutes;
+  private Map<RouteId,Route> routeIndex;
   private RouteId cachedRouteId;
   private Route   cachedRoute;
   private List<Waypoint> cachedWaypoints;
@@ -34,18 +38,39 @@ public class RouteManager {
     this.storage = storage;
   }
   
+  private List<Route> compact(List<Route> list) {
+    return Arrays.asList(list.toArray(new Route[list.size()]));
+  }
+  
   public List<Route> getRoutes() {
-    Clock clock = new Clock("getRoutes");
-    try {
-      return storage.loadRoutes();
-    } finally {
-      Log.info(clock);
+    if ( allRoutes == null ) {
+      synchronized( this ) {
+        if ( allRoutes == null ) {
+          Clock clock = new Clock("getRoutes");
+          allRoutes = compact(storage.loadRoutes());
+          routeIndex = new HashMap<RouteId,Route>();
+          for(Route route: allRoutes) {
+            routeIndex.put(route.getRouteId(), route);            
+          }
+          Log.info(clock);
+        }
+      }
     }
+    Log.info("allRoutes size=" + allRoutes.size());
+    return allRoutes;
+  }
+  public Map<RouteId,Route> getRouteIndex() {
+    getRoutes();
+    return routeIndex;
   }
   
   public List<Route> getPrimaryRoutes() {
     if ( primaryRoutes == null ) {
-      primaryRoutes = storage.loadPrimaryRoutes();
+      synchronized(this) {
+        if ( primaryRoutes == null) {
+          primaryRoutes = compact(storage.loadPrimaryRoutes());
+        }
+      }
     }
     return primaryRoutes;
   }
@@ -56,8 +81,13 @@ public class RouteManager {
         return cachedRoute;
       }
     }
-    Log.info( "RouteManager.loadRoute: " + routeId );
-    Route route = storage.loadRoute(routeId);
+    Route route = null;
+    if (allRoutes != null) {
+      route = routeIndex.get(routeId);
+    } else {
+      Log.info( "RouteManager.loadRoute: " + routeId );
+      route = storage.loadRoute(routeId);
+    }
     synchronized(this) {
       setCachedRouteId(routeId);
       cachedRoute = route;
