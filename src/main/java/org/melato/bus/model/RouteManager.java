@@ -14,6 +14,7 @@ import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 import org.melato.log.Log;
+import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
 
 /**
@@ -218,6 +219,8 @@ public class RouteManager {
   
 
   public void iterateAllRouteStops(RouteStopCallback callback) {
+    ProgressGenerator progress = ProgressGenerator.get();
+    progress.setLimit( getRoutes().size() );
     storage.iterateAllRouteStops(callback);
   }
 
