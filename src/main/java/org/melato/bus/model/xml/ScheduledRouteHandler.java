@@ -67,7 +67,7 @@ public class ScheduledRouteHandler extends RouteHandler {
     try {
       return parseScheduledRoutes(new FileInputStream(file));
     } catch(SAXException e ) {
-      throw new IOException(e);
+      throw new RuntimeException(e);
     }
   }
   public List<ScheduledRoute> getScheduledRoutes() {
