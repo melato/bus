@@ -34,7 +34,7 @@ import java.util.Set;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
 import org.melato.gps.Earth;
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.GPXWriter;
@@ -71,7 +71,7 @@ public class NearbyManager {
     this.cacheDir = cacheDir;
   }
 
-  public Point getLastLocation() {
+  public Point2D getLastLocation() {
     File file = new File(cacheDir, LOCATION_FILE );
     if ( file.exists() ) {
       try {
@@ -88,7 +88,7 @@ public class NearbyManager {
     return null;
   }
   
-  private void setLastLocation(Point location) {
+  private void setLastLocation(Point2D location) {
     GPX gpx = new GPX();
     gpx.setWaypoints(Collections.singletonList(new Waypoint(location)));
     GPXWriter writer = new GPXWriter();
@@ -99,7 +99,7 @@ public class NearbyManager {
     }
   }
       
-  private Waypoint[] filterDistance(List<Waypoint> waypoints, Point target) {    
+  private Waypoint[] filterDistance(List<Waypoint> waypoints, Point2D target) {    
     WaypointDistance[] array = WaypointDistance.createArray(waypoints, target);
     Arrays.sort(array);
     int size = 0;
@@ -114,9 +114,9 @@ public class NearbyManager {
     return result;
   }
   
-  private List<Waypoint> readCache(Point location) {
+  private List<Waypoint> readCache(Point2D location) {
     Clock clock = new Clock("readCache");
-    Point lastLocation = getLastLocation();
+    Point2D lastLocation = getLastLocation();
     File file = new File(cacheDir, NEARBY_FILE ); 
     if ( lastLocation != null && Earth.distance(lastLocation, location) < CACHE_DISTANCE ) {
       try {
@@ -133,7 +133,7 @@ public class NearbyManager {
     return null;
   }
 
-  private void writeCache(List<Waypoint> list, Point location) {
+  private void writeCache(List<Waypoint> list, Point2D location) {
     File file = new File(cacheDir, NEARBY_FILE ); 
     GPX gpx = new GPX();
     gpx.setWaypoints(list);
@@ -145,7 +145,7 @@ public class NearbyManager {
     }        
   }
   
-  public Waypoint[] getNearbyWaypoints(Point location) {
+  public Waypoint[] getNearbyWaypoints(Point2D location) {
     List<Waypoint> list = null;
     list = readCache(location);
     if ( list == null ) {
@@ -164,7 +164,7 @@ public class NearbyManager {
     }
     return map;
   }
-  public NearbyStop[] getNearby(Point location) {
+  public NearbyStop[] getNearby(Point2D location) {
     Log.info("getNearby location=" + location);
     Waypoint[] waypoints = getNearbyWaypoints(location);
     Log.info("getNearbyWaypoints: " + waypoints.length );

@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.melato.gps.Earth;
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.Waypoint;
 
 /** Contains a Waypoint and a distance.
@@ -86,7 +86,7 @@ public class WaypointDistance implements Comparable<WaypointDistance> {
    * @param target
    * @return
    */
-  public static Waypoint[] sort(List<Waypoint> waypoints, Point target) {
+  public static Waypoint[] sort(List<Waypoint> waypoints, Point2D target) {
     WaypointDistance[] array = createArray(waypoints, target );
     Arrays.sort(array);
     Waypoint[] result = new Waypoint[array.length];
@@ -96,13 +96,13 @@ public class WaypointDistance implements Comparable<WaypointDistance> {
     return result;
   }
 
-  public static void setDistance(WaypointDistance[] array, Point location) {
+  public static void setDistance(WaypointDistance[] array, Point2D location) {
     for(WaypointDistance stop: array ) {
       stop.setDistance(Earth.distance(stop.getWaypoint(), location));          
     }
   }  
   
-  public static WaypointDistance[] createArray(List<Waypoint> waypoints, Point target) {
+  public static WaypointDistance[] createArray(List<Waypoint> waypoints, Point2D target) {
     WaypointDistance[] array = new WaypointDistance[waypoints.size()];
     for( int i = 0; i < array.length; i++ ) {
       Waypoint p = waypoints.get(i); 

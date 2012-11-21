@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.Waypoint;
 
 /**
@@ -40,13 +40,13 @@ public abstract class AbstractRouteStorage implements RouteStorage {
 
   
   @Override
-  public void iterateNearbyRoutes(Point point, float latitudeDifference,
+  public void iterateNearbyRoutes(Point2D point, float latitudeDifference,
       float longitudeDifference, Collection<RouteId> collector) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void iterateNearbyStops(Point point, float latDiff, float lonDiff,
+  public void iterateNearbyStops(Point2D point, float latDiff, float lonDiff,
       Collection<Waypoint> collector) {
     throw new UnsupportedOperationException();
   }

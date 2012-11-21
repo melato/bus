@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.melato.gps.Earth;
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.GPX;
 import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
@@ -200,10 +200,10 @@ public class RouteManager {
   static class DistanceFilter extends AbstractCollector<Waypoint> {
     Collection<Waypoint> result;
     
-    private Point center;
+    private Point2D center;
     private float distance;
     
-    public DistanceFilter(List<Waypoint> result, Point center, float distance) {
+    public DistanceFilter(List<Waypoint> result, Point2D center, float distance) {
       super();
       this.result = result;
       this.center = center;
@@ -221,13 +221,13 @@ public class RouteManager {
     }    
   }
   
-  public void iterateNearbyRoutes(Point point, float latitudeDifference,
+  public void iterateNearbyRoutes(Point2D point, float latitudeDifference,
       float longitudeDifference, Collection<RouteId> collector) {
     storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
         collector);
   }
 
-  public List<Waypoint> findNearbyStops(Point point, float distance) {
+  public List<Waypoint> findNearbyStops(Point2D point, float distance) {
     List<Waypoint> result = new ArrayList<Waypoint>();
     DistanceFilter filter = new DistanceFilter(result, point, distance);
     float latDiff = Earth.latitudeForDistance(distance);
@@ -248,7 +248,7 @@ public class RouteManager {
     iterateAllRouteStops(new RouteStopCallback() {
 
       @Override
-      public void add(RouteId routeId, List<Point> waypoints) {
+      public void add(RouteId routeId, List<Point2D> waypoints) {
       }
       
     });

@@ -23,7 +23,7 @@ package org.melato.bus.model;
 import java.util.Collection;
 import java.util.List;
 
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.Waypoint;
 
 /**
@@ -49,14 +49,14 @@ public interface RouteStorage {
   /** Iterate over all stops that are within a certain latitude and longitude difference from a point.
    * The waypoint's links should contain the relevant route-ids.
    * */
-  void iterateNearbyStops(Point point, float latitudeDifference, float longitudeDifference, Collection<Waypoint> collector);
+  void iterateNearbyStops(Point2D point, float latitudeDifference, float longitudeDifference, Collection<Waypoint> collector);
   
   void iterateAllRouteStops(RouteStopCallback callback);
 
   /** Iterate over all routes that are within a certain latitude and longitude difference from a point.
    * The waypoint's links should contain the relevant route-ids.
    * */
-  void iterateNearbyRoutes(Point point, float latitudeDifference, float longitudeDifference, Collection<RouteId> collector);
+  void iterateNearbyRoutes(Point2D point, float latitudeDifference, float longitudeDifference, Collection<RouteId> collector);
   /**
    * Return the original web URL for the route at the route provider's web site.
    * @param route

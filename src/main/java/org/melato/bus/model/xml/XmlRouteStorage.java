@@ -34,7 +34,7 @@ import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.Schedule;
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
 import org.melato.gpx.Waypoint;
@@ -157,7 +157,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   }
   
   @Override
-  public void iterateNearbyStops(Point point, float latDiff, float lonDiff,
+  public void iterateNearbyStops(Point2D point, float latDiff, float lonDiff,
       Collection<Waypoint> collector) {
     iterateAllStops(new NearbyFilter(point, latDiff, lonDiff, collector));
   }

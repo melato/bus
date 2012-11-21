@@ -24,16 +24,16 @@ import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.melato.gps.Point;
+import org.melato.gps.Point2D;
 import org.melato.gpx.Waypoint;
 
 public class NearbyFilter extends AbstractCollection<Waypoint> {
   private Collection<Waypoint> result;
-  private Point target;
+  private Point2D target;
   private float latDelta;
   private float lonDelta;
   
-  public NearbyFilter(Point target, float latDiff, float lonDiff, Collection<Waypoint> result) {
+  public NearbyFilter(Point2D target, float latDiff, float lonDiff, Collection<Waypoint> result) {
     super();
     this.result = result;
     this.target = target;
