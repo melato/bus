@@ -25,17 +25,17 @@ import java.util.Date;
 
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.Schedule;
-import org.melato.log.Log;
 
+/** A list of times for displaying the schedule. */
 public class TimeOfDayList extends AbstractList<TimeOfDay> {
   private int[] times;
+  /** The time difference from the start to the desired stop, in seconds. */ 
   private int   timeOffset;
   private Date  currentTime;
 
   public TimeOfDayList(int[] times, Date currentTime) {
     this.times = times;
     this.currentTime = currentTime;
-    Log.info( "TimeOfDayList times.length=" + times.length );
   }
   
   public void setTimeOffset(int timeOffset) {
@@ -46,11 +46,11 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
     this(schedule.getTimes(currentTime), currentTime);
   }
   public TimeOfDayList(DaySchedule schedule, Date currentTime) {
-    this(schedule.getTimes(), currentTime);;
+    this(schedule.getTimes(), currentTime);
   }
   @Override
   public TimeOfDay get(int location) {
-    return new TimeOfDay(times[location] + timeOffset / 60);
+    return new TimeOfDay(times[location], timeOffset);
   }
 
   @Override
@@ -59,7 +59,8 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
   }
   
   public int getDefaultPosition() {
-    int time = Schedule.getTime(currentTime);
+    Date date = new Date(currentTime.getTime() - timeOffset * 1000L );
+    int time = Schedule.getTime(date);
     for( int i = 1; i < times.length; i++ ) {
       if ( times[i] >= time )
         return i - 1;

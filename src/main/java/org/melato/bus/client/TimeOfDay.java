@@ -22,18 +22,35 @@ package org.melato.bus.client;
 
 import org.melato.bus.model.Schedule;
 
+/**
+ * An object for displaying a particular schedule time.
+ * It mainly has a toString() method for use by an ArrayAdapter.
+ * */
 public class TimeOfDay {
-  private int time;
+  /** A time in minutes. */
+  private int timeMinutes;
+  
+  /** An offset in seconds. */
+  private int offsetSeconds; 
   
   
   public TimeOfDay(int minutes) {
-    super();
-    this.time = minutes;
+    this.timeMinutes = minutes;
+  }
+
+  public TimeOfDay(int minutes, int offsetSeconds) {
+    this.timeMinutes = minutes;
+    this.offsetSeconds = offsetSeconds;
   }
 
   @Override
   public String toString() {
-    return Schedule.formatTime(time);
+    if ( offsetSeconds == 0 ) {
+      return Schedule.formatTime(timeMinutes);
+    } else {
+      return Schedule.formatTime(timeMinutes + offsetSeconds/60) + " (" + 
+          Schedule.formatTime(timeMinutes) + " + " + Schedule.formatTime(offsetSeconds/60) + ")";
+    }
   }    
 }
 
