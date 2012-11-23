@@ -49,7 +49,7 @@ public class TimeOfDay {
       return Schedule.formatTime(timeMinutes);
     } else {
       return Schedule.formatTime(timeMinutes + offsetSeconds/60) + " (" + 
-          Schedule.formatTime(timeMinutes) + " + " + Schedule.formatTime(offsetSeconds/60) + ")";
+          Schedule.formatTime(timeMinutes) + "+" + Schedule.formatDuration(offsetSeconds) + ")";
     }
   }    
 }

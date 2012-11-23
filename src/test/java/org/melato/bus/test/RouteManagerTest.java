@@ -30,9 +30,9 @@ import org.junit.Test;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
+import org.melato.bus.model.Stop;
 import org.melato.bus.model.xml.XmlRouteStorage;
 import org.melato.gps.Point2D;
-import org.melato.gpx.GPX;
 import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
 
@@ -49,9 +49,7 @@ public class RouteManagerTest {
     RouteManager routeManager = new RouteManager(new XmlRouteStorage(url));
     List<Route> routes = routeManager.getRoutes();
     Assert.assertEquals(4, routes.size());
-    GPX gpx = routeManager.loadGPX(new RouteId("021", "1"));
-    Assert.assertEquals(1, gpx.getRoutes().size());
-    List<Waypoint> waypoints = gpx.getRoutes().get(0).path.getWaypoints();
-    Assert.assertTrue(waypoints.size() > 2 );
+    Stop[] stops = routeManager.getStops(new RouteId("021", "1"));
+    Assert.assertTrue(stops.length > 2 );
   }
 }

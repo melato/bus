@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.Schedule;
+import org.melato.bus.model.Stop;
 import org.melato.gps.Point2D;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
@@ -131,8 +133,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   }
 
 
-  @Override
-  public List<Waypoint> loadWaypoints(RouteId routeId) {
+  private List<Waypoint> loadWaypoints(RouteId routeId) {
     try {
       URL url = makeUrl( GPX_DIR, routeId + ".gpx" );
       GPXParser parser = new GPXParser();
@@ -144,6 +145,23 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     } catch( IOException e ) {
       throw new RuntimeException(e);
     }
+  }
+  
+  List<Stop> waypointsToStops(List<Waypoint> waypoints) {
+    Stop[] stops = new Stop[waypoints.size()];
+    for( int i = 0; i < stops.length; i++ ) {
+      Waypoint p = waypoints.get(i);
+      Stop stop = new Stop(p);
+      stop.setSymbol(p.getSym());
+      stop.setName(p.getName());
+      stops[i] = stop;
+    }
+    return Arrays.asList(stops);
+  }
+  
+  @Override
+  public List<Stop> loadStops(RouteId routeId) {
+    return waypointsToStops(loadWaypoints(routeId));
   }
   
   public void iterateAllStops(Collection<Waypoint> collector) {

@@ -51,6 +51,7 @@ public class RouteManager {
   private Map<RouteId,Route> routeIndex;
   private RouteId cachedRouteId;
   private Route   cachedRoute;
+  private Stop[]  cachedStops;
   private List<Waypoint> cachedWaypoints;
   private Schedule cachedSchedule;
     
@@ -142,9 +143,53 @@ public class RouteManager {
     if ( ! isCached(routeId)) {
       cachedRouteId = routeId;
       cachedRoute = null;
+      cachedStops = null;
       cachedWaypoints = null;    
       cachedSchedule = null;
     }
+  }
+
+  /**
+   * Get the list or stops for the route.
+   * Each stop defines
+   * It defines:
+   *  - lat, lon - The stops coordinates
+   *  - sym - The stop symbol
+   *  - name - The stop label
+   *  - time - The duration from the previous stop (in milliseconds)
+   *  - deviation - The statistical deviation from the stated duration
+   * */
+  public Stop[] getStops(RouteId routeId) {
+    synchronized(this) {
+      if ( isCached(routeId) && cachedStops != null) {
+        return cachedStops;
+      }
+    }
+    Stop[] stops = storage.loadStops(routeId).toArray(new Stop[0]);
+    synchronized(this) {
+      setCachedRouteId(routeId);
+      cachedStops = stops;
+    }
+    return stops;
+  }
+
+  public Stop[] getStops(Route route) {
+    return getStops(route.getRouteId());
+  }
+
+
+  private List<Waypoint> stopsToWaypoints(RouteId routeId, Stop[] stops) {
+    Waypoint[] waypoints = new Waypoint[stops.length];
+    List<String> links = Arrays.asList( new String[] { routeId.toString() }); 
+    for( int i = 0; i < waypoints.length; i++ ){
+      Stop stop = stops[i];
+      Waypoint p = new Waypoint(stop);
+      p.setName(stop.getName());
+      p.setSym(stop.getSymbol());
+      p.setLinks(links);
+      waypoints[i] = p;
+    }
+    return Arrays.asList(waypoints);
   }
   /**
    * Get the list or waypoints for the route.
@@ -160,10 +205,12 @@ public class RouteManager {
         return cachedWaypoints;
       }
     }
-    List<Waypoint> waypoints = storage.loadWaypoints(routeId);
+    Stop[] stops = getStops(routeId);
+    List<Waypoint> waypoints = stopsToWaypoints(routeId, stops);
     synchronized(this) {
-      setCachedRouteId(routeId);
-      cachedWaypoints = waypoints;
+      if ( isCached(routeId) ) {
+        cachedWaypoints = waypoints;
+      }
     }
     return waypoints;
   }

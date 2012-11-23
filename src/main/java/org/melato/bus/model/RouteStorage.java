@@ -42,8 +42,8 @@ public interface RouteStorage {
   Route loadRoute(RouteId routeId);
   /** Load a route's schedule (for all days of the week) */
   Schedule loadSchedule(RouteId routeId);
-  /** Load a route's stops as a list of consecutive waypoints. */
-  List<Waypoint> loadWaypoints(RouteId routeId);
+  /** Load a route's stops. */
+  List<Stop> loadStops(RouteId routeId);
   /** Load information about a single stop. */
   MarkerInfo loadMarker(String symbol);
   /** Iterate over all stops that are within a certain latitude and longitude difference from a point.

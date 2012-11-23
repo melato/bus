@@ -41,6 +41,14 @@ public class Schedule {
   public static String formatTime(int time) {
     return d2Format.format(time/60) + ":" + d2Format.format(time%60);
   }
+
+  public static String formatDuration(int seconds) {
+    if ( seconds < 3600 ) {
+      return d2Format.format(seconds/60) + "'";
+    } else {
+      return d2Format.format(seconds/3600) + ":" + d2Format.format((seconds%3600)/60);
+    }
+  }
   
   /** Parse a hh:mm time and return minutes since midnight.*/
   public static int parseTime(String time) {
