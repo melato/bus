@@ -53,6 +53,10 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
     return new TimeOfDay(times[location], timeOffset);
   }
 
+  public boolean hasOffset() {
+    return timeOffset != 0;
+  }
+  
   @Override
   public int size() {
     return times.length;

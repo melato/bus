@@ -45,12 +45,15 @@ public class TimeOfDay {
 
   @Override
   public String toString() {
+    return Schedule.formatTime(timeMinutes + offsetSeconds/60);
+    /*
     if ( offsetSeconds == 0 ) {
       return Schedule.formatTime(timeMinutes);
     } else {
       return Schedule.formatTime(timeMinutes + offsetSeconds/60) + " (" + 
           Schedule.formatTime(timeMinutes) + "+" + Schedule.formatDuration(offsetSeconds) + ")";
     }
+    */
   }    
 }
 
