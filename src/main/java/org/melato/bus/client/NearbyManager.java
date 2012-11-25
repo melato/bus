@@ -40,7 +40,6 @@ import org.melato.gpx.GPXParser;
 import org.melato.gpx.GPXWriter;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
-import org.melato.log.Log;
 
 /**
  * Provides access to nearby stops.
@@ -122,7 +121,7 @@ public class NearbyManager {
       try {
         GPXParser parser = new GPXParser();
         GPX gpx = parser.parse(file);
-        Log.info(clock);
+        //Log.info(clock);
         return gpx.getWaypoints();
       } catch( IOException e ) {
         file.delete();
@@ -150,7 +149,6 @@ public class NearbyManager {
     list = readCache(location);
     if ( list == null ) {
       // not in cache.  filter the global list
-      Log.info( "querying database for nearby");
       list = routeManager.findNearbyStops(location, TARGET_DISTANCE + CACHE_DISTANCE);
       writeCache(list, location);
     }
@@ -165,9 +163,7 @@ public class NearbyManager {
     return map;
   }
   public NearbyStop[] getNearby(Point2D location) {
-    Log.info("getNearby location=" + location);
     Waypoint[] waypoints = getNearbyWaypoints(location);
-    Log.info("getNearbyWaypoints: " + waypoints.length );
     List<NearbyStop> nearby = new ArrayList<NearbyStop>();
     Set<String> links = new HashSet<String>();
     Map<String,Route> map = getRouteMap();
@@ -185,7 +181,6 @@ public class NearbyManager {
       }
     }
     NearbyStop[] array = nearby.toArray(new NearbyStop[0]);
-    Log.info( "nearby.length=" + array.length);
     // sort them by distance and name.
     Arrays.sort( array, new NearbyStop.Comparer() );
     return array;
