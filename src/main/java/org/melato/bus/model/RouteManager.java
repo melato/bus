@@ -33,7 +33,6 @@ import org.melato.gpx.GPX;
 import org.melato.gpx.Sequence;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
-import org.melato.log.Log;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
 
@@ -74,11 +73,10 @@ public class RouteManager {
           for(Route route: allRoutes) {
             routeIndex.put(route.getRouteId(), route);            
           }
-          Log.info(clock);
+          //Log.info(clock);
         }
       }
     }
-    Log.info("allRoutes size=" + allRoutes.size());
     return allRoutes;
   }
   public Map<RouteId,Route> getRouteIndex() {
@@ -107,7 +105,6 @@ public class RouteManager {
     if (allRoutes != null) {
       route = routeIndex.get(routeId);
     } else {
-      Log.info( "RouteManager.loadRoute: " + routeId );
       route = storage.loadRoute(routeId);
     }
     synchronized(this) {
@@ -123,7 +120,6 @@ public class RouteManager {
         return cachedSchedule;
       }
     }
-    Log.info( "RouteManager.loadSchedule: " + routeId );
     Schedule schedule = storage.loadSchedule(routeId);
     synchronized(this) {
       setCachedRouteId(routeId);
