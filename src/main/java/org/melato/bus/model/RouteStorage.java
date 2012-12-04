@@ -52,6 +52,7 @@ public interface RouteStorage {
   void iterateNearbyStops(Point2D point, float latitudeDifference, float longitudeDifference, Collection<Waypoint> collector);
   
   void iterateAllRouteStops(RouteStopCallback callback);
+  void iteratePrimaryRouteStops(RouteStopCallback callback);
 
   /** Iterate over all routes that are within a certain latitude and longitude difference from a point.
    * The waypoint's links should contain the relevant route-ids.

@@ -287,6 +287,10 @@ public class RouteManager {
     storage.iterateAllRouteStops(callback);
   }
 
+  public void iteratePrimaryRouteStops(RouteStopCallback callback) {
+    storage.iteratePrimaryRouteStops(callback);
+  }
+
   public void benchmark() {
     iterateAllRouteStops(new RouteStopCallback() {
 

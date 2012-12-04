@@ -55,8 +55,13 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public void iterateAllRouteStops(RouteStopCallback callback) {
     throw new UnsupportedOperationException();
   }
-
   
+  @Override
+  public void iteratePrimaryRouteStops(RouteStopCallback callback) {
+    throw new UnsupportedOperationException();
+  }
+
+
   @Override
   public String getUri(RouteId routeId) {
     return null;
