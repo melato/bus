@@ -27,13 +27,13 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.melato.bus.model.Marker;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Stop;
 import org.melato.bus.model.xml.XmlRouteStorage;
 import org.melato.gps.Point2D;
-import org.melato.gpx.Waypoint;
 import org.xml.sax.SAXException;
 
 public class RouteManagerTest {
@@ -41,7 +41,7 @@ public class RouteManagerTest {
     URL url = getClass().getResource("data/");
     RouteManager routeManager = new RouteManager(new XmlRouteStorage(url));
     Point2D target = new Point2D(37.98581f, 23.739164f);
-    List<Waypoint> near = routeManager.findNearbyStops(target, 50);
+    List<Marker> near = routeManager.findNearbyStops(target, 50);
     Assert.assertEquals(1, near.size());
   }
   @Test public void testGPXRoute() throws Exception {
