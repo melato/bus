@@ -29,9 +29,6 @@ import java.util.Map;
 
 import org.melato.gps.Earth;
 import org.melato.gps.Point2D;
-import org.melato.gpx.GPX;
-import org.melato.gpx.Sequence;
-import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
@@ -51,7 +48,6 @@ public class RouteManager {
   private RouteId cachedRouteId;
   private Route   cachedRoute;
   private Stop[]  cachedStops;
-  private List<Waypoint> cachedWaypoints;
   private Schedule cachedSchedule;
     
   public RouteManager(RouteStorage storage) {
@@ -140,7 +136,6 @@ public class RouteManager {
       cachedRouteId = routeId;
       cachedRoute = null;
       cachedStops = null;
-      cachedWaypoints = null;    
       cachedSchedule = null;
     }
   }
@@ -173,60 +168,6 @@ public class RouteManager {
     return getStops(route.getRouteId());
   }
 
-
-  private List<Waypoint> stopsToWaypoints(RouteId routeId, Stop[] stops) {
-    Waypoint[] waypoints = new Waypoint[stops.length];
-    List<String> links = Arrays.asList( new String[] { routeId.toString() }); 
-    for( int i = 0; i < waypoints.length; i++ ){
-      Stop stop = stops[i];
-      Waypoint p = new Waypoint(stop);
-      p.setName(stop.getName());
-      p.setSym(stop.getSymbol());
-      p.setLinks(links);
-      waypoints[i] = p;
-    }
-    return Arrays.asList(waypoints);
-  }
-  /**
-   * Get the list or waypoints for the route.
-   * Each waypoint is a route stop.
-   * It defines:
-   *  - lat, lon - The stops coordinates
-   *  - sym - The stop symbol
-   *  - name - The stop label  
-   * */
-  public List<Waypoint> getWaypoints(RouteId routeId) {
-    synchronized(this) {
-      if ( isCached(routeId) && cachedWaypoints != null) {
-        return cachedWaypoints;
-      }
-    }
-    Stop[] stops = getStops(routeId);
-    List<Waypoint> waypoints = stopsToWaypoints(routeId, stops);
-    synchronized(this) {
-      if ( isCached(routeId) ) {
-        cachedWaypoints = waypoints;
-      }
-    }
-    return waypoints;
-  }
-
-  public List<Waypoint> getWaypoints(Route route) {
-    return getWaypoints(route.getRouteId());
-  }
-
-  public GPX loadGPX(RouteId routeId) {
-    List<Waypoint> waypoints = getWaypoints(routeId);
-    GPX gpx = new GPX();
-    org.melato.gpx.Route rte = new org.melato.gpx.Route();
-    rte.path = new Sequence(waypoints);
-    gpx.getRoutes().add(rte);
-    return gpx;      
-  }
-
-  public GPX loadGPX(Route route) {
-    return loadGPX(route.getRouteId());
-  }
 
   public String getUri( Route route ) {
     return storage.getUri(route.getRouteId());

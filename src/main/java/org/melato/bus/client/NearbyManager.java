@@ -35,9 +35,6 @@ import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.gps.Earth;
 import org.melato.gps.Point2D;
-import org.melato.gpx.GPX;
-import org.melato.gpx.GPXParser;
-import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 
 /**
@@ -71,19 +68,13 @@ public class NearbyManager {
 
   public Point2D getLastLocation() {
     File file = new File(cacheDir, LOCATION_FILE );
+    Point2D location = null;
     if ( file.exists() ) {
-      try {
-        GPXParser parser = new GPXParser();
-        GPX gpx = parser.parse(file);
-        List<Waypoint> waypoints = gpx.getWaypoints();
-        if ( ! waypoints.isEmpty() ) {
-          return waypoints.get(0);
-        }
-      } catch( IOException e ) {
-        file.delete();
-      }
+      location = (Point2D) Serialization.read(Point2D.class, file);
+      if ( location == null )
+        file.delete();      
     }
-    return null;
+    return location;
   }
   
   private void setLastLocation(Point2D location) {

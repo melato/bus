@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.melato.gps.Point2D;
-import org.melato.gpx.Waypoint;
 
 /**
  * Provides dummy implementations of non-essential RouteStorage methods.
