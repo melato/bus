@@ -240,13 +240,13 @@ public class RouteManager {
     return storage.loadMarker(symbol);
   }
 
-  static class DistanceFilter extends AbstractCollector<Waypoint> {
-    Collection<Waypoint> result;
+  static class DistanceFilter extends AbstractCollector<Marker> {
+    Collection<Marker> result;
     
     private Point2D center;
     private float distance;
     
-    public DistanceFilter(List<Waypoint> result, Point2D center, float distance) {
+    public DistanceFilter(List<Marker> result, Point2D center, float distance) {
       super();
       this.result = result;
       this.center = center;
@@ -254,7 +254,7 @@ public class RouteManager {
     }
 
     @Override
-    public boolean add(Waypoint p) {
+    public boolean add(Marker p) {
       if ( Earth.distance(center, p) < distance ) {
         result.add(p);
         size++;
@@ -270,8 +270,8 @@ public class RouteManager {
         collector);
   }
 
-  public List<Waypoint> findNearbyStops(Point2D point, float distance) {
-    List<Waypoint> result = new ArrayList<Waypoint>();
+  public List<Marker> findNearbyStops(Point2D point, float distance) {
+    List<Marker> result = new ArrayList<Marker>();
     DistanceFilter filter = new DistanceFilter(result, point, distance);
     float latDiff = Earth.latitudeForDistance(distance);
     float lonDiff = Earth.longitudeForDistance(distance, point.getLat());

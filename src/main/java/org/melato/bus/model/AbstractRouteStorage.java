@@ -47,7 +47,7 @@ public abstract class AbstractRouteStorage implements RouteStorage {
 
   @Override
   public void iterateNearbyStops(Point2D point, float latDiff, float lonDiff,
-      Collection<Waypoint> collector) {
+      Collection<Marker> collector) {
     throw new UnsupportedOperationException();
   }
 

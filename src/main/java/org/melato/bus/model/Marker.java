@@ -18,50 +18,52 @@
  * along with Athens Next Bus.  If not, see <http://www.gnu.org/licenses/>.
  *-------------------------------------------------------------------------
  */
-package org.melato.bus.client;
+package org.melato.bus.model;
 
-import java.util.Comparator;
+import org.melato.gps.Point2D;
+import org.melato.gps.PointTime;
 
-import org.melato.bus.model.Marker;
-import org.melato.bus.model.Route;
-
-/** Maintains information about a bus stop nearby. */
-public class NearbyStop extends WaypointDistance {
-  private Route     route;
-  private int       group;
-
-  public static class Comparer implements Comparator<NearbyStop> {
-
-    @Override
-    public int compare(NearbyStop s1, NearbyStop s2) {
-      int d = WaypointDistance.compare(s1,  s2);
-      if ( d != 0 )
-        return d;
-      // when two routes have the same stop, compare them by name.
-      return s1.route.compareTo(s2.route);
-    }
-    
+/**
+ * A marker is a route-independent stop that may belong to multiple routes.
+ * @author Alex Athanasopoulos
+ */
+public class Marker extends Point2D {
+  private static final long serialVersionUID = 1L;
+  String name;
+  String symbol;
+  RouteId[] routes;
+  
+  public Marker() {
+    super();
   }
-  public NearbyStop(Marker waypoint, Route route) {
-    super(waypoint, 0f);
-    this.route = route;
+  public Marker(float lat, float lon) {
+    super(lat, lon);
   }
   
-  public Route getRoute() {
-    return route;
+  public Marker(Point2D p) {
+    super(p);
   }
-
-  public int getGroup() {
-    return group;
+  public String getName() {
+    return name;
   }
-
-  public void setGroup(int group) {
-    this.group = group;
+  public void setName(String name) {
+    this.name = name;
   }
-
+  public String getSymbol() {
+    return symbol;
+  }
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
+  
+  public RouteId[] getRoutes() {
+    return routes;
+  }
+  public void setRoutes(RouteId[] routes) {
+    this.routes = routes;
+  }
   @Override
   public String toString() {
-    String s = route + " " + getWaypoint().getName() + " (" + formatDistance(getDistance()) + ")";
-    return s;
-  }
+    return symbol + ":" + name + " " + super.toString();
+  }  
 }

@@ -24,20 +24,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.melato.bus.model.Marker;
 import org.melato.bus.model.Route;
+import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.gps.Earth;
 import org.melato.gps.Point2D;
 import org.melato.gpx.GPX;
 import org.melato.gpx.GPXParser;
-import org.melato.gpx.GPXWriter;
 import org.melato.gpx.Waypoint;
 import org.melato.log.Clock;
 
@@ -52,12 +51,12 @@ public class NearbyManager {
   /** Extra distance to cache. */
   static final float CACHE_DISTANCE = 100f;
   /** The cache file for the nearby waypoints (markers) */
-  static final String NEARBY_FILE = "nearby.gpx";
+  static final String NEARBY_FILE = "nearby.dat";
   /**
    * The cache file for the location used for the nearby waypoints.
    * It is a GPX file containing a single waypoint.
    * */
-  static final String LOCATION_FILE = "location.gpx";
+  static final String LOCATION_FILE = "location.dat";
   static final String LAT = "lat";
   static final String LON = "lon";
   
@@ -88,17 +87,14 @@ public class NearbyManager {
   }
   
   private void setLastLocation(Point2D location) {
-    GPX gpx = new GPX();
-    gpx.setWaypoints(Collections.singletonList(new Waypoint(location)));
-    GPXWriter writer = new GPXWriter();
-    File file = new File(cacheDir, LOCATION_FILE ); 
+    File file = new File(cacheDir, LOCATION_FILE );
     try {
-      writer.write(gpx,  file);
+      Serialization.write(location,  file);
     } catch( IOException e ) {
     }
   }
       
-  private Waypoint[] filterDistance(List<Waypoint> waypoints, Point2D target) {    
+  private Marker[] filterDistance(List<Marker> waypoints, Point2D target) {    
     WaypointDistance[] array = WaypointDistance.createArray(waypoints, target);
     Arrays.sort(array);
     int size = 0;
@@ -106,47 +102,40 @@ public class NearbyManager {
       if ( array[size].getDistance() > TARGET_DISTANCE )
         break;
     }
-    Waypoint[] result = new Waypoint[size];
+    Marker[] result = new Marker[size];
     for( int i = 0; i < size; i++ ) {
       result[i] = array[i].getWaypoint();
     }
     return result;
   }
   
-  private List<Waypoint> readCache(Point2D location) {
+  private List<Marker> readCache(Point2D location) {
     Clock clock = new Clock("readCache");
     Point2D lastLocation = getLastLocation();
     File file = new File(cacheDir, NEARBY_FILE ); 
     if ( lastLocation != null && Earth.distance(lastLocation, location) < CACHE_DISTANCE ) {
-      try {
-        GPXParser parser = new GPXParser();
-        GPX gpx = parser.parse(file);
-        //Log.info(clock);
-        return gpx.getWaypoints();
-      } catch( IOException e ) {
+      Marker[] markers = (Marker[]) Serialization.read(Marker[].class, file);
+      if ( markers != null ) {
+        return Arrays.asList(markers);
+      } else {
         file.delete();
-      } finally {
-        
       }
     }
     return null;
   }
 
-  private void writeCache(List<Waypoint> list, Point2D location) {
-    File file = new File(cacheDir, NEARBY_FILE ); 
-    GPX gpx = new GPX();
-    gpx.setWaypoints(list);
-    GPXWriter writer = new GPXWriter();
+  private void writeCache(List<Marker> list, Point2D location) {
+    File nearbyFile = new File(cacheDir, NEARBY_FILE );
+    Marker[] markers = list.toArray(new Marker[0]);
     try {
-      writer.write(gpx,  file);
+      Serialization.write( markers, nearbyFile );
       setLastLocation(location);
     } catch( IOException e ) {
     }        
   }
   
-  public Waypoint[] getNearbyWaypoints(Point2D location) {
-    List<Waypoint> list = null;
-    list = readCache(location);
+  public Marker[] getNearbyWaypoints(Point2D location) {
+    List<Marker> list = readCache(location);
     if ( list == null ) {
       // not in cache.  filter the global list
       list = routeManager.findNearbyStops(location, TARGET_DISTANCE + CACHE_DISTANCE);
@@ -155,20 +144,13 @@ public class NearbyManager {
     return filterDistance(list, location);
   }
     
-  Map<String,Route> getRouteMap() {
-    Map<String,Route> map = new HashMap<String,Route>();
-    for( Route route: routeManager.getRoutes() ) {
-      map.put( route.getRouteId().toString(), route);
-    }
-    return map;
-  }
   public NearbyStop[] getNearby(Point2D location) {
-    Waypoint[] waypoints = getNearbyWaypoints(location);
+    Marker[] waypoints = getNearbyWaypoints(location);
     List<NearbyStop> nearby = new ArrayList<NearbyStop>();
-    Set<String> links = new HashSet<String>();
-    Map<String,Route> map = getRouteMap();
-    for( Waypoint p: waypoints ) {
-      for( String link: p.getLinks() ) {
+    Set<RouteId> links = new HashSet<RouteId>();
+    Map<RouteId,Route> map = routeManager.getRouteIndex();
+    for( Marker p: waypoints ) {
+      for( RouteId link: p.getRoutes() ) {
         if ( ! links.contains( link )) {
           links.add(link);
           Route route = map.get(link);

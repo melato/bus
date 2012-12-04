@@ -25,12 +25,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.melato.bus.model.AbstractRouteStorage;
+import org.melato.bus.model.Marker;
 import org.melato.bus.model.NearbyFilter;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
@@ -164,11 +167,43 @@ public class XmlRouteStorage extends AbstractRouteStorage {
     return waypointsToStops(loadWaypoints(routeId));
   }
   
-  public void iterateAllStops(Collection<Waypoint> collector) {
+  static class WaypointMarkerFilter extends AbstractCollection<Waypoint> {
+    private Collection<Marker> markers;
+    
+    public WaypointMarkerFilter(Collection<Marker> markers) {
+      this.markers = markers;
+    }
+
+    @Override
+    public boolean add(Waypoint waypoint) {
+      Marker marker = new Marker(waypoint);
+      marker.setSymbol( waypoint.getSym());
+      marker.setName(waypoint.getName());
+      List<String> links = waypoint.getLinks();
+      RouteId[] routes = new RouteId[links.size()];
+      for( int i = 0; i < routes.length; i++ ) {
+        routes[i] = new RouteId(links.get(i));
+      }
+      marker.setRoutes(routes);
+      return markers.add(marker);
+    }
+
+    @Override
+    public Iterator<Waypoint> iterator() {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int size() {
+      throw new UnsupportedOperationException();
+    }
+    
+  }
+  public void iterateAllStops(Collection<Marker> collector) {
     try {
       URL url = makeUrl( STOPS_FILE );
       GPXParser parser = new GPXParser();
-      parser.parseWaypoints(url.openStream(), collector);
+      parser.parseWaypoints(url.openStream(), new WaypointMarkerFilter(collector));
     } catch( IOException e ) {
       throw new RuntimeException(e);
     }
@@ -176,7 +211,7 @@ public class XmlRouteStorage extends AbstractRouteStorage {
   
   @Override
   public void iterateNearbyStops(Point2D point, float latDiff, float lonDiff,
-      Collection<Waypoint> collector) {
+      Collection<Marker> collector) {
     iterateAllStops(new NearbyFilter(point, latDiff, lonDiff, collector));
   }
 }
