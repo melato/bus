@@ -57,6 +57,7 @@ public interface RouteStorage {
    * The waypoint's links should contain the relevant route-ids.
    * */
   void iterateNearbyRoutes(Point2D point, float latitudeDifference, float longitudeDifference, Collection<RouteId> collector);
+  Point2D getCenter();
   /**
    * Return the original web URL for the route at the route provider's web site.
    * @param route

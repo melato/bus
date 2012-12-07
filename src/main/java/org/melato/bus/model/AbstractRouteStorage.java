@@ -71,5 +71,11 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public List<Route> loadPrimaryRoutes() {
     return Collections.emptyList();
   }
-    
+
+
+  @Override
+  public Point2D getCenter() {
+    return null;
+  }
+   
 }

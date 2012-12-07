@@ -232,6 +232,15 @@ public class RouteManager {
     storage.iteratePrimaryRouteStops(callback);
   }
 
+  /** Get a center point for the whole route collection. */
+  public Point2D getCenter() {
+    Point2D center = storage.getCenter();
+    if ( center == null ) {
+      center = new Point2D( 37.975086f, 23.735683f); // hardcoded Syntagma Square.
+    }
+    return center;    
+  }
+  
   public void benchmark() {
     iterateAllRouteStops(new RouteStopCallback() {
 
@@ -240,7 +249,7 @@ public class RouteManager {
       }
       
     });
-  }
+  }   
 
   public RouteStorage getStorage() {
     return storage;
