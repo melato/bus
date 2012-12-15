@@ -35,7 +35,6 @@ import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.gps.Earth;
 import org.melato.gps.Point2D;
-import org.melato.log.Clock;
 
 /**
  * Provides access to nearby stops.
@@ -101,7 +100,6 @@ public class NearbyManager {
   }
   
   private List<Marker> readCache(Point2D location) {
-    Clock clock = new Clock("readCache");
     Point2D lastLocation = getLastLocation();
     File file = new File(cacheDir, NEARBY_FILE ); 
     if ( lastLocation != null && Earth.distance(lastLocation, location) < CACHE_DISTANCE ) {
