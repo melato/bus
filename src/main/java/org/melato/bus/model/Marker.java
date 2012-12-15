@@ -21,7 +21,6 @@
 package org.melato.bus.model;
 
 import org.melato.gps.Point2D;
-import org.melato.gps.PointTime;
 
 /**
  * A marker is a route-independent stop that may belong to multiple routes.
