@@ -28,11 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.melato.gps.Earth;
+import org.melato.gps.GlobalDistance;
+import org.melato.gps.LocalDistance;
+import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
-import org.melato.gpx.GlobalDistance;
-import org.melato.gpx.LocalDistance;
-import org.melato.gpx.Metric;
-import org.melato.log.Clock;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
 
@@ -66,13 +65,11 @@ public class RouteManager {
     if ( allRoutes == null ) {
       synchronized( this ) {
         if ( allRoutes == null ) {
-          Clock clock = new Clock("getRoutes");
           allRoutes = compact(storage.loadRoutes());
           routeIndex = new HashMap<RouteId,Route>();
           for(Route route: allRoutes) {
             routeIndex.put(route.getRouteId(), route);            
           }
-          //Log.info(clock);
         }
       }
     }
