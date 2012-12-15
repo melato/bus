@@ -29,6 +29,9 @@ import java.util.Map;
 
 import org.melato.gps.Earth;
 import org.melato.gps.Point2D;
+import org.melato.gpx.GlobalDistance;
+import org.melato.gpx.LocalDistance;
+import org.melato.gpx.Metric;
 import org.melato.log.Clock;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
@@ -239,6 +242,14 @@ public class RouteManager {
       center = new Point2D( 37.975086f, 23.735683f); // hardcoded Syntagma Square.
     }
     return center;    
+  }
+
+  public Metric getMetric() {
+    Point2D center = getCenter();
+    if ( center != null ) {
+      return new LocalDistance(center);
+    }
+    return new GlobalDistance();
   }
   
   public void benchmark() {
