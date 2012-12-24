@@ -4,8 +4,6 @@ package org.melato.bus.model;
 public class ScheduleException implements Comparable<ScheduleException> {
   private int dateId;
   private DaySchedule daySchedule;
-  /** Used for internal identification purposes, e.g. when saving the exception to XML, etc. */
-  private String id;
     
   public ScheduleException(int dateId, DaySchedule daySchedule) {
     super();
@@ -17,12 +15,6 @@ public class ScheduleException implements Comparable<ScheduleException> {
   }
   public DaySchedule getDaySchedule() {
     return daySchedule;
-  }
-  public String getId() {
-    return id;
-  }
-  public void setId(String id) {
-    this.id = id;
   }
   @Override
   public int compareTo(ScheduleException o) {
