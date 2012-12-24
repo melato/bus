@@ -30,6 +30,7 @@ import java.util.GregorianCalendar;
 public class Schedule {
   private DaySchedule[] schedules;
   private String comment;
+  private ScheduleException[] exceptions = new ScheduleException[0];
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
@@ -71,8 +72,24 @@ public class Schedule {
     return schedules;
   }
   
+  public ScheduleException[] getExceptions() {
+    return exceptions;
+  }
+
+  public void setExceptions(ScheduleException[] exceptions) {
+    this.exceptions = exceptions;
+  }
+
   public DaySchedule getSchedule(Date date) {
-    return DaySchedule.findSchedule(schedules, date);    
+    Calendar cal = new GregorianCalendar();
+    cal.setTime(date);
+    int dateId = DateId.dateId(cal);
+    for(ScheduleException exception: exceptions) {
+      if ( exception.getDateId() == dateId ) {
+        return exception.getDaySchedule();
+      }
+    }
+    return DaySchedule.findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
   /** Get the schedule times for a given day of the week. */
   public int[] getTimes( Date date ) {
@@ -117,6 +134,4 @@ public class Schedule {
   public void setComment(String comment) {
     this.comment = comment;
   }
-
-  
 }
