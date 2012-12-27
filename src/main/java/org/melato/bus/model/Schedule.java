@@ -30,7 +30,6 @@ import java.util.GregorianCalendar;
 public class Schedule {
   private DaySchedule[] schedules;
   private String comment;
-  private ScheduleException[] exceptions = new ScheduleException[0];
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
@@ -72,25 +71,30 @@ public class Schedule {
     return schedules;
   }
   
-  public ScheduleException[] getExceptions() {
-    return exceptions;
+  public DaySchedule getSchedule(ScheduleId id) {
+    if (id == null)
+      return null;
+    for( DaySchedule d: getSchedules() ) {
+      if ( id.equals(d.getScheduleId())) {
+        return d;
+      }
+    }
+    return null;    
   }
-
-  public void setExceptions(ScheduleException[] exceptions) {
-    this.exceptions = exceptions;
-  }
-
+  
   public DaySchedule getSchedule(Date date) {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
+    cal.add(Calendar.HOUR, -4); // go back 4 hours.
     int dateId = DateId.dateId(cal);
-    for(ScheduleException exception: exceptions) {
-      if ( exception.getDateId() == dateId ) {
-        return exception.getDaySchedule();
+    for( DaySchedule daySchedule: schedules) {
+      if (daySchedule.matchesDateId(dateId)) {
+        return daySchedule;
       }
     }
     return DaySchedule.findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
+  
   /** Get the schedule times for a given day of the week. */
   public int[] getTimes( Date date ) {
     DaySchedule schedule = getSchedule(date);
@@ -118,11 +122,12 @@ public class Schedule {
     return hour * 60 + minute;
   }
 
+  /** For debugging. */
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder("Schedule:");
     for( DaySchedule ds: schedules ) {
-      buf.append( " " + ds.getDays() + "=" + ds.getTimes().length);
+      buf.append( " " + ds.getScheduleId() + "=" + ds.getTimes().length);
     }
     return buf.toString();
   }
