@@ -30,6 +30,8 @@ import java.util.GregorianCalendar;
 public class Schedule {
   private DaySchedule[] schedules;
   private String comment;
+  /** The # of minutes after midnight where the schedule is still considered the previous day's schedule. */
+  private int dayChange;
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
@@ -58,10 +60,6 @@ public class Schedule {
     return Integer.parseInt(time.substring(0,p)) * 60 + Integer.parseInt(time.substring(p+1));
   }
     
-  /** Create an empty schedule. */
-  public Schedule() {
-  }
-
   public Schedule(DaySchedule[] schedules) {
     super();
     this.schedules = schedules;
@@ -85,7 +83,7 @@ public class Schedule {
   public DaySchedule getSchedule(Date date) {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
-    cal.add(Calendar.HOUR, -4); // go back 4 hours.
+    cal.add(Calendar.MINUTE, -dayChange); // shift the day back.
     int dateId = DateId.dateId(cal);
     for( DaySchedule daySchedule: schedules) {
       if (daySchedule.matchesDateId(dateId)) {
@@ -105,7 +103,7 @@ public class Schedule {
   }
   
   /** Get the schedule times for a given day of the week. */
-  public int[] getTimes( int dayOfWeek ) {
+  public int[] getTimesForDayOfWeek( int dayOfWeek ) {
     DaySchedule schedule = DaySchedule.findSchedule(schedules, dayOfWeek);
     if ( schedule == null ) {
       return new int[0];
@@ -139,4 +137,12 @@ public class Schedule {
   public void setComment(String comment) {
     this.comment = comment;
   }
+
+  public int getDayChange() {
+    return dayChange;
+  }
+
+  public void setDayChange(int dayChange) {
+    this.dayChange = dayChange;
+  }  
 }
