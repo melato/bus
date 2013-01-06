@@ -24,11 +24,13 @@ import java.util.Comparator;
 
 import org.melato.bus.model.Marker;
 import org.melato.bus.model.Route;
+import org.melato.bus.model.Schedule;
 
 /** Maintains information about a bus stop nearby. */
 public class NearbyStop extends WaypointDistance {
   private Route     route;
   private int       group;
+  private int[]     nearestTimes; // the nearest time and the next one.
 
   public static class Comparer implements Comparator<NearbyStop> {
 
@@ -60,8 +62,28 @@ public class NearbyStop extends WaypointDistance {
   }
 
   @Override
-  public String toString() {
-    String s = route + " " + getWaypoint().getName() + " (" + formatDistance(getDistance()) + ")";
-    return s;
+  public String toString() {    
+    StringBuilder buf = new StringBuilder();
+    buf.append( route );
+    buf.append( " " );
+    buf.append( getWaypoint().getName());
+    buf.append( " (");
+    buf.append( formatDistance(getDistance()));
+    buf.append( ")" );
+    if ( nearestTimes != null) {
+      for( int time: nearestTimes ) {
+        buf.append( " " );
+        buf.append( Schedule.formatTime(time));
+      }
+    }
+    return buf.toString();
+  }
+
+  public int[] getNearestTimes() {
+    return nearestTimes;
+  }
+
+  public void setNearestTimes(int[] nearestTimes) {
+    this.nearestTimes = nearestTimes;
   }
 }
