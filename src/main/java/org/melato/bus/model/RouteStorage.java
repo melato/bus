@@ -21,6 +21,7 @@
 package org.melato.bus.model;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.melato.gps.Point2D;
@@ -41,6 +42,13 @@ public interface RouteStorage {
   Route loadRoute(RouteId routeId);
   /** Load a route's schedule (for all days of the week) */
   Schedule loadSchedule(RouteId routeId);
+  
+  ScheduleSummary loadScheduleSummary(RouteId routeId);
+  
+  DaySchedule loadDaySchedule(RouteId routeId, ScheduleId scheduleId);
+  
+  DaySchedule loadDaySchedule(RouteId routeId, Date date);
+  
   /** Load a route's stops. */
   List<Stop> loadStops(RouteId routeId);
   /** Load information about a single stop. */

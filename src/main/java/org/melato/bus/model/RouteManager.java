@@ -23,6 +23,7 @@ package org.melato.bus.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,12 +123,16 @@ public class RouteManager {
       cachedSchedule = schedule;
     }
     return schedule;
-  }
+  }    
 
   public Schedule getSchedule(Route route) {
     return getSchedule(route.getRouteId());
   }
-
+  
+  public DaySchedule getDaySchedule(Route route, Date date) {
+    return storage.loadDaySchedule(route.getRouteId(), date);    
+  }
+  
   private boolean isCached(RouteId routeId) {
     return cachedRouteId != null && cachedRouteId.equals(routeId);
   }

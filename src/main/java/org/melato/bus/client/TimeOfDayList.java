@@ -21,7 +21,6 @@
 package org.melato.bus.client;
 
 import java.util.AbstractList;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.melato.bus.model.DaySchedule;
@@ -65,20 +64,7 @@ public class TimeOfDayList extends AbstractList<TimeOfDay> {
   
   public int getDefaultPosition() {
     Date date = new Date(currentTime.getTime() - timeOffset * 1000L );
-    int time = Schedule.getTime(date);
-    int pos = Arrays.binarySearch(times, time);
-    if ( pos >= 0 )
-      return pos;
-    pos = - (pos + 1);
-    if ( pos == 0 )
-      return pos;
-    if ( pos == times.length )
-      return times.length - 1;
-    if ( times[pos] - time < time - times[pos-1] ) {
-      return pos;
-    } else {
-      return pos - 1;
-    }
+    return DaySchedule.getClosestIndex(times, date);
   }
 }
 

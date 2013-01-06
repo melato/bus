@@ -77,5 +77,25 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public Point2D getCenter() {
     return null;
   }
-   
+
+
+  @Override
+  public ScheduleSummary loadScheduleSummary(RouteId routeId) {
+    Schedule schedule = loadSchedule(routeId);
+    DaySchedule[] schedules = schedule.getSchedules();
+    ScheduleId[] scheduleIds = new ScheduleId[schedules.length];
+    for( int i = 0; i < schedules.length; i++ ) {
+      scheduleIds[i] = schedules[i].getScheduleId();
+    }
+    return new ScheduleSummary(scheduleIds, schedule.getDayChange());
+  }
+
+
+  @Override
+  public DaySchedule loadDaySchedule(RouteId routeId, ScheduleId scheduleId) {
+    Schedule schedule = loadSchedule(routeId);
+    return null;
+  }
+
+  
 }

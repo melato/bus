@@ -54,12 +54,11 @@ public class DaySchedule {
   }
 
   public boolean matchesDateId(int dateId) {
-    return scheduleId.getDateId() == dateId;
+    return scheduleId.matchesDateId(dateId);
   }
   
   public boolean matchesDayOfWeek(int dayOfWeek) {
-    int bitmap = 1 << (dayOfWeek-Calendar.SUNDAY);
-    return (scheduleId.getDays() & bitmap) != 0;
+    return scheduleId.matchesDayOfWeek(dayOfWeek);
   }
   
   public boolean isWeekly() {
@@ -90,4 +89,22 @@ public class DaySchedule {
     cal.setTime(date);
     return findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
+  
+  public static int getClosestIndex(int[] times, Date date) {
+    int time = Schedule.getTime(date);
+    int pos = Arrays.binarySearch(times, time);
+    if ( pos >= 0 )
+      return pos;
+    pos = - (pos + 1);
+    if ( pos == 0 )
+      return pos;
+    if ( pos == times.length )
+      return times.length - 1;
+    if ( times[pos] - time < time - times[pos-1] ) {
+      return pos;
+    } else {
+      return pos - 1;
+    }
+  }
+  
 }
