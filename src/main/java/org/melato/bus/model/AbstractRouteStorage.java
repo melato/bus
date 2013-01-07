@@ -22,6 +22,7 @@ package org.melato.bus.model;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.melato.gps.Point2D;
@@ -79,23 +80,36 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   }
 
 
-  @Override
-  public ScheduleSummary loadScheduleSummary(RouteId routeId) {
-    Schedule schedule = loadSchedule(routeId);
+  private ScheduleSummary toSummary(Schedule schedule) {
     DaySchedule[] schedules = schedule.getSchedules();
     ScheduleId[] scheduleIds = new ScheduleId[schedules.length];
     for( int i = 0; i < schedules.length; i++ ) {
       scheduleIds[i] = schedules[i].getScheduleId();
     }
-    return new ScheduleSummary(scheduleIds, schedule.getDayChange());
+    return new ScheduleSummary(scheduleIds, schedule.getDayChange());    
+  }
+  
+  @Override
+  public ScheduleSummary loadScheduleSummary(RouteId routeId) {
+    Schedule schedule = loadSchedule(routeId);
+    return toSummary(schedule);
   }
 
 
   @Override
   public DaySchedule loadDaySchedule(RouteId routeId, ScheduleId scheduleId) {
     Schedule schedule = loadSchedule(routeId);
-    return null;
+    return schedule.getSchedule(scheduleId);
   }
 
-  
+  @Override
+  public DaySchedule loadDaySchedule(RouteId routeId, Date date) {
+    Schedule schedule = loadSchedule(routeId);
+    ScheduleSummary summary = toSummary(schedule);
+    ScheduleId scheduleId = summary.getScheduleId(date);
+    if ( scheduleId != null) {
+      return schedule.getSchedule(scheduleId);
+    }
+    return null;
+  }
 }
