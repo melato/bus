@@ -78,7 +78,6 @@ public class TrackHistory implements PointTimeListener {
 
   @Override
   public final void setLocation(PointTime point) {
-    Log.info(point);
     if ( point == null )
       return;
     previousLocation = location;
