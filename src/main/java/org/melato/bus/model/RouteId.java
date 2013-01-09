@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author Alex Athanasopoulos
  *
  */
-public class RouteId implements Serializable {
+public class RouteId implements Serializable, Comparable<RouteId> {
   private static final long serialVersionUID = 1L;
   /** The internal name, e.g. 301b */
   private String  name;
@@ -95,4 +95,12 @@ public class RouteId implements Serializable {
       return false;
     return true;
   }
+  @Override
+  public int compareTo(RouteId o) {
+    int d = name.compareTo(o.name);
+    if ( d != 0)
+      return d;
+    return direction.compareTo(o.direction);
+  }
+  
 }
