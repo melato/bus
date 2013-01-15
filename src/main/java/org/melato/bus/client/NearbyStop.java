@@ -22,13 +22,14 @@ package org.melato.bus.client;
 
 import java.util.Comparator;
 
-import org.melato.bus.model.Marker;
+import org.melato.bus.model.RStop;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.Schedule;
 
 /** Maintains information about a bus stop nearby. */
-public class NearbyStop extends WaypointDistance {
+public class NearbyStop {
   private Route     route;
+  private RStop     rstop;
   private int       group;
   private int[]     nearestTimes; // the nearest time and the next one.
 
@@ -36,7 +37,7 @@ public class NearbyStop extends WaypointDistance {
 
     @Override
     public int compare(NearbyStop s1, NearbyStop s2) {
-      int d = WaypointDistance.compare(s1,  s2);
+      int d = RStop.compare(s1.rstop,  s2.rstop);
       if ( d != 0 )
         return d;
       // when two routes have the same stop, compare them by name.
@@ -44,8 +45,8 @@ public class NearbyStop extends WaypointDistance {
     }
     
   }
-  public NearbyStop(Marker waypoint, Route route) {
-    super(waypoint, 0f);
+  public NearbyStop(RStop rstop, Route route) {
+    this.rstop = rstop;
     this.route = route;
   }
   
@@ -61,14 +62,19 @@ public class NearbyStop extends WaypointDistance {
     this.group = group;
   }
 
+  
+  public RStop getRStop() {
+    return rstop;
+  }
+
   @Override
   public String toString() {    
     StringBuilder buf = new StringBuilder();
     buf.append( route );
     buf.append( " " );
-    buf.append( getWaypoint().getName());
+    buf.append( rstop.getStop().getName());
     buf.append( " (");
-    buf.append( formatDistance(getDistance()));
+    buf.append( RStop.formatDistance(rstop.getDistance()));
     buf.append( ")" );
     if ( nearestTimes != null) {
       for( int time: nearestTimes ) {

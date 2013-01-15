@@ -33,6 +33,7 @@ import org.melato.gps.GlobalDistance;
 import org.melato.gps.LocalDistance;
 import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
+import org.melato.log.Log;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
 
@@ -186,22 +187,26 @@ public class RouteManager {
     return storage.loadMarker(symbol);
   }
 
-  static class DistanceFilter extends AbstractCollector<Marker> {
-    Collection<Marker> result;
+  static class DistanceFilter extends AbstractCollector<RStop> {
+    Collection<RStop> result;
+    Metric metric;
     
     private Point2D center;
     private float distance;
     
-    public DistanceFilter(List<Marker> result, Point2D center, float distance) {
+    public DistanceFilter(List<RStop> result, Point2D center, float distance, Metric metric) {
       super();
       this.result = result;
       this.center = center;
       this.distance = distance;
+      this.metric = metric;
     }
 
     @Override
-    public boolean add(Marker p) {
-      if ( Earth.distance(center, p) < distance ) {
+    public boolean add(RStop p) {
+      float d = metric.distance(center, p.getStop());
+      if ( d < distance ) {
+        p.setDistance(d);
         result.add(p);
         size++;
         return true;
@@ -216,9 +221,15 @@ public class RouteManager {
         collector);
   }
 
-  public List<Marker> findNearbyStops(Point2D point, float distance) {
-    List<Marker> result = new ArrayList<Marker>();
-    DistanceFilter filter = new DistanceFilter(result, point, distance);
+  /**
+   * Find all (route,stop) combinations within a certain radius from a point.
+   * @param point
+   * @param distance
+   * @return
+   */
+  public List<RStop> findNearbyStops(Point2D point, float distance) {
+    List<RStop> result = new ArrayList<RStop>();
+    DistanceFilter filter = new DistanceFilter(result, point, distance, getMetric());
     float latDiff = Earth.latitudeForDistance(distance);
     float lonDiff = Earth.longitudeForDistance(distance, point.getLat());
     storage.iterateNearbyStops(point, latDiff, lonDiff, filter);
