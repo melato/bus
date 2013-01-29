@@ -131,7 +131,7 @@ public class RouteManager {
   }
   
   public DaySchedule getDaySchedule(Route route, Date date) {
-    return storage.loadDaySchedule(route.getRouteId(), date);    
+    return storage.loadDaySchedule(route.getRouteId(), date);
   }
   
   private boolean isCached(RouteId routeId) {
