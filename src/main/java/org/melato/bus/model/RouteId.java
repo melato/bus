@@ -97,10 +97,10 @@ public class RouteId implements Serializable, Comparable<RouteId> {
   }
   @Override
   public int compareTo(RouteId o) {
-    int d = name.compareTo(o.name);
-    if ( d != 0)
+    int d = AlphanumericComparator.INSTANCE.compare(name, o.name);
+    if ( d != 0 )
       return d;
-    return direction.compareTo(o.direction);
+    return AlphanumericComparator.INSTANCE.compare(getDirection(), o.getDirection());
   }
   
 }
