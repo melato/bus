@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/** Represents a date as a human-readable 8-digit integer, e.g. 20130205 */
 public class DateId {
   public static void setCalendar(int dateId, Calendar cal) {
     cal.set(Calendar.YEAR, getYear(dateId));
