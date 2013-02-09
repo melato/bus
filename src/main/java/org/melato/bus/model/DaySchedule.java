@@ -44,6 +44,9 @@ public class DaySchedule {
   /** times are stored as minutes from midnight. */
   private int[] times;
   private ScheduleId scheduleId;
+  /** Same as Schedule.dayChange */
+  private int dayChange;
+
   
   public int[] getTimes() {
     return times;
@@ -90,8 +93,11 @@ public class DaySchedule {
     return findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
   
-  public static int getClosestIndex(int[] times, Date date) {
+  public int getClosestIndex(Date date) {
     int time = Schedule.getTime(date);
+    if ( time < dayChange ) {
+      time += 24 * 60;
+    }
     int pos = Arrays.binarySearch(times, time);
     if ( pos >= 0 )
       return pos;
@@ -106,5 +112,12 @@ public class DaySchedule {
       return pos - 1;
     }
   }
-  
+
+  public int getDayChange() {
+    return dayChange;
+  }
+
+  public void setDayChange(int dayChange) {
+    this.dayChange = dayChange;
+  }
 }
