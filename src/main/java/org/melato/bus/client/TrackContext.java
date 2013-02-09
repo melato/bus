@@ -23,10 +23,11 @@ package org.melato.bus.client;
 import org.melato.bus.model.Stop;
 import org.melato.geometry.gpx.Path;
 import org.melato.geometry.gpx.PathTracker;
-import org.melato.geometry.gpx.PointTimeListener;
 import org.melato.gps.Metric;
 import org.melato.gps.PointTime;
+import org.melato.gps.PointTimeListener;
 
+/** Keeps all the pieces needed to keep track of where we are on a route. */
 public class TrackContext implements PointTimeListener {
   private Metric metric;
   private Stop[] stops;
