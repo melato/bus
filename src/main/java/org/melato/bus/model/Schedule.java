@@ -25,6 +25,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.melato.util.DateId;
+
 
 /** A schedule maintains departure information for one route and for all days of the week. */
 public class Schedule {

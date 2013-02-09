@@ -24,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.melato.util.DateId;
+
 
 /** Contains information for choosing the right schedule. */
 public class ScheduleSummary {
