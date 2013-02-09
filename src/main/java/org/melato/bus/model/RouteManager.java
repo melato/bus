@@ -33,7 +33,6 @@ import org.melato.gps.GlobalDistance;
 import org.melato.gps.LocalDistance;
 import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
-import org.melato.log.Log;
 import org.melato.progress.ProgressGenerator;
 import org.melato.util.AbstractCollector;
 
