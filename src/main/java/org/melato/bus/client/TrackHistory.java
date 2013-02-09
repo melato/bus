@@ -23,13 +23,15 @@ package org.melato.bus.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.melato.geometry.gpx.PointTimeListener;
+import org.melato.bus.model.RouteId;
+import org.melato.bus.model.RouteManager;
 import org.melato.geometry.gpx.RollingSpeedManager;
 import org.melato.geometry.gpx.RollingSpeedManager.RollingSpeed;
+import org.melato.geometry.gpx.SpeedTracker;
 import org.melato.gps.Earth;
 import org.melato.gps.Metric;
 import org.melato.gps.PointTime;
-import org.melato.log.Log;
+import org.melato.gps.PointTimeListener;
 
 /**
  * Maintains track history.
@@ -37,6 +39,7 @@ import org.melato.log.Log;
  *
  */
 public class TrackHistory implements PointTimeListener {
+  private RouteManager routeManager;
   private Metric metric;
   private PointTime   previousLocation;
   private PointTime   location;
@@ -44,9 +47,14 @@ public class TrackHistory implements PointTimeListener {
   private RollingSpeedManager speedManager;
   private RollingSpeed speed60;
   private RollingSpeed speed300;
+  
+  private RouteId       routeId;  
+  private TrackContext trackContext;
+  private SpeedTracker speedTracker;
 
-  public TrackHistory(Metric metric) {
-    this.metric = metric;
+  public TrackHistory(RouteManager routeManager) {
+    this.routeManager = routeManager;
+    this.metric = routeManager.getMetric();
     speedManager = new RollingSpeedManager(metric);
     speed60 = speedManager.getRollingSpeed(60);
     speed300 = speedManager.getRollingSpeed(300);
@@ -56,6 +64,25 @@ public class TrackHistory implements PointTimeListener {
     return metric;    
   }
   
+  public void setRoute(RouteId routeId) {
+    if ( routeId != null ) {
+      if ( ! routeId.equals(this.routeId)) {
+        this.routeId = routeId;
+        trackContext = new TrackContext(metric);
+        trackContext.setStops(routeManager.getStops(routeId));
+        speedTracker = new SpeedTracker(trackContext.getPathTracker());
+      }
+    }
+  }
+    
+  public TrackContext getTrackContext() {
+    return trackContext;
+  }
+  
+  public SpeedTracker getSpeedTracker() {
+    return speedTracker;
+  }
+
   protected void enableUpdates(boolean enabled) {}
     
   public synchronized void addLocationListener(PointTimeListener listener) {
