@@ -20,6 +20,7 @@
  */
 package org.melato.bus.model;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -32,6 +33,22 @@ import org.melato.gps.Point2D;
  * @author Alex Athanasopoulos
  */
 public abstract class AbstractRouteStorage implements RouteStorage {
+
+
+  public static List<RouteId> extractRouteIds(List<Route> routes) {
+    RouteId[] routeIds = new RouteId[routes.size()];
+    for( int i = 0; i < routeIds.length; i++ ) {
+      routeIds[i] = routes.get(i).getRouteId();
+    }
+    return Arrays.asList(routeIds);
+  }
+  
+  @Override
+  public List<RouteId> loadRouteIds() {
+    List<Route> routes = loadRoutes();
+    return extractRouteIds(routes);
+  }
+
 
   @Override
   public MarkerInfo loadMarker(String symbol) {

@@ -32,6 +32,9 @@ import org.melato.gps.Point2D;
  *
  */
 public interface RouteStorage {
+  /** Load a list of all route Ids. */
+  List<RouteId> loadRouteIds();
+
   /** Load a list of all routes. */
   List<Route> loadRoutes();
 

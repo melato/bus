@@ -45,6 +45,7 @@ import org.melato.util.AbstractCollector;
 public class RouteManager {
   private RouteStorage storage;
   
+  private List<RouteId> allRouteIds;
   private List<Route> allRoutes;
   private List<Route> primaryRoutes;
   private Map<RouteId,Route> routeIndex;
@@ -76,6 +77,22 @@ public class RouteManager {
     }
     return allRoutes;
   }
+
+  public List<RouteId> getRouteIds() {
+    if ( allRouteIds == null ) {
+      synchronized( this ) {
+        if ( allRouteIds == null ) {
+          if ( allRoutes != null ) {
+            allRouteIds = AbstractRouteStorage.extractRouteIds(allRoutes); 
+          } else {
+            allRouteIds = storage.loadRouteIds();
+          }
+        }
+      }
+    }
+    return allRouteIds;
+  }
+
   public Map<RouteId,Route> getRouteIndex() {
     getRoutes();
     return routeIndex;
