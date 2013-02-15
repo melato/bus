@@ -43,7 +43,7 @@ public class Schedule {
    * @return
    */
   public static String formatTime(int time) {
-    return d2Format.format(time/60) + ":" + d2Format.format(time%60);
+    return d2Format.format((time/60)%24) + ":" + d2Format.format(time%60);
   }
 
   public static String formatDuration(int seconds) {
