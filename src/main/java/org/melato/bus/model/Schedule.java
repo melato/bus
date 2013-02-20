@@ -38,11 +38,21 @@ public class Schedule {
   static DecimalFormat d2Format = new DecimalFormat("00");
   
   /**
-   * format a schedule time
+   * format a schedule time as hh:mm
+   * hh may be larger than 24
    * @param time The time in minutes since midnight.
    * @return
    */
   public static String formatTime(int time) {
+    return d2Format.format(time/60) + ":" + d2Format.format(time%60);
+  }
+
+  /**
+   * Same as formatTime, but shift hours to the 0-24 range.
+   * @param time
+   * @return
+   */
+  public static String formatTimeMod24(int time) {
     return d2Format.format((time/60)%24) + ":" + d2Format.format(time%60);
   }
 

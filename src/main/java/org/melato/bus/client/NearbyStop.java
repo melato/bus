@@ -79,7 +79,7 @@ public class NearbyStop {
     if ( nearestTimes != null) {
       for( int time: nearestTimes ) {
         buf.append( " " );
-        buf.append( Schedule.formatTime(time));
+        buf.append( Schedule.formatTimeMod24(time));
       }
     }
     return buf.toString();
