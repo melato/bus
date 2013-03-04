@@ -294,4 +294,9 @@ public class RouteManager {
   public RouteStorage getStorage() {
     return storage;
   }  
+
+  public List<Agency> getAgencies() {
+    return storage.loadAgencies();
+  }
+
 }
