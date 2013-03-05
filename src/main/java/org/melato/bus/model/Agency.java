@@ -37,5 +37,8 @@ public class Agency {
   public void setIcon(byte[] icon) {
     this.icon = icon;
   }
-  
+  @Override
+  public String toString() {
+    return label;
+  }
 }
