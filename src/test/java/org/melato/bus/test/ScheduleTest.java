@@ -38,7 +38,8 @@ public class ScheduleTest {
   private void check3(int minute, int expectedIndex) {
     GregorianCalendar cal = new GregorianCalendar();
     cal.set(2013, Calendar.MARCH, 18 );
-    cal.set(Calendar.MINUTE, minute);
+    cal.set(Calendar.HOUR, minute/60);
+    cal.set(Calendar.MINUTE, minute%60);
     int[] times = new int[] { 60, 120, 180 };
     DaySchedule daySchedule = new DaySchedule(times, ScheduleId.forWeek(DaySchedule.MONDAY));
     Assert.assertEquals(expectedIndex, daySchedule.getClosestIndex(cal.getTime()));
