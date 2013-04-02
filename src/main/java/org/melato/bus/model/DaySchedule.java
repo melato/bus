@@ -51,7 +51,13 @@ public class DaySchedule {
   public int[] getTimes() {
     return times;
   }
-  
+
+  public void setTimes(int[] times) {
+    this.times = times;
+  }
+
+
+
   public ScheduleId getScheduleId() {
     return scheduleId;
   }
@@ -94,13 +100,17 @@ public class DaySchedule {
   }
   
   public int getClosestIndex(Date date) {
+    System.out.println( "date: " + date);
     int time = Schedule.getTime(date);
+    System.out.println( "time: " + time );
     if ( time < dayChange ) {
       time += 24 * 60;
     }
+    System.out.println( "time2: " + time );
     if ( times.length == 0 )
       return -1;
     int pos = Arrays.binarySearch(times, time);
+    System.out.println( "pos: " + pos);
     if ( pos >= 0 )
       return pos;
     pos = - (pos + 1);
