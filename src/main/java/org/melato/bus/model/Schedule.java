@@ -146,6 +146,13 @@ public class Schedule {
     return result;
   }
   
+  static boolean contains(int[] times, int time) {
+    for( int t: times ) {
+      if ( t == time )
+        return true;
+    }
+    return false;
+  }
   public List<RouteException> getExceptions(ScheduleId scheduleId, int time) {
     DaySchedule daySchedule = getSchedule(scheduleId);
     List<RouteException> exceptions = new ArrayList<RouteException>();    
@@ -153,7 +160,7 @@ public class Schedule {
       List<RouteException> dayExceptions = getExceptions(scheduleId);
       for( RouteException exception: dayExceptions ) {
         int[] times = exception.getTimes();
-        if ( times != null) {
+        if ( times != null && contains(times, time)) {
           for(int exceptionTime: times) {
             if ( daySchedule.containsTime(exceptionTime)) {
               exceptions.add(exception);
