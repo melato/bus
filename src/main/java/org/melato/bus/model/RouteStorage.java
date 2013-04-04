@@ -46,6 +46,8 @@ public interface RouteStorage {
   /** Load a route's schedule (for all days of the week) */
   Schedule loadSchedule(RouteId routeId);
   
+  List<RouteException> loadExceptions(RouteId routeId);
+  
   ScheduleSummary loadScheduleSummary(RouteId routeId);
   
   DaySchedule loadDaySchedule(RouteId routeId, ScheduleId scheduleId);

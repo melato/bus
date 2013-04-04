@@ -139,7 +139,4 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public String getDefaultAgencyName() {
     return null;
   }
-  
-  
-  
 }
