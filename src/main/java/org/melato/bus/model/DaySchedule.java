@@ -83,9 +83,12 @@ public class DaySchedule {
     this.times = times;
     this.scheduleId = scheduleId;
   }
-  
+
+  public static int dayBitmap(int dayOfWeek) {
+    return 1 << (dayOfWeek-Calendar.SUNDAY);
+  }
   public static DaySchedule findSchedule(DaySchedule[] schedules, int dayOfWeek) {
-    int bitmap = 1 << (dayOfWeek-Calendar.SUNDAY);
+    int bitmap = dayBitmap(dayOfWeek);
     for( DaySchedule schedule: schedules ) {
       if ( (schedule.getScheduleId().getDays() & bitmap) != 0 ) {
         return schedule;
@@ -131,5 +134,10 @@ public class DaySchedule {
 
   public void setDayChange(int dayChange) {
     this.dayChange = dayChange;
+  }
+  
+  public boolean containsTime(int time) {
+    int pos = Arrays.binarySearch(times, time);
+    return pos >= 0;        
   }
 }

@@ -43,5 +43,8 @@ public class RouteException {
   public void setTimes(int[] times) {
     this.times = times;
   }
-  
+  @Override
+  public String toString() {
+    return note;
+  }
 }

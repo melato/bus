@@ -156,10 +156,6 @@ public class RouteManager {
     return schedule;
   }    
 
-  public List<RouteException> getExceptions(RouteId routeId) {
-    return storage.loadExceptions(routeId);
-  }    
-
   public Schedule getSchedule(Route route) {
     return getSchedule(route.getRouteId());
   }
