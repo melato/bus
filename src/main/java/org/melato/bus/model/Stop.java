@@ -31,6 +31,7 @@ public class Stop extends PointTime {
   private static final long serialVersionUID = 1L;
   String name;
   String symbol;
+  int   timedCount;
   float deviation = 1;
   public Stop() {
     super();
@@ -47,9 +48,16 @@ public class Stop extends PointTime {
   }
   public String getName() {
     return name;
-  }
+  }  
   public void setName(String name) {
     this.name = name;
+  }
+  
+  public int getTimedCount() {
+    return timedCount;
+  }
+  public void setTimedCount(int timedCount) {
+    this.timedCount = timedCount;
   }
   public String getSymbol() {
     return symbol;
