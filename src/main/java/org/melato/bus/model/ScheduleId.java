@@ -50,6 +50,11 @@ public class ScheduleId implements Comparable<ScheduleId>, Serializable {
   public int getDateId() {
     return dateId;
   }
+  
+  public boolean isWeekly() {
+    return getDays() != 0;
+  }
+
   @Override
   public String toString() {
     if ( dateId != 0 )
@@ -101,5 +106,16 @@ public class ScheduleId implements Comparable<ScheduleId>, Serializable {
   public boolean matchesDayOfWeek(int dayOfWeek) {
     int bitmap = 1 << (dayOfWeek-Calendar.SUNDAY);
     return (days & bitmap) != 0;
+  }
+  /** Return true if this schedule id overlaps the specified schedule id.
+   **/
+  public boolean matches(ScheduleId id) {
+    if ( (days & id.days) != 0) {
+      return true;
+    }
+    if ( dateId != 0 && dateId == id.dateId ) {
+      return true;
+    }
+    return false;
   }
 }

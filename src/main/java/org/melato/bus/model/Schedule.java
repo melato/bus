@@ -86,7 +86,7 @@ public class Schedule {
     return schedules;
   }
   
-  public DaySchedule getSchedule(ScheduleId id) {
+  public DaySchedule getSchedule1(ScheduleId id) {
     if (id == null)
       return null;
     for( DaySchedule d: getSchedules() ) {
@@ -95,6 +95,27 @@ public class Schedule {
       }
     }
     return null;    
+  }
+  
+  public DaySchedule getSchedule(ScheduleId id) {
+    if (id == null)
+      return null;
+    if ( id.isWeekly()) {
+      for( DaySchedule d: getSchedules() ) {
+        if ( id.matches(d.getScheduleId())) {
+          return d;
+        }
+      }      
+      return null;
+    }    
+    for( DaySchedule d: getSchedules() ) {
+      if ( id.matches(d.getScheduleId())) {
+        return d;
+      }
+    }
+    Calendar cal = new GregorianCalendar();
+    DateId.setCalendar(id.getDateId(), cal);
+    return DaySchedule.findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
   
   public DaySchedule getSchedule(Date date) {
