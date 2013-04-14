@@ -29,9 +29,10 @@ import org.melato.gps.PointTime;
  */
 public class Stop extends PointTime {
   private static final long serialVersionUID = 1L;
+  public static final int FLAG_TIMED = 0x1;
   String name;
   String symbol;
-  int   timedCount;
+  int   flags;
   float deviation = 1;
   public Stop() {
     super();
@@ -51,13 +52,15 @@ public class Stop extends PointTime {
   }  
   public void setName(String name) {
     this.name = name;
+  }  
+  public int getFlags() {
+    return flags;
   }
-  
-  public int getTimedCount() {
-    return timedCount;
+  public void setFlags(int flags) {
+    this.flags = flags;
   }
-  public void setTimedCount(int timedCount) {
-    this.timedCount = timedCount;
+  public boolean isTimed() {
+    return (flags & FLAG_TIMED) != 0; 
   }
   public String getSymbol() {
     return symbol;
