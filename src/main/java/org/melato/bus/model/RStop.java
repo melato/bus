@@ -22,6 +22,7 @@ package org.melato.bus.model;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.Comparator;
 
 /**
  * A stop on a route.
@@ -36,6 +37,17 @@ public class RStop implements Serializable, Comparable<RStop> {
   private Stop    stop;
   private int     stopIndex;
   private float   distance;
+  
+  public static class RouteComparator implements Comparator<RStop> {
+    @Override
+    public int compare(RStop o1, RStop o2) {
+      int d = o1.routeId.compareTo(o2.routeId);
+      if ( d != 0 )
+        return d;
+      d = o1.stopIndex - o2.stopIndex;
+      return d < 0 ? -1 : (d > 0 ? 1 : 0);
+    }    
+  }
   public RStop(RouteId routeId, Stop stop, int stopIndex) {
     super();
     this.routeId = routeId;
@@ -76,4 +88,9 @@ public class RStop implements Serializable, Comparable<RStop> {
   public int compareTo(RStop o) {
     return compare(this, o);
   }
+  @Override
+  public String toString() {
+    return routeId + " " + stop.getName() + " (" + stopIndex + ")";
+  }
+  
 }
