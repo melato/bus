@@ -34,7 +34,7 @@ import org.melato.bus.model.RouteManager;
 import org.melato.gps.Earth;
 import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
-import org.melato.util.AbstractGrouper;
+import org.melato.util.AbstractListGrouper;
 
 /**
  * Provides access to nearby stops.
@@ -137,7 +137,7 @@ public class NearbyManager {
     return filterDistance(list, location);
   }
     
-  class NearbyGrouper extends AbstractGrouper<RStop> {
+  class NearbyGrouper extends AbstractListGrouper<RStop> {
     List<NearbyStop> nearby = new ArrayList<NearbyStop>();
     Metric metric = routeManager.getMetric();
     Map<RouteId,Route> map = routeManager.getRouteIndex();
@@ -154,14 +154,20 @@ public class NearbyManager {
     }
 
     @Override
-    protected void addGroup(RStop[] array, int start, int end) {
-      Arrays.sort(array, start, end);
-      RStop p = array[start];
-      RouteId routeId = p.getRouteId();
+    protected void addGroup(List<RStop> group) {      
+      RStop minStop = null;
+      float minDistance = 0;
+      for( RStop stop: group ) {
+        if (minStop == null || stop.getDistance() < minDistance) {
+          minStop = stop;
+          minDistance = stop.getDistance();
+        }
+      }
+      RouteId routeId = minStop.getRouteId();
       Route route = map.get(routeId);
       if ( route != null ) {
-        NearbyStop stop = new NearbyStop(p, route);
-        p.setDistance(metric.distance(p.getStop(),  location));
+        NearbyStop stop = new NearbyStop(minStop, route);
+        minStop.setDistance(metric.distance(minStop.getStop(),  location));
         nearby.add(stop);
       }
     }
