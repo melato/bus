@@ -33,6 +33,7 @@ public class Stop extends PointTime {
   String name;
   String symbol;
   int   flags;
+  int   index;
   float deviation = 1;
   public Stop() {
     super();
@@ -73,6 +74,12 @@ public class Stop extends PointTime {
   }
   public void setDeviation(float deviation) {
     this.deviation = deviation;
+  }
+  public int getIndex() {
+    return index;
+  }
+  public void setIndex(int index) {
+    this.index = index;
   }
   @Override
   public String toString() {
