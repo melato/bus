@@ -238,7 +238,7 @@ public class RouteManager {
     private Point2D center;
     private float distance;
     
-    public DistanceFilter(List<RStop> result, Point2D center, float distance, Metric metric) {
+    public DistanceFilter(Collection<RStop> result, Point2D center, float distance, Metric metric) {
       super();
       this.result = result;
       this.center = center;
@@ -271,13 +271,11 @@ public class RouteManager {
    * @param distance
    * @return
    */
-  public List<RStop> findNearbyStops(Point2D point, float distance) {
-    List<RStop> result = new ArrayList<RStop>();
+  public void findNearbyStops(Point2D point, float distance, Collection<RStop> result) {
     DistanceFilter filter = new DistanceFilter(result, point, distance, getMetric());
     float latDiff = Earth.latitudeForDistance(distance);
     float lonDiff = Earth.longitudeForDistance(distance, point.getLat());
     storage.iterateNearbyStops(point, latDiff, lonDiff, filter);
-    return result;
   }
 
   

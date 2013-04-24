@@ -130,8 +130,9 @@ public class NearbyManager {
   public RStop[] getNearbyWaypoints(Point2D location) {
     List<RStop> list = readCache(location);
     if ( list == null ) {
+      list = new ArrayList<RStop>();
       // not in cache.  filter the global list
-      list = routeManager.findNearbyStops(location, TARGET_DISTANCE + CACHE_DISTANCE);
+      routeManager.findNearbyStops(location, TARGET_DISTANCE + CACHE_DISTANCE, list);
       writeCache(list, location);
     }
     return filterDistance(list, location);

@@ -86,6 +86,10 @@ public class RStop implements Serializable, Comparable<RStop> {
   public int compareTo(RStop o) {
     return compare(this, o);
   }
+  /** Return true of the stops are in the same route and the 1st stop is before or equal the 2nd stop. */
+  public boolean isBefore(RStop stop2) {
+    return getRouteId().equals(stop2.getRouteId()) && stop.getIndex() < stop2.getStop().getIndex();
+  }  
   @Override
   public String toString() {
     return routeId + " " + stop.getName() + " (" + getStopIndex() + ")";
