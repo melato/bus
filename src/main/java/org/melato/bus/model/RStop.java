@@ -35,7 +35,6 @@ public class RStop implements Serializable, Comparable<RStop> {
   private static DecimalFormat kmFormat = new DecimalFormat( "0.00" );
   private RouteId routeId;
   private Stop    stop;
-  private int     stopIndex;
   private float   distance;
   
   public static class RouteComparator implements Comparator<RStop> {
@@ -44,15 +43,14 @@ public class RStop implements Serializable, Comparable<RStop> {
       int d = o1.routeId.compareTo(o2.routeId);
       if ( d != 0 )
         return d;
-      d = o1.stopIndex - o2.stopIndex;
+      d = o1.stop.getIndex() - o2.stop.getIndex();
       return d < 0 ? -1 : (d > 0 ? 1 : 0);
     }    
   }
-  public RStop(RouteId routeId, Stop stop, int stopIndex) {
+  public RStop(RouteId routeId, Stop stop) {
     super();
     this.routeId = routeId;
     this.stop = stop;
-    this.stopIndex = stopIndex;
   }
   public RouteId getRouteId() {
     return routeId;
@@ -61,7 +59,7 @@ public class RStop implements Serializable, Comparable<RStop> {
     return stop;
   }
   public int getStopIndex() {
-    return stopIndex;
+    return stop.getIndex();
   }
   public float getDistance() {
     return distance;
@@ -90,7 +88,7 @@ public class RStop implements Serializable, Comparable<RStop> {
   }
   @Override
   public String toString() {
-    return routeId + " " + stop.getName() + " (" + stopIndex + ")";
+    return routeId + " " + stop.getName() + " (" + getStopIndex() + ")";
   }
   
 }
