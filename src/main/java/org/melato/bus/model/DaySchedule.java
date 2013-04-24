@@ -102,18 +102,17 @@ public class DaySchedule {
     return findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
   
-  public int getClosestIndex(Date date) {
-    System.out.println( "date: " + date);
-    int time = Schedule.getTime(date);
-    System.out.println( "time: " + time );
+  /**
+   * @param time minutes from midnight
+   * @return
+   */
+  public int getClosestIndex(int time) {
     if ( time < dayChange ) {
       time += 24 * 60;
     }
-    System.out.println( "time2: " + time );
     if ( times.length == 0 )
       return -1;
     int pos = Arrays.binarySearch(times, time);
-    System.out.println( "pos: " + pos);
     if ( pos >= 0 )
       return pos;
     pos = - (pos + 1);
@@ -126,6 +125,31 @@ public class DaySchedule {
     } else {
       return pos - 1;
     }
+  }
+
+  /**
+   * 
+   * @param time minutes from midnight
+   * @return
+   */
+  public int getNextIndex(int time) {
+    if ( time < dayChange ) {
+      time += 24 * 60;
+    }
+    if ( times.length == 0 )
+      return -1;
+    int pos = Arrays.binarySearch(times, time);
+    if ( pos >= 0 )
+      return pos;
+    pos = - (pos + 1);
+    if ( pos == times.length )
+      return -1;
+    return pos;
+  }
+  
+  public int getClosestIndex(Date date) {
+    int time = Schedule.getTime(date);
+    return getClosestIndex(time);
   }
 
   public int getDayChange() {
