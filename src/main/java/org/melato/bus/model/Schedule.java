@@ -54,11 +54,11 @@ public class Schedule {
 
   /**
    * Same as formatTime, but shift hours to the 0-24 range.
-   * @param time
+   * @param minutes
    * @return
    */
-  public static String formatTimeMod24(int time) {
-    return d2Format.format((time/60)%24) + ":" + d2Format.format(time%60);
+  public static String formatTimeMod24(int minutes) {
+    return d2Format.format((minutes/60)%24) + ":" + d2Format.format(minutes%60);
   }
 
   public static String formatDuration(int seconds) {
@@ -212,13 +212,19 @@ public class Schedule {
     return schedule.getTimes();
   }
   
-  /** Get the time in minutes since midnight */
-  public static int getTime( Date date ) {
+  /** Get the time in seconds since midnight */
+  public static int getSeconds( Date date ) {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
     int hour = cal.get(Calendar.HOUR_OF_DAY);
     int minute = cal.get(Calendar.MINUTE);
-    return hour * 60 + minute;
+    int second = cal.get(Calendar.SECOND);
+    return 60 * (hour * 60 + minute) + second;
+  }
+
+  /** Get the time in minutes since midnight */
+  public static int getTime( Date date ) {
+    return getSeconds(date) / 60;
   }
 
   /** For debugging. */
