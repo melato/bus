@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.melato.bus.model.cache.RoutePointCache;
 import org.melato.gps.Earth;
 import org.melato.gps.GlobalDistance;
 import org.melato.gps.LocalDistance;
@@ -55,10 +56,19 @@ public class RouteManager {
   private Route   cachedRoute;
   private Stop[]  cachedStops;
   private Schedule cachedSchedule;
+  
+  private RoutePointCache pointCache;
     
   public RouteManager(RouteStorage storage) {
     super();
     this.storage = storage;
+  }
+  
+  public RoutePointCache getPointCache() {
+    if ( pointCache == null) {
+      pointCache = new RoutePointCache(this);
+    }
+    return pointCache;
   }
   
   private List<Route> compact(List<Route> list) {
@@ -261,10 +271,10 @@ public class RouteManager {
   
   public void iterateNearbyRoutes(Point2D point, float latitudeDifference,
       float longitudeDifference, Collection<RouteId> collector) {
-    storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
-        collector);
+      storage.iterateNearbyRoutes(point, latitudeDifference, longitudeDifference,
+          collector);
   }
-
+  
   /**
    * Find all (route,stop) combinations within a certain radius from a point.
    * @param point
