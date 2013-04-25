@@ -99,6 +99,7 @@ public class Plan implements Comparable<Plan>{
     walkDistance = 0;
     for(PlanLeg leg: legs) {
       float d = metric.distance(previous, leg.getStop1());
+      leg.setDistanceBefore(d);
       walkDistance += d;
       previous = leg.getStop2();
     }
