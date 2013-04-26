@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.melato.bus.model.cache.RoutePointCache;
+import org.melato.bus.model.cache.ScheduleCache;
 import org.melato.gps.Earth;
 import org.melato.gps.GlobalDistance;
 import org.melato.gps.LocalDistance;
@@ -58,6 +59,7 @@ public class RouteManager {
   private Schedule cachedSchedule;
   
   private RoutePointCache pointCache;
+  private ScheduleCache scheduleCache;
     
   public RouteManager(RouteStorage storage) {
     super();
@@ -69,6 +71,13 @@ public class RouteManager {
       pointCache = new RoutePointCache(this);
     }
     return pointCache;
+  }
+  
+  public ScheduleCache getScheduleCache() {
+    if ( scheduleCache == null) {
+      scheduleCache = new ScheduleCache(this);
+    }
+    return scheduleCache;
   }
   
   private List<Route> compact(List<Route> list) {
@@ -171,7 +180,11 @@ public class RouteManager {
   }
   
   public DaySchedule getDaySchedule(Route route, Date date) {
-    return storage.loadDaySchedule(route.getRouteId(), date);
+    return getDaySchedule(route.getRouteId(), date);
+  }
+  
+  public DaySchedule getDaySchedule(RouteId routeId, Date date) {
+    return storage.loadDaySchedule(routeId, date);
   }
   
   private boolean isCached(RouteId routeId) {
