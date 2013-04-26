@@ -22,6 +22,7 @@ package org.melato.bus.plan;
 
 import java.util.Comparator;
 
+import org.melato.bus.client.Formatting;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.Schedule;
 import org.melato.bus.model.Stop;
@@ -112,5 +113,11 @@ public class PlanLeg {
         + " " + getStop1().getName()
         + "(" +(int) getDistanceBefore() + ")" 
         + " -> " + getStop2().getName();
+  }
+  public String shortLabel() {
+    // 140-2 (120m) 17:50 18:05 
+    return getRoute().getLabel()
+        + " " + Formatting.straightDistance(getDistanceBefore()) 
+        + formatTimes();
   }
 }

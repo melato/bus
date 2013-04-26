@@ -20,6 +20,7 @@
  */
 package org.melato.bus.plan;
 
+import org.melato.bus.client.Formatting;
 import org.melato.bus.model.Schedule;
 import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
@@ -119,8 +120,7 @@ public class Plan implements Comparable<Plan>{
   public void setArrivalTime(int arrivalTime) {
     this.arrivalTime = arrivalTime;
   }
-  @Override
-  public String toString() {
+  public String toString2() {
     StringBuilder buf = new StringBuilder();
     buf.append(Schedule.formatDuration((int) getDuration()));
     buf.append( " " );
@@ -134,18 +134,22 @@ public class Plan implements Comparable<Plan>{
     buf.append( "(" + (int) getLastWalkDistance() + ")");
     return buf.toString();
   }
+
+  @Override
+  public String toString() {
+    StringBuilder buf = new StringBuilder();
+    for(PlanLeg leg: getLegs()) {
+      buf.append(leg.shortLabel());
+      buf.append( " -> " );        
+    }
+    buf.append( Formatting.straightDistance(getLastWalkDistance()));
+    buf.append( " " );
+    buf.append(Schedule.formatTime(getArrivalTime()/60));
+    return buf.toString();
+  }
   
   public String getDescription() {
     StringBuilder buf = new StringBuilder();
-    /*
-    buf.append("(");
-    buf.append(Schedule.formatDuration((int) getDuration()));
-    buf.append(")");
-    
-    buf.append( " " );
-    buf.append( String.valueOf((int) getWalkDistance()));
-    */
-    buf.append( " " );
     boolean first = true;
     for(PlanLeg leg: getLegs()) {
       if ( ! first ) {
