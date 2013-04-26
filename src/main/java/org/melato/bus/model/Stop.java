@@ -29,7 +29,10 @@ import org.melato.gps.PointTime;
  */
 public class Stop extends PointTime {
   private static final long serialVersionUID = 1L;
+  /** The stop is timed. */
   public static final int FLAG_TIMED = 0x1;
+  /** This is the last stop in the route. */
+  public static final int FLAG_LAST = 0x2;
   String name;
   String symbol;
   int   flags;
@@ -62,6 +65,9 @@ public class Stop extends PointTime {
   }
   public boolean isTimed() {
     return (flags & FLAG_TIMED) != 0; 
+  }
+  public boolean isLast() {
+    return (flags & FLAG_LAST) != 0; 
   }
   public String getSymbol() {
     return symbol;
