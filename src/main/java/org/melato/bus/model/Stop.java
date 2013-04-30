@@ -87,6 +87,9 @@ public class Stop extends PointTime {
   public void setIndex(int index) {
     this.index = index;
   }
+  public boolean isBefore(Stop stop2) {
+    return index < stop2.index;
+  }
   @Override
   public String toString() {
     return symbol + ":" + name + " " + super.toString();
