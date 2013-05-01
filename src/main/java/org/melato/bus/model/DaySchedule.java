@@ -94,7 +94,6 @@ public class DaySchedule {
   }
   public static DaySchedule findSchedule(DaySchedule[] schedules, int dayOfWeek) {
     int bitmap = dayBitmap(dayOfWeek);
-    System.out.println( "day=" + dayOfWeek + " bitmap=" + bitmap);
     for( DaySchedule schedule: schedules ) {
       if ( (schedule.getScheduleId().getDays() & bitmap) != 0 ) {
         return schedule;
