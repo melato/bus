@@ -86,4 +86,15 @@ public class Sequence implements Serializable {
       return stop;
     return stops[minIndex];    
   }
+  
+  public int getLevels() {
+    int maxIndex = -1;
+    for(Leg leg: legs) {
+      int index = leg.index;
+      if (index > maxIndex) {
+        maxIndex = index;
+      }
+    }
+    return maxIndex + 1;
+  }
 }

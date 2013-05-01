@@ -1,6 +1,8 @@
 package org.melato.bus.plan;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import org.melato.bus.model.Schedule;
 
@@ -8,41 +10,58 @@ public class SequenceInstance implements Serializable {
   private static final long serialVersionUID = 1L;
   int startTime;
   int endTime;
-  LegTime[] legs;
+  LegInstance[] legs;
   
-  String debug() {
-    /*
-    StringBuilder buf = new StringBuilder();
-    for(LegTime leg: legs) {
-      buf.append( leg);
-      buf.append( " ");
-    }
-    buf.append( "(");
-    buf.append( legs.length + ")");
-    return buf.toString();
-    */
-    return legs[0].getRoute().getLabel() + " " + legs.length;
+  public static class LegInstance {
+    private LegTime legTime;
+    private LegTime previous;
+
+    public LegInstance(LegTime legTime, LegTime previous) {
+      super();
+      this.legTime = legTime;
+      this.previous = previous;
+    }    
+    
+
+    @Override
+    public String toString() {
+      String s = legTime.toString();
+      if ( previous != null) {
+        s += " (wait " + Schedule.formatDuration(legTime.getTime1()-previous.getTime2()) + ")";
+      }
+      return s;
+    }    
   }
+  
+  public SequenceInstance( List<LegTime> legTimes) {    
+    legs = new LegInstance[legTimes.size()];
+    LegTime previous = null;
+    for( int i = 0; i < legs.length; i++ ) {
+      LegTime leg = legTimes.get(i);
+      legs[i] = new LegInstance(leg, previous);
+      previous = leg;
+    }
+    startTime = legs[0].legTime.getTime1();
+    endTime = legs[legs.length-1].legTime.getTime2();
+  }
+  
   public SequenceInstance( LegTime[] timeArray, int start, int length) {
-    legs = new LegTime[length];
-    System.arraycopy(timeArray,  start, legs, 0, length);
-    startTime = this.legs[0].getTime1();
-    endTime = legs[legs.length-1].getTime2();
-    System.out.println( debug());
+    this(Arrays.asList(timeArray).subList(start, start + length));
+  }
+  
+  public LegInstance[] getLegInstances() {
+    return legs;
   }
 
   @Override
   public String toString() {
-    /*
     StringBuilder buf = new StringBuilder();
-    buf.append( Schedule.formatTime(startTime));
+    buf.append( Schedule.formatTime(startTime/60));
     buf.append( " -> " );
-    buf.append( Schedule.formatTime(endTime));
+    buf.append( Schedule.formatTime(endTime/60));
     buf.append( " (" );
-    buf.append(Schedule.formatDuration((endTime-startTime)*60));
+    buf.append(Schedule.formatDuration(endTime-startTime));
     buf.append(")");
     return buf.toString();
-    */
-    return debug();
   }
 }

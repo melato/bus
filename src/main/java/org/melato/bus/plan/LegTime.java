@@ -23,12 +23,11 @@ import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 
 
-public class LegTime {
+public class LegTime implements Comparable<LegTime> {
   private Route route;
   public Leg leg;
   /** route start time from start, in minutes */
   int     time;
-  public LegTime previous;
   public boolean last;
   public LegTime(Leg leg, int time, RouteManager routeManager) {
     super();
@@ -36,7 +35,13 @@ public class LegTime {
     this.time = time;
     this.route = routeManager.getRoute(leg.getRouteId());
   }
-    
+      
+  @Override
+  public int compareTo(LegTime another) {
+    return getTime1() - another.getTime1();
+  }
+
+
   public boolean isLast() {
     return last;
   }
@@ -71,31 +76,16 @@ public class LegTime {
     return time;
   }
 
-  public LegTime getPrevious() {
-    return previous;
-  }
-
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
-    if ( last ) {
-      buf.append( "* " );
-    } else {
-      buf.append( leg.index + " " );
-    }
+    buf.append( leg.index + " " );
     buf.append( route.getLabel());
     //buf.append( "(" + leg.index + ")");
     buf.append( " " );
     buf.append( Schedule.formatTime(getTime1()/60));
     buf.append( " -> " );
     buf.append( Schedule.formatTime(getTime2()/60));
-    
-    if ( previous != null) {
-      buf.append( " (wait " );
-      buf.append( (getTime1()-previous.getTime2())/60);
-      buf.append( ")");
-    }
     return buf.toString();
   }
-  
 }

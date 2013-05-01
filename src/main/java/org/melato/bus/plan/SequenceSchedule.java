@@ -20,105 +20,130 @@ package org.melato.bus.plan;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
+import org.melato.util.AbstractListGrouper;
 import org.melato.util.DateId;
 
 public class SequenceSchedule {
   private int dateId;
-  private LegTime[] legs;
+  private Level[] levels;
   private List<SequenceInstance> instances;
+
+  static class Level {
+    int level;
+    Leg[] legs;
+    LegTime[] legTimes;
+    int[] times;
+    public Level(Leg[] legs) {
+      super();
+      this.level = legs[0].index;
+      this.legs = legs;
+    } 
+    void compute(Date date, RouteManager routeManager) {
+      List<LegTime> timeList = new ArrayList<LegTime>();
+      for(int i = 0; i < legs.length; i++ ) {
+        Leg leg = legs[i];
+        Schedule schedule = routeManager.getSchedule(leg.getRouteId());
+        DaySchedule daySchedule = schedule.getSchedule(date);
+        int[] times = daySchedule.getTimes();
+        for( int time: times ) {
+          LegTime legTime = new LegTime(leg, time, routeManager);
+          timeList.add(legTime);
+        }
+      }
+      legTimes = timeList.toArray(new LegTime[0]);
+      Arrays.sort(legTimes);
+      times = new int[legTimes.length];
+      for( int i = 0; i < times.length; i++ ) {
+        times[i] = legTimes[i].getTime1();
+      }
+    }
     
+    int findTimeIndex(int time) {
+      int pos = Arrays.binarySearch(times, time);
+      if ( pos >= 0 )
+        return pos;
+      pos = -(pos+1);
+      if ( pos < times.length ) {
+        return pos;
+      }
+      return -1;
+    }
+  }
+  
+  static class LevelGrouper extends AbstractListGrouper<Leg> {
+    private List<Level> levels = new ArrayList<Level>();
+    public Level[] getLevels() {
+      return levels.toArray(new Level[0]);
+    }
+    @Override
+    protected boolean inSameGroup(Leg item, Leg nextItem) {
+      return item.index == nextItem.index;
+    }
+
+    @Override
+    protected void addGroup(List<Leg> group) {
+      levels.add(new Level(group.toArray(new Leg[0])));
+    }
+    
+  }
   public void setDateId(int dateId) {
     this.dateId = dateId;
   }
-  
-  public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
-    legs = createLegs(sequence, routeManager);
-    instances = findInstances(legs);
-  }
-  public LegTime[] getLegs() {
-    return legs;
-  }
 
-  public List<SequenceInstance> getInstances() {
-    return instances;
-  }
-  
-  static LegTime findPrevious(LegTime[] legTimes, int index) {
-    int legIndex = legTimes[index].leg.index;
-    if ( legIndex > 0 ) {
-      legIndex--;
-      for( int i = index - 1; i >= 0; i-- ) {
-        if ( legTimes[i].leg.index == legIndex) {
-          return legTimes[i];
-        }
-      }
-    }
-    return null;
-  }
-  
-  private LegTime[] createLegs(Sequence sequence, RouteManager routeManager) {
+  public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
+    LevelGrouper grouper = new LevelGrouper();
+    grouper.group(sequence.getLegs());
+    levels = grouper.getLevels();
     Date date = null;
     if ( dateId != 0 ) {
       date = DateId.getDate(dateId);
     } else {
       date = new Date();
     }
-    Leg[] legs = new Leg[sequence.getLegs().size()];
-    for( int i = 0; i < legs.length; i++ ) {
-      legs[i] = sequence.getLegs().get(i);
+    for(Level level: levels ) {
+      level.compute(date, routeManager);
     }
-    int lastLegIndex = -1;
-    if ( legs.length > 0 ) {
-      lastLegIndex = legs[legs.length-1].index;
-    }
-    List<LegTime> timeList = new ArrayList<LegTime>();
-    for(int i = 0; i < legs.length; i++ ) {
-      Leg leg = legs[i];
-      Schedule schedule = routeManager.getSchedule(leg.getRouteId());
-      DaySchedule daySchedule = schedule.getSchedule(date);
-      int[] times = daySchedule.getTimes();
-      for( int time: times ) {
-        LegTime legTime = new LegTime(leg, time, routeManager);
-        timeList.add(legTime);
-      }
-    }
-    LegTime[] timeArray = timeList.toArray(new LegTime[0]);
-    Comparator<LegTime> comparator = new LegTimeComparator();
-    Arrays.sort(timeArray, comparator);
-    for(int i = 1; i < timeArray.length; i++ ) {
-      if (comparator.compare(timeArray[i-1], timeArray[i]) > 0) {
-        throw new RuntimeException("bad comparison i=" + i);
-      }
-    }
-    for( int i = 0; i < timeArray.length; i++ ) {
-      LegTime legTime = timeArray[i];
-      System.out.println( legTime.getLeg().index + " " + legTime.getTime1() + "->" + legTime.getTime2());
-      legTime.previous = findPrevious(timeArray, i);
-      if ( legTime.leg.index == lastLegIndex ) {
-        legTime.last = true;
-      }      
-    }
-    return timeArray;
+    instances = createInstances(levels);
+  }
+
+  public List<SequenceInstance> getInstances() {
+    return instances;
   }
   
-  public List<SequenceInstance> findInstances(LegTime[] legs) {
+  private List<SequenceInstance> createInstances(Level[] levels) {
     List<SequenceInstance> instances = new ArrayList<SequenceInstance>();
-    for( int i = 0; i < legs.length; i++ ) {
-      if ( legs[i].isFirst() ) {
-        for( int j = i; j < legs.length; j++ ) {
-          if ( legs[j].isLast()) {
-            SequenceInstance instance = new SequenceInstance(legs, i, j-i+1);
-            instances.add(instance);
-            break;
-          }
+    if ( levels.length == 0 )
+      return instances;
+    Level firstLevel = levels[0];
+    LegTime[] legTimes = new LegTime[levels.length];
+    for(LegTime firstLeg: firstLevel.legTimes) {
+      //System.out.println( "first leg: " + firstLeg);
+      legTimes[0] = firstLeg;
+      int time = firstLeg.getTime2();
+      boolean complete = true;
+      for( int i = 1; i < levels.length; i++ ) {
+        int timeIndex = levels[i].findTimeIndex(time);
+        if ( timeIndex >= 0 ) {
+          LegTime leg = levels[i].legTimes[timeIndex];
+          legTimes[i] = leg;
+          time = leg.getTime2();
+          //System.out.println( leg);
+        } else {
+          complete = false;
+          break;
         }
+      }      
+      if ( complete ) {
+        SequenceInstance instance = new SequenceInstance(Arrays.asList(legTimes));
+        instances.add(instance);        
+      } else {
+        break;
       }
     }
     return instances;
