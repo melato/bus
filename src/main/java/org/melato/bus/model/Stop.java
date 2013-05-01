@@ -95,4 +95,8 @@ public class Stop extends PointTime {
     return symbol + ":" + name + " " + super.toString();
   }
   
+  public int getSecondsFromStart() {
+    return (int) (getTime() / 1000);
+  }
+  
 }
