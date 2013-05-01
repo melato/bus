@@ -12,6 +12,7 @@ import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
 
 public class Sequence implements Serializable {
+  private static final long serialVersionUID = 1L;
   public static final float CLOSE_DISTANCE = 100;
   private List<Leg> legs;
   
@@ -36,43 +37,6 @@ public class Sequence implements Serializable {
   }
 
 
-  public static class Leg implements Serializable {
-    public RouteId routeId;
-    public Stop stop1;
-    public Stop stop2;
-    public Leg(RStop stop) {
-      this.routeId = stop.getRouteId();
-      this.stop1 = stop.getStop();      
-    }
-    public RouteId getRouteId() {
-      return routeId;
-    }
-    public Stop getStop1() {
-      return stop1;
-    }
-    public Stop getStop2() {
-      return stop2;
-    }
-    public void setStop1(Stop stop1) {
-      this.stop1 = stop1;
-    }
-    public void setStop2(Stop stop2) {
-      this.stop2 = stop2;
-    }
-    @Override
-    public String toString() {
-      StringBuilder buf = new StringBuilder();
-      buf.append(routeId);
-      buf.append( " " );
-      buf.append(stop1.getName());
-      if ( stop2 != null) {
-        buf.append( " -> " );
-        buf.append(stop2.getName());
-      }
-      return buf.toString();
-    }        
-  }
-  
   public void addStop(RouteManager routeManager, RStop stop) {
     if ( legs.isEmpty() ) {
       legs.add(new Leg(stop));
@@ -95,9 +59,8 @@ public class Sequence implements Serializable {
         // by finding the intersection of the previous route and the new route        
         Stop s = findClosestStopAfterStop(routeManager, lastLeg.getRouteId(), lastLeg.getStop1(), stop.getStop());
         lastLeg.setStop2(s);
-      } else {
-        legs.add(new Leg(stop));
       }
+      legs.add(new Leg(stop));
     }
   }
   

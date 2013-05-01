@@ -1,0 +1,68 @@
+/*-------------------------------------------------------------------------
+ * Copyright (c) 2012,2013, Alex Athanasopoulos.  All Rights Reserved.
+ * alex@melato.org
+ *-------------------------------------------------------------------------
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *-------------------------------------------------------------------------
+ */
+package org.melato.bus.plan;
+
+import org.melato.bus.model.Route;
+import org.melato.bus.model.RouteManager;
+import org.melato.bus.model.Schedule;
+
+
+public class LegTime {
+  private Route route;
+  public Leg leg;
+  int     time;
+  public LegTime previous;
+  public boolean last;
+  public LegTime(Leg leg, int time, RouteManager routeManager) {
+    super();
+    this.leg = leg;
+    this.time = time;
+    this.route = routeManager.getRoute(leg.getRouteId());
+  }
+  
+  int getTime1() {
+    return time + (int) (leg.getStop1().getTime()/1000L/60);
+  }
+  
+  int getTime2() {
+    return time + (int) (leg.getStop2().getTime()/1000L/60);
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder buf = new StringBuilder();
+    if ( last ) {
+      buf.append( "* " );
+    }
+    buf.append( route.getLabel());
+    //buf.append( "(" + leg.index + ")");
+    buf.append( " " );
+    buf.append( Schedule.formatTime(getTime1()));
+    buf.append( " -> " );
+    buf.append( Schedule.formatTime(getTime2()));
+    
+    if ( previous != null) {
+      buf.append( " (wait " );
+      buf.append( getTime1()-previous.getTime2());
+      buf.append( ")");
+    }
+    return buf.toString();
+  }
+  
+}
