@@ -23,29 +23,18 @@ import java.util.Comparator;
 
 public class LegTimeComparator implements Comparator<LegTime> {
 
-  private static int compare(int a, int b ) {
-    if ( a < b )
-      return -1;
-    if ( a > b )
-      return 1;
-    return 0;
-  }
   @Override
   public int compare(LegTime o1, LegTime o2) {
     int time1 = 0; 
     int time2 = 0;
     if ( o1.leg.index == o2.leg.index ) {
-      time1 = o1.time * 60 + (int) (o1.leg.getStop1().time / 1000L); 
-      time2 = o2.time * 60 + (int) (o2.leg.getStop1().time / 1000L);
-      return compare(time1, time2);
+      return o1.getTime1() - o2.getTime1();
     }
     if ( o1.leg.index > o2.leg.index ) {
       LegTime t = o1;
       o1 = o2;
       o2 = t;
     }
-    time1 = o1.time * 60 + (int) (o1.leg.getStop2().time / 1000L); 
-    time2 = o2.time * 60 + (int) (o2.leg.getStop1().time / 1000L);
-    return compare(time1, time2);
+    return o1.getTime2() - o2.getTime1();
   }
 }

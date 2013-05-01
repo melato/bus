@@ -60,7 +60,9 @@ public class Sequence implements Serializable {
         Stop s = findClosestStopAfterStop(routeManager, lastLeg.getRouteId(), lastLeg.getStop1(), stop.getStop());
         lastLeg.setStop2(s);
       }
-      legs.add(new Leg(stop));
+      Leg leg = new Leg(stop);
+      leg.index = lastLeg.index + 1;
+      legs.add(leg);
     }
   }
   

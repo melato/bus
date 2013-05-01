@@ -202,8 +202,11 @@ public class Schedule {
     }
     return schedule.getTimes();
   }
-  
-  /** Get the schedule times for a given day of the week. */
+
+  /** Get the schedule times for a given day of the week.
+   * @param dayOfWeek 0 = sunday, 1 = monday
+   * @return
+   */
   public int[] getTimesForDayOfWeek( int dayOfWeek ) {
     DaySchedule schedule = DaySchedule.findSchedule(schedules, dayOfWeek);
     if ( schedule == null ) {

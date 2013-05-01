@@ -34,7 +34,7 @@ public class SequenceScheduler {
   public void setDateId(int dateId) {
     this.dateId = dateId;
   }
-
+  
   static LegTime findPrevious(LegTime[] legTimes, int index) {
     int legIndex = legTimes[index].leg.index;
     if ( legIndex > 0 ) {
@@ -47,11 +47,10 @@ public class SequenceScheduler {
     }
     return null;
   }
-  public LegTime[] schedule(Sequence sequence, RouteManager routeManager) {
+  public LegTime[] getLegs(Sequence sequence, RouteManager routeManager) {
     Date date = null;
     if ( dateId != 0 ) {
       date = DateId.getDate(dateId);
-      System.out.println( "Date: " + DateId.toString(dateId));
     } else {
       date = new Date();
     }
@@ -59,9 +58,9 @@ public class SequenceScheduler {
     for( int i = 0; i < legs.length; i++ ) {
       legs[i] = sequence.getLegs().get(i);
     }
-    int legIndex = -1;
+    int lastLegIndex = -1;
     if ( legs.length > 0 ) {
-      legIndex = legs[legs.length-1].index;
+      lastLegIndex = legs[legs.length-1].index;
     }
     List<LegTime> timeList = new ArrayList<LegTime>();
     for(int i = 0; i < legs.length; i++ ) {
@@ -79,10 +78,30 @@ public class SequenceScheduler {
     for( int i = 0; i < timeArray.length; i++ ) {
       LegTime legTime = timeArray[i];
       legTime.previous = findPrevious(timeArray, i);
-      if ( legTime.leg.index == legIndex ) {
+      if ( legTime.leg.index == lastLegIndex ) {
         legTime.last = true;
       }      
     }
     return timeArray;
+  }
+  
+  public List<SequenceInstance> findInstances(LegTime[] legs) {
+    List<SequenceInstance> instances = new ArrayList<SequenceInstance>();
+    for( int i = 0; i < legs.length; i++ ) {
+      if ( legs[i].isFirst() ) {
+        for( int j = i; j < legs.length; j++ ) {
+          if ( legs[j].isLast()) {
+            SequenceInstance instance = new SequenceInstance(legs, i, j-i+1);
+            instances.add(instance);
+            break;
+          }
+        }
+      }
+    }
+    return instances;
+  }  
+  public List<SequenceInstance> getInstances(Sequence sequence, RouteManager routeManager) {
+    LegTime[] timeArray = getLegs(sequence, routeManager);
+    return findInstances(timeArray);
   }
 }

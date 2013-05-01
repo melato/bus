@@ -26,6 +26,7 @@ import org.melato.bus.model.Schedule;
 public class LegTime {
   private Route route;
   public Leg leg;
+  /** route start time from start, in minutes */
   int     time;
   public LegTime previous;
   public boolean last;
@@ -35,31 +36,63 @@ public class LegTime {
     this.time = time;
     this.route = routeManager.getRoute(leg.getRouteId());
   }
-  
+    
+  public boolean isLast() {
+    return last;
+  }
+
+  public boolean isFirst() {
+    return leg.index == 0;
+  }
+
+  /** Seconds from midnight */
   int getTime1() {
-    return time + (int) (leg.getStop1().getTime()/1000L/60);
+    return time * 60 + leg.getStop1().getSecondsFromStart();
   }
   
+  /** Seconds from midnight */
   int getTime2() {
-    return time + (int) (leg.getStop2().getTime()/1000L/60);
+    if ( leg.getStop2() != null) {
+      return time * 60 + leg.getStop2().getSecondsFromStart();
+    } else {
+      return getTime1();
+    }
   }
-  
+    
+  public Route getRoute() {
+    return route;
+  }
+
+  public Leg getLeg() {
+    return leg;
+  }
+
+  public int getTime() {
+    return time;
+  }
+
+  public LegTime getPrevious() {
+    return previous;
+  }
+
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
     if ( last ) {
       buf.append( "* " );
+    } else {
+      buf.append( leg.index + " " );
     }
     buf.append( route.getLabel());
     //buf.append( "(" + leg.index + ")");
     buf.append( " " );
-    buf.append( Schedule.formatTime(getTime1()));
+    buf.append( Schedule.formatTime(getTime1()/60));
     buf.append( " -> " );
-    buf.append( Schedule.formatTime(getTime2()));
+    buf.append( Schedule.formatTime(getTime2()/60));
     
     if ( previous != null) {
       buf.append( " (wait " );
-      buf.append( getTime1()-previous.getTime2());
+      buf.append( (getTime1()-previous.getTime2())/60);
       buf.append( ")");
     }
     return buf.toString();

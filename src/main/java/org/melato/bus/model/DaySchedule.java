@@ -84,11 +84,17 @@ public class DaySchedule {
     this.scheduleId = scheduleId;
   }
 
+  /**
+   * Convert a day-of-week to a days bitmap
+   * @param dayOfWeek day of week, 0 = sunday, 1 = monday
+   * @return
+   */
   public static int dayBitmap(int dayOfWeek) {
-    return 1 << (dayOfWeek-Calendar.SUNDAY);
+    return 1 << (dayOfWeek%7);
   }
   public static DaySchedule findSchedule(DaySchedule[] schedules, int dayOfWeek) {
     int bitmap = dayBitmap(dayOfWeek);
+    System.out.println( "day=" + dayOfWeek + " bitmap=" + bitmap);
     for( DaySchedule schedule: schedules ) {
       if ( (schedule.getScheduleId().getDays() & bitmap) != 0 ) {
         return schedule;
