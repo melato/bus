@@ -43,14 +43,27 @@ public class RStop implements Serializable, Comparable<RStop> {
       int d = o1.routeId.compareTo(o2.routeId);
       if ( d != 0 )
         return d;
-      d = o1.stop.getIndex() - o2.stop.getIndex();
-      return d < 0 ? -1 : (d > 0 ? 1 : 0);
+      if ( o1.stop != null && o2.stop != null) {
+        return o1.stop.getIndex() - o2.stop.getIndex();
+      }
+      if ( o1.stop == null && o1.stop == null) {
+        return 0;
+      }
+      if ( o1.stop == null ) {
+        return -1;
+      } else {
+        return 1;
+      }
     }    
   }
   public RStop(RouteId routeId, Stop stop) {
     super();
     this.routeId = routeId;
     this.stop = stop;
+  }
+  public RStop(RouteId routeId) {
+    super();
+    this.routeId = routeId;
   }
   public RouteId getRouteId() {
     return routeId;
@@ -59,6 +72,8 @@ public class RStop implements Serializable, Comparable<RStop> {
     return stop;
   }
   public int getStopIndex() {
+    if ( stop == null )
+      return 0;
     return stop.getIndex();
   }
   public float getDistance() {
@@ -88,11 +103,15 @@ public class RStop implements Serializable, Comparable<RStop> {
   }
   /** Return true of the stops are in the same route and the 1st stop is before or equal the 2nd stop. */
   public boolean isBefore(RStop stop2) {
-    return getRouteId().equals(stop2.getRouteId()) && stop.getIndex() < stop2.getStop().getIndex();
+    return getRouteId().equals(stop2.getRouteId()) && getStopIndex() < stop2.getStopIndex();
   }  
   @Override
   public String toString() {
-    return routeId + " " + stop.getName() + " (" + getStopIndex() + ")";
+    String s = routeId.toString();
+    if ( stop != null) {
+      s += " " + stop.getName() + " (" + getStopIndex() + ")";
+    }
+    return s;
   }
   
 }
