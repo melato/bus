@@ -204,7 +204,7 @@ public class Schedule {
   }
 
   /** Get the schedule times for a given day of the week.
-   * @param dayOfWeek 0 = sunday, 1 = monday
+   * @param dayOfWeek, as per Calendar.DAY_OF_WEEK
    * @return
    */
   public int[] getTimesForDayOfWeek( int dayOfWeek ) {

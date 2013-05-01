@@ -86,11 +86,11 @@ public class DaySchedule {
 
   /**
    * Convert a day-of-week to a days bitmap
-   * @param dayOfWeek day of week, 0 = sunday, 1 = monday
+   * @param dayOfWeek day of week, as per Calendar.DAY_OF_WEEK
    * @return
    */
   public static int dayBitmap(int dayOfWeek) {
-    return 1 << (dayOfWeek%7);
+    return 1 << (dayOfWeek-Calendar.SUNDAY);
   }
   public static DaySchedule findSchedule(DaySchedule[] schedules, int dayOfWeek) {
     int bitmap = dayBitmap(dayOfWeek);
