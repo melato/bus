@@ -51,6 +51,12 @@ public class DaySchedule {
   public int[] getTimes() {
     return times;
   }
+  
+  public int getLastTime() {
+    if ( times.length == 0 )
+      return -1;
+    return times[times.length-1];
+  }
 
   public void setTimes(int[] times) {
     this.times = times;
