@@ -20,21 +20,19 @@ package org.melato.bus.plan;
 
 import java.util.Comparator;
 
-
+/** Sort legs with the same index according to start time.
+ * Sort legs with different index according to end time of first leg and start time of second leg. */
 public class LegTimeComparator implements Comparator<LegTime> {
 
   @Override
   public int compare(LegTime o1, LegTime o2) {
-    int time1 = 0; 
-    int time2 = 0;
     if ( o1.leg.index == o2.leg.index ) {
       return o1.getTime1() - o2.getTime1();
     }
-    if ( o1.leg.index > o2.leg.index ) {
-      LegTime t = o1;
-      o1 = o2;
-      o2 = t;
+    if ( o1.leg.index < o2.leg.index ) {
+      return o1.getTime2() - o2.getTime1();
+    } else {
+      return o2.getTime2() - o1.getTime1();
     }
-    return o1.getTime2() - o2.getTime1();
   }
 }

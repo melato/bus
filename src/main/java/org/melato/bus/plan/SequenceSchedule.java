@@ -20,6 +20,7 @@ package org.melato.bus.plan;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,11 +29,25 @@ import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 import org.melato.util.DateId;
 
-public class SequenceScheduler {
+public class SequenceSchedule {
   private int dateId;
+  private LegTime[] legs;
+  private List<SequenceInstance> instances;
     
   public void setDateId(int dateId) {
     this.dateId = dateId;
+  }
+  
+  public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
+    legs = createLegs(sequence, routeManager);
+    instances = findInstances(legs);
+  }
+  public LegTime[] getLegs() {
+    return legs;
+  }
+
+  public List<SequenceInstance> getInstances() {
+    return instances;
   }
   
   static LegTime findPrevious(LegTime[] legTimes, int index) {
@@ -47,7 +62,8 @@ public class SequenceScheduler {
     }
     return null;
   }
-  public LegTime[] getLegs(Sequence sequence, RouteManager routeManager) {
+  
+  private LegTime[] createLegs(Sequence sequence, RouteManager routeManager) {
     Date date = null;
     if ( dateId != 0 ) {
       date = DateId.getDate(dateId);
@@ -74,9 +90,16 @@ public class SequenceScheduler {
       }
     }
     LegTime[] timeArray = timeList.toArray(new LegTime[0]);
-    Arrays.sort(timeArray, new LegTimeComparator());
+    Comparator<LegTime> comparator = new LegTimeComparator();
+    Arrays.sort(timeArray, comparator);
+    for(int i = 1; i < timeArray.length; i++ ) {
+      if (comparator.compare(timeArray[i-1], timeArray[i]) > 0) {
+        throw new RuntimeException("bad comparison i=" + i);
+      }
+    }
     for( int i = 0; i < timeArray.length; i++ ) {
       LegTime legTime = timeArray[i];
+      System.out.println( legTime.getLeg().index + " " + legTime.getTime1() + "->" + legTime.getTime2());
       legTime.previous = findPrevious(timeArray, i);
       if ( legTime.leg.index == lastLegIndex ) {
         legTime.last = true;
@@ -100,8 +123,4 @@ public class SequenceScheduler {
     }
     return instances;
   }  
-  public List<SequenceInstance> getInstances(Sequence sequence, RouteManager routeManager) {
-    LegTime[] timeArray = getLegs(sequence, routeManager);
-    return findInstances(timeArray);
-  }
 }
