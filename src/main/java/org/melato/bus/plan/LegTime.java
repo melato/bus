@@ -18,12 +18,15 @@
  */
 package org.melato.bus.plan;
 
+import java.io.Serializable;
+
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 
 
-public class LegTime implements Comparable<LegTime> {
+public class LegTime implements Comparable<LegTime>, Serializable {
+  private static final long serialVersionUID = 1L;
   private Route route;
   public Leg leg;
   /** route start time from start, in minutes */

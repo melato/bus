@@ -12,7 +12,8 @@ public class SequenceInstance implements Serializable {
   int endTime;
   LegInstance[] legs;
   
-  public static class LegInstance {
+  public static class LegInstance implements Serializable{
+    private static final long serialVersionUID = 1L;
     private LegTime legTime;
     private LegTime previous;
 
