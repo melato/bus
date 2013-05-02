@@ -46,7 +46,7 @@ public class Leg implements Serializable {
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
-    buf.append( index + " " );
+    buf.append( (index+1) + " " );
     buf.append(routeId);
     buf.append( " " );
     buf.append(stop1.getName());

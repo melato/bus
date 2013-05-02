@@ -82,7 +82,7 @@ public class LegTime implements Comparable<LegTime>, Serializable {
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
-    buf.append( leg.index + " " );
+    buf.append( (leg.index+1) + " " );
     buf.append( route.getLabel());
     //buf.append( "(" + leg.index + ")");
     buf.append( " " );

@@ -115,6 +115,22 @@ public class SequenceSchedule {
   public List<SequenceInstance> getInstances() {
     return instances;
   }
+
+  public int getTimePosition(int minutes) {
+    int size = instances.size();
+    int seconds = minutes * 60;
+    for( int i = 0; i < size; i++ ) {
+      SequenceInstance instance = instances.get(i);
+      if ( seconds < instance.getStartTime() ) {
+        return i;
+      }
+    }
+    return -1;
+  }  
+  
+  public int getTimePosition(Date date) {
+    return getTimePosition(Schedule.getTime(date));
+  }  
   
   private List<SequenceInstance> createInstances(Level[] levels) {
     List<SequenceInstance> instances = new ArrayList<SequenceInstance>();

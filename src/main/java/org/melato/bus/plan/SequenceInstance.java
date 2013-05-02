@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import org.melato.bus.model.RStop;
 import org.melato.bus.model.Schedule;
 
 public class SequenceInstance implements Serializable {
@@ -23,6 +24,9 @@ public class SequenceInstance implements Serializable {
       this.previous = previous;
     }    
     
+    public RStop getRStop() {
+      return legTime.leg.getRStop1();
+    }    
 
     @Override
     public String toString() {
@@ -49,7 +53,15 @@ public class SequenceInstance implements Serializable {
   public SequenceInstance( LegTime[] timeArray, int start, int length) {
     this(Arrays.asList(timeArray).subList(start, start + length));
   }
-  
+    
+  public int getStartTime() {
+    return startTime;
+  }
+
+  public int getEndTime() {
+    return endTime;
+  }
+
   public LegInstance[] getLegInstances() {
     return legs;
   }
@@ -65,4 +77,5 @@ public class SequenceInstance implements Serializable {
     buf.append(")");
     return buf.toString();
   }
+  
 }
