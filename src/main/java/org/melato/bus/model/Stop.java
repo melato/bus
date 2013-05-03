@@ -20,6 +20,8 @@
  */
 package org.melato.bus.model;
 
+import java.util.Comparator;
+
 import org.melato.gps.Point2D;
 import org.melato.gps.PointTime;
 
@@ -38,6 +40,14 @@ public class Stop extends PointTime {
   int   flags;
   int   index;
   float deviation = 1;
+  
+  public static class IndexComparator implements Comparator<Stop> {
+    @Override
+    public int compare(Stop s1, Stop s2) {
+      return s1.getIndex() - s2.getIndex();
+    }    
+  }
+  
   public Stop() {
     super();
   }

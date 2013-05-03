@@ -21,13 +21,11 @@
 package org.melato.bus.model;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.melato.gps.Point2D;
-import org.melato.util.DelegateList;
 
 /**
  * Provides dummy implementations of non-essential RouteStorage methods.
@@ -49,13 +47,6 @@ public abstract class AbstractRouteStorage implements RouteStorage {
     List<Route> routes = loadRoutes();
     return extractRouteIds(routes);
   }
-
-
-  @Override
-  public MarkerInfo loadMarker(String symbol) {
-    throw new UnsupportedOperationException();
-  }
-
   
   @Override
   public String getUri(RouteId routeId) {

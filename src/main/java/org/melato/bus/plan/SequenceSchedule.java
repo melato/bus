@@ -26,7 +26,6 @@ import java.util.List;
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
-import org.melato.util.AbstractListGrouper;
 import org.melato.util.DateId;
 
 public class SequenceSchedule {
@@ -34,19 +33,28 @@ public class SequenceSchedule {
   private Level[] levels;
   private List<SequenceInstance> instances;
 
+  static Leg[] findEquivalentLegs(RouteManager routeManager, Leg leg) {
+    if ( leg.getStop2() != null) {
+      List<Leg> legs = routeManager.getLegsBetween(leg.getStop1().getSymbol(), leg.getStop2().getSymbol());
+      return legs.toArray(new Leg[0]);
+    } else {
+      return new Leg[] {leg};
+    }
+  }
+  
   static class Level {
-    Leg[] legs;
-    LegTime[] legTimes;
-    int[] times;
-    public Level(Leg[] legs) {
-      super();
-      this.legs = legs;
-    } 
+    private Leg leg;
+    private Leg[] legs;
+    private LegTime[] legTimes;
+    private int[] times;
     public Level(Leg leg) {
       super();
-      this.legs = new Leg[] { leg };
-    } 
+      this.leg = leg;
+    }
     void compute(Date date, RouteManager routeManager) {
+      if ( legs == null) {
+        legs = findEquivalentLegs(routeManager, leg);
+      }
       List<LegTime> timeList = new ArrayList<LegTime>();
       for(int i = 0; i < legs.length; i++ ) {
         Leg leg = legs[i];
@@ -78,22 +86,6 @@ public class SequenceSchedule {
     }
   }
   
-  static class LevelGrouper extends AbstractListGrouper<Leg> {
-    private List<Level> levels = new ArrayList<Level>();
-    public Level[] getLevels() {
-      return levels.toArray(new Level[0]);
-    }
-    @Override
-    protected boolean inSameGroup(Leg item, Leg nextItem) {
-      return false;
-    }
-
-    @Override
-    protected void addGroup(List<Leg> group) {
-      levels.add(new Level(group.toArray(new Leg[0])));
-    }
-    
-  }
   public void setDateId(int dateId) {
     this.dateId = dateId;
   }

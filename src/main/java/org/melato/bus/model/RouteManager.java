@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.melato.bus.model.cache.RoutePointCache;
 import org.melato.bus.model.cache.ScheduleCache;
+import org.melato.bus.plan.Leg;
 import org.melato.gps.Earth;
 import org.melato.gps.GlobalDistance;
 import org.melato.gps.LocalDistance;
@@ -245,15 +246,6 @@ public class RouteManager {
     return null;
   }
   
-  /**
-   * Load marker information, which includes all routes that go through the given stop.
-   * @param symbol
-   * @return
-   */
-  public synchronized MarkerInfo loadMarker(String symbol) {
-    return storage.loadMarker(symbol);
-  }
-
   static class DistanceFilter extends AbstractCollector<RStop> {
     Collection<RStop> result;
     Metric metric;
@@ -311,6 +303,10 @@ public class RouteManager {
 
   public void iteratePrimaryRouteStops(RouteStopCallback callback) {
     storage.iteratePrimaryRouteStops(callback);
+  }
+  
+  public List<Leg> getLegsBetween(String stop1, String stop2) {
+    return storage.loadLegsBetween(stop1, stop2);
   }
 
   /** Get a center point for the whole route collection. */
