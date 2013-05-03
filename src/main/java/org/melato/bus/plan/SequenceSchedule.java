@@ -42,6 +42,7 @@ public class SequenceSchedule {
     }
   }
   
+  /** Helper class for scheduling one leg and equivalent legs */
   static class Level {
     private Leg leg;
     private Leg[] legs;
