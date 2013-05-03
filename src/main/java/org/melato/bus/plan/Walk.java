@@ -23,9 +23,12 @@ public class Walk implements LegItem {
       return D2.format(seconds/60) + "'";
     }
   }
+  public static String distanceDuration(float distance) {
+    return formatDuration(distance*OVERHEAD/SPEED);
+  }
   
   @Override
   public String toString() {
-    return "Walk " + Formatting.straightDistance(distance) + " " + formatDuration(distance*OVERHEAD/SPEED);
+    return "Walk " + Formatting.straightDistance(distance) + " " + distanceDuration(distance);
   }
 }
