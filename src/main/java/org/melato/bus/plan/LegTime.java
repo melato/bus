@@ -24,7 +24,7 @@ import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 
-
+/** A Leg at a particular schedule time. */
 public class LegTime implements Comparable<LegTime>, Serializable {
   private static final long serialVersionUID = 1L;
   private Route route;

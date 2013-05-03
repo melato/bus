@@ -9,6 +9,7 @@ import org.melato.bus.model.RStop;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.Stop;
 
+/** A leg is a portion of a route between two stops. */ 
 public class Leg implements Serializable {
   private static final long serialVersionUID = 1L;
   public RouteId routeId;

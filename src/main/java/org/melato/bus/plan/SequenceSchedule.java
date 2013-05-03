@@ -133,17 +133,19 @@ public class SequenceSchedule {
     if ( levels.length == 0 )
       return instances;
     Level firstLevel = levels[0];
+    LegTime[] firstTimes = firstLevel.legTimes;
+    int[] indexes = new int[levels.length];
     LegTime[] legTimes = new LegTime[levels.length];
-    for(LegTime firstLeg: firstLevel.legTimes) {
-      //System.out.println( "first leg: " + firstLeg);
-      legTimes[0] = firstLeg;
+    for(int firstIndex = 0; firstIndex < firstTimes.length; firstIndex++ ) {      
+      LegTime firstLeg = firstTimes[firstIndex];
+      indexes[0] = firstIndex;
       int time = firstLeg.getTime2();
       boolean complete = true;
       for( int i = 1; i < levels.length; i++ ) {
         int timeIndex = levels[i].findTimeIndex(time);
         if ( timeIndex >= 0 ) {
+          indexes[i] = timeIndex;
           LegTime leg = levels[i].legTimes[timeIndex];
-          legTimes[i] = leg;
           time = leg.getTime2();
           //System.out.println( leg);
         } else {
@@ -152,6 +154,23 @@ public class SequenceSchedule {
         }
       }      
       if ( complete ) {
+        for( int i = 0; i < levels.length; i++ ) {
+          legTimes[i] = levels[i].legTimes[indexes[i]];
+        }
+        /*
+        // use the last possible leg at the first level
+        if ( levels.length > 1 ) {
+          int time1 = legTimes[1].getTime1();
+          while( firstIndex + 1 < levels[0].legTimes.length ) {
+            if ( firstTimes[firstIndex+1].getTime2() < time1 ) {
+              firstIndex++;
+              legTimes[0] = firstTimes[firstIndex];
+            } else {
+              break;
+            }
+          }
+        }
+        */
         SequenceInstance instance = new SequenceInstance(Arrays.asList(legTimes));
         instances.add(instance);        
       } else {

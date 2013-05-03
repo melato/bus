@@ -7,6 +7,7 @@ import java.util.List;
 import org.melato.bus.model.RStop;
 import org.melato.bus.model.Schedule;
 
+/** A sequence scheduled at a particular time */
 public class SequenceInstance implements Serializable {
   private static final long serialVersionUID = 1L;
   int startTime;
