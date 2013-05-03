@@ -26,6 +26,7 @@ import java.util.List;
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
+import org.melato.gps.Metric;
 import org.melato.util.DateId;
 
 public class SequenceSchedule {
@@ -48,9 +49,16 @@ public class SequenceSchedule {
     private Leg[] legs;
     private LegTime[] legTimes;
     private int[] times;
+    private int walkTime;
     public Level(Leg leg) {
       super();
       this.leg = leg;
+    }
+    public void setWalkDistance(float distance) {
+      this.walkTime = (int)Walk.duration(distance);
+    }    
+    public int getWalkTime() {
+      return walkTime;
     }
     void compute(Date date, RouteManager routeManager) {
       if ( legs == null) {
@@ -94,8 +102,13 @@ public class SequenceSchedule {
   public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
     List<Leg> legs = sequence.getLegs();
     levels = new Level[legs.size()];
+    Metric metric = routeManager.getMetric();
     for( int i = 0; i < levels.length; i++ ) {
       levels[i] = new Level(legs.get(i));
+    }
+    for( int i = 1; i < levels.length; i++ ) {
+      float distance = metric.distance(levels[i-1].leg.getStop2(), levels[i].leg.getStop1());
+      levels[i].setWalkDistance(distance);
     }
     Date date = null;
     if ( dateId != 0 ) {
@@ -143,6 +156,7 @@ public class SequenceSchedule {
       int time = firstLeg.getTime2();
       boolean complete = true;
       for( int i = 1; i < levels.length; i++ ) {
+        time += levels[i].getWalkTime();
         int timeIndex = levels[i].findTimeIndex(time);
         if ( timeIndex >= 0 ) {
           indexes[i] = timeIndex;
