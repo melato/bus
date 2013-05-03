@@ -8,8 +8,6 @@ import org.melato.bus.model.Stop;
 
 public class Leg implements Serializable {
   private static final long serialVersionUID = 1L;
-  /** The index of the leg in the sequence.  Used for putting legs in order. */
-  public int    index;
   public RouteId routeId;
   public Stop stop1;
   public Stop stop2;
@@ -46,7 +44,6 @@ public class Leg implements Serializable {
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
-    buf.append( (index+1) + " " );
     buf.append(routeId);
     buf.append( " " );
     buf.append(stop1.getName());

@@ -44,15 +44,6 @@ public class LegTime implements Comparable<LegTime>, Serializable {
     return getTime1() - another.getTime1();
   }
 
-
-  public boolean isLast() {
-    return last;
-  }
-
-  public boolean isFirst() {
-    return leg.index == 0;
-  }
-
   /** Seconds from midnight */
   int getTime1() {
     return time * 60 + leg.getStop1().getSecondsFromStart();
@@ -82,9 +73,8 @@ public class LegTime implements Comparable<LegTime>, Serializable {
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
-    buf.append( (leg.index+1) + " " );
+    //buf.append( (leg.index+1) + " " );
     buf.append( route.getLabel());
-    //buf.append( "(" + leg.index + ")");
     buf.append( " " );
     buf.append( Schedule.formatTime(getTime1()/60));
     buf.append( " -> " );

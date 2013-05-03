@@ -35,14 +35,16 @@ public class SequenceSchedule {
   private List<SequenceInstance> instances;
 
   static class Level {
-    int level;
     Leg[] legs;
     LegTime[] legTimes;
     int[] times;
     public Level(Leg[] legs) {
       super();
-      this.level = legs[0].index;
       this.legs = legs;
+    } 
+    public Level(Leg leg) {
+      super();
+      this.legs = new Leg[] { leg };
     } 
     void compute(Date date, RouteManager routeManager) {
       List<LegTime> timeList = new ArrayList<LegTime>();
@@ -83,7 +85,7 @@ public class SequenceSchedule {
     }
     @Override
     protected boolean inSameGroup(Leg item, Leg nextItem) {
-      return item.index == nextItem.index;
+      return false;
     }
 
     @Override
@@ -97,9 +99,11 @@ public class SequenceSchedule {
   }
 
   public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
-    LevelGrouper grouper = new LevelGrouper();
-    grouper.group(sequence.getLegs());
-    levels = grouper.getLevels();
+    List<Leg> legs = sequence.getLegs();
+    levels = new Level[legs.size()];
+    for( int i = 0; i < levels.length; i++ ) {
+      levels[i] = new Level(legs.get(i));
+    }
     Date date = null;
     if ( dateId != 0 ) {
       date = DateId.getDate(dateId);
