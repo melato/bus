@@ -6,7 +6,7 @@ import org.melato.bus.client.Formatting;
 import org.melato.gps.GlobalDistance;
 import org.melato.gps.Point2D;
 
-public class Walk implements LegItem {
+public class Walk {
   public static final float OVERHEAD = 1.3f;
   public static final float SPEED = 5000f/3600;
   public static final DecimalFormat D2 = new DecimalFormat("00");

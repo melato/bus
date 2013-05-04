@@ -42,6 +42,46 @@ public class Schedule {
 
   static DecimalFormat d2Format = new DecimalFormat("00");
   
+  public static interface ScheduleFactory {
+    DaySchedule getSchedule(Schedule schedule);  
+  }
+  public static class DateScheduleFactory implements ScheduleFactory {
+    private Date date;
+    
+    public DateScheduleFactory(Date date) {
+      super();
+      this.date = date;
+    }
+
+    public DateScheduleFactory(int dateId) {
+      this(DateId.getDate(dateId));
+    }
+
+    public DateScheduleFactory() {
+      this(new Date());
+    }
+    
+    @Override
+    public DaySchedule getSchedule(Schedule schedule) {
+      return schedule.getSchedule(date);
+    }      
+  }
+  
+  public static class ScheduleIdScheduleFactory implements ScheduleFactory {
+    private ScheduleId scheduleId;
+        
+    public ScheduleIdScheduleFactory(ScheduleId scheduleId) {
+      super();
+      this.scheduleId = scheduleId;
+    }
+
+    @Override
+    public DaySchedule getSchedule(Schedule schedule) {
+      return schedule.getSchedule(scheduleId);
+    }      
+  }
+  
+  
   /**
    * format a schedule time as hh:mm
    * hh may be larger than 24
@@ -117,7 +157,7 @@ public class Schedule {
     DateId.setCalendar(id.getDateId(), cal);
     return DaySchedule.findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
-  
+    
   public DaySchedule getSchedule(Date date) {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);

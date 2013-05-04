@@ -26,11 +26,10 @@ import java.util.List;
 import org.melato.bus.model.DaySchedule;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
+import org.melato.bus.model.Schedule.ScheduleFactory;
 import org.melato.gps.Metric;
-import org.melato.util.DateId;
 
 public class SequenceSchedule {
-  private int dateId;
   private Level[] levels;
   private List<SequenceInstance> instances;
 
@@ -46,7 +45,7 @@ public class SequenceSchedule {
   /** Helper class for scheduling one leg and equivalent legs */
   static class Level {
     private Leg leg;
-    private Leg[] legs;
+    private Leg[] equivalentLegs;
     private LegTime[] legTimes;
     private int[] times;
     private int walkTime;
@@ -60,15 +59,15 @@ public class SequenceSchedule {
     public int getWalkTime() {
       return walkTime;
     }
-    void compute(Date date, RouteManager routeManager) {
-      if ( legs == null) {
-        legs = findEquivalentLegs(routeManager, leg);
+    void compute(ScheduleFactory scheduleFactory, RouteManager routeManager) {
+      if ( equivalentLegs == null) {
+        equivalentLegs = findEquivalentLegs(routeManager, leg);
       }
       List<LegTime> timeList = new ArrayList<LegTime>();
-      for(int i = 0; i < legs.length; i++ ) {
-        Leg leg = legs[i];
+      for(int i = 0; i < equivalentLegs.length; i++ ) {
+        Leg leg = equivalentLegs[i];
         Schedule schedule = routeManager.getSchedule(leg.getRouteId());
-        DaySchedule daySchedule = schedule.getSchedule(date);
+        DaySchedule daySchedule = scheduleFactory.getSchedule(schedule);
         int[] times = daySchedule.getTimes();
         for( int time: times ) {
           LegTime legTime = new LegTime(leg, time, routeManager);
@@ -95,11 +94,7 @@ public class SequenceSchedule {
     }
   }
   
-  public void setDateId(int dateId) {
-    this.dateId = dateId;
-  }
-
-  public SequenceSchedule(Sequence sequence, RouteManager routeManager) {
+  public SequenceSchedule(Sequence sequence, ScheduleFactory scheduleFactory, RouteManager routeManager) {
     List<Leg> legs = sequence.getLegs();
     levels = new Level[legs.size()];
     Metric metric = routeManager.getMetric();
@@ -110,14 +105,8 @@ public class SequenceSchedule {
       float distance = metric.distance(levels[i-1].leg.getStop2(), levels[i].leg.getStop1());
       levels[i].setWalkDistance(distance);
     }
-    Date date = null;
-    if ( dateId != 0 ) {
-      date = DateId.getDate(dateId);
-    } else {
-      date = new Date();
-    }
     for(Level level: levels ) {
-      level.compute(date, routeManager);
+      level.compute(scheduleFactory, routeManager);
     }
     instances = createInstances(levels);
   }
@@ -149,7 +138,6 @@ public class SequenceSchedule {
     Level firstLevel = levels[0];
     LegTime[] firstTimes = firstLevel.legTimes;
     int[] indexes = new int[levels.length];
-    LegTime[] legTimes = new LegTime[levels.length];
     for(int firstIndex = 0; firstIndex < firstTimes.length; firstIndex++ ) {      
       LegTime firstLeg = firstTimes[firstIndex];
       indexes[0] = firstIndex;
@@ -169,29 +157,31 @@ public class SequenceSchedule {
         }
       }      
       if ( complete ) {
+        List<LegTime> legTimes = new ArrayList<LegTime>();
         for( int i = 0; i < levels.length; i++ ) {
-          legTimes[i] = levels[i].legTimes[indexes[i]];
+          int index = indexes[i];
+          legTimes.add(levels[i].legTimes[index]);
         }
-        /*
-        // use the last possible leg at the first level
-        if ( levels.length > 1 ) {
-          int time1 = legTimes[1].getTime1();
-          while( firstIndex + 1 < levels[0].legTimes.length ) {
-            if ( firstTimes[firstIndex+1].getTime2() < time1 ) {
-              firstIndex++;
-              legTimes[0] = firstTimes[firstIndex];
-            } else {
-              break;
-            }
-          }
-        }
-        */
-        SequenceInstance instance = new SequenceInstance(Arrays.asList(legTimes));
+        SequenceInstance instance = new SequenceInstance(legTimes);
         instances.add(instance);        
       } else {
         break;
       }
     }
     return instances;
+    /*
+    // use the last possible leg at the first level
+    if ( levels.length > 1 ) {
+      int time1 = legTimes[1].getTime1();
+      while( firstIndex + 1 < levels[0].legTimes.length ) {
+        if ( firstTimes[firstIndex+1].getTime2() < time1 ) {
+          firstIndex++;
+          legTimes[0] = firstTimes[firstIndex];
+        } else {
+          break;
+        }
+      }
+    }
+    */
   }  
 }

@@ -29,7 +29,7 @@ public class Sequence implements Serializable {
     Leg previous = null;
     for(Leg leg: legs ) {
       if ( previous != null) {
-        items.add(new Walk(previous.getStop2(), leg.getStop1()));
+        items.add(new WalkItem(previous.getStop2(), leg.getStop1()));
       }
       items.add(leg);
       previous = leg;

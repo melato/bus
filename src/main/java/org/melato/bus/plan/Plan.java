@@ -20,6 +20,8 @@
  */
 package org.melato.bus.plan;
 
+import java.util.Comparator;
+
 import org.melato.bus.client.Formatting;
 import org.melato.bus.model.Schedule;
 import org.melato.gps.Metric;
@@ -40,6 +42,26 @@ public class Plan implements Comparable<Plan>{
   /** Arrival time (seconds from midnight) */
   private int arrivalTime;
 
+  public static class TimeComparator implements Comparator<Plan> {
+
+    @Override
+    public int compare(Plan o1, Plan o2) {
+      return compareFloats(o1.duration, o2.duration);
+    }    
+  }
+  public static int compareFloats(float a, float b) {
+    float diff = a - b;
+    if ( ! Float.isNaN(diff)) {
+      return diff < 0 ? -1 : (diff > 0 ? 1 : 0);
+    }
+    if ( ! Float.isNaN(a)) {
+      return -1;
+    }
+    if ( ! Float.isNaN(b)) {
+      return 1;
+    }
+    return 0;
+  }
   public Plan(Point2D origin, Point2D destination, PlanLeg[] legs) {
     super();
     this.origin = origin;
@@ -57,17 +79,7 @@ public class Plan implements Comparable<Plan>{
   
   @Override
   public int compareTo(Plan o) {
-    float diff = duration - o.duration;
-    if ( ! Float.isNaN(diff)) {
-      return (int) diff;
-    }
-    if ( ! Float.isNaN(duration)) {
-      return -1;
-    }
-    if ( ! Float.isNaN(o.duration)) {
-      return 1;
-    }
-    return 0;
+    return compareFloats(walkDistance, o.walkDistance);
   }
 
   public PlanLeg[] getLegs() {
