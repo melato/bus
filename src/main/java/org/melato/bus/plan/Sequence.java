@@ -49,7 +49,7 @@ public class Sequence implements Serializable {
   }
 
 
-  public void addStop(RouteManager routeManager, RStop stop) {
+  public void addStopAfter(RouteManager routeManager, RStop stop) {
     if ( legs.isEmpty() ) {
       legs.add(new Leg(stop));
       return;
@@ -74,6 +74,29 @@ public class Sequence implements Serializable {
       }
       Leg leg = new Leg(stop);
       legs.add(leg);
+    }
+  }
+  
+  public void addStopBefore(RouteManager routeManager, RStop stop) {
+    if ( legs.isEmpty() ) {
+      legs.add(new Leg(stop.getRouteId(), stop.getStop(), stop.getStop()));
+      return;
+    }
+    Leg firstLeg = legs.get(0);
+    if ( firstLeg.getRouteId().equals(stop.getRouteId())) {
+      // if the first leg is for the same route.
+      if ( stop.getStop().isBefore(firstLeg.getStop2())) {
+        // replace stop1
+        firstLeg.setStop1(stop.getStop());
+      } else {
+        // or replace both stops
+        firstLeg.setStop1(stop.getStop());
+        firstLeg.setStop2(stop.getStop());
+      }
+    } else {
+      // add a new leg at the beginning
+      Leg leg = new Leg(stop.getRouteId(), stop.getStop(), stop.getStop());
+      legs.add(0, leg);
     }
   }
   
