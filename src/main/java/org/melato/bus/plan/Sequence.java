@@ -12,38 +12,38 @@ import org.melato.gps.Metric;
 import org.melato.gps.Point2D;
 
 public class Sequence implements Serializable {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
   public static final float CLOSE_DISTANCE = 100;
-  private List<Leg> legs;
+  private List<LegGroup> legs;
   
-  public List<Leg> getLegs() {
+  public List<LegGroup> getLegs() {
     return legs;
   }
 
-  public void setLegs(List<Leg> legs) {
+  public void setLegs(List<LegGroup> legs) {
     this.legs = legs;
   }
 
-  public List<LegItem> getLegItems() {
-    List<LegItem> items = new ArrayList<LegItem>();
+  public List<SequenceItem> getSequenceItems() {
+    List<SequenceItem> items = new ArrayList<SequenceItem>();
     Leg previous = null;
-    for(Leg leg: legs ) {
+    for(LegGroup leg: legs ) {
       if ( previous != null) {
-        items.add(new WalkItem(previous.getStop2(), leg.getStop1()));
+        items.add(new WalkItem(previous.getStop2(), leg.getLeg().getStop1()));
       }
       items.add(leg);
-      previous = leg;
+      previous = leg.getLeg();
     }
     return items;
   }
   
   public Sequence() {
     super();
-    legs = new ArrayList<Leg>();
+    legs = new ArrayList<LegGroup>();
     
   }
 
-  public Sequence(List<Leg> legs) {
+  public Sequence(List<LegGroup> legs) {
     super();
     this.legs = legs;
   }
@@ -51,10 +51,10 @@ public class Sequence implements Serializable {
 
   public void addStopAfter(RouteManager routeManager, RStop stop) {
     if ( legs.isEmpty() ) {
-      legs.add(new Leg(stop));
+      legs.add(new LegGroup(new Leg(stop)));
       return;
     }
-    Leg lastLeg = legs.get(legs.size()-1);
+    Leg lastLeg = legs.get(legs.size()-1).getLeg();
     if ( lastLeg.getRouteId().equals(stop.getRouteId())) {
       // if the last leg is for the same route.
       if ( lastLeg.getStop1().isBefore(stop.getStop())) {
@@ -73,16 +73,16 @@ public class Sequence implements Serializable {
         lastLeg.setStop2(s);
       }
       Leg leg = new Leg(stop);
-      legs.add(leg);
+      legs.add(new LegGroup(leg));
     }
   }
   
   public void addStopBefore(RouteManager routeManager, RStop stop) {
     if ( legs.isEmpty() ) {
-      legs.add(new Leg(stop.getRouteId(), stop.getStop(), stop.getStop()));
+      legs.add(new LegGroup(new Leg(stop.getRouteId(), stop.getStop(), stop.getStop())));
       return;
     }
-    Leg firstLeg = legs.get(0);
+    Leg firstLeg = legs.get(0).getLeg();
     if ( firstLeg.getRouteId().equals(stop.getRouteId())) {
       // if the first leg is for the same route.
       if ( stop.getStop().isBefore(firstLeg.getStop2())) {
@@ -96,7 +96,7 @@ public class Sequence implements Serializable {
     } else {
       // add a new leg at the beginning
       Leg leg = new Leg(stop.getRouteId(), stop.getStop(), stop.getStop());
-      legs.add(0, leg);
+      legs.add(0, new LegGroup(leg));
     }
   }
   

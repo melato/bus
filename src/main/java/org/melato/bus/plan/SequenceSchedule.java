@@ -33,23 +33,14 @@ public class SequenceSchedule {
   private Level[] levels;
   private List<SequenceInstance> instances;
 
-  static Leg[] findEquivalentLegs(RouteManager routeManager, Leg leg) {
-    if ( leg.getStop2() != null) {
-      List<Leg> legs = routeManager.getLegsBetween(leg.getStop1().getSymbol(), leg.getStop2().getSymbol());
-      return legs.toArray(new Leg[0]);
-    } else {
-      return new Leg[] {leg};
-    }
-  }
-  
   /** Helper class for scheduling one leg and equivalent legs */
   static class Level {
-    private Leg leg;
-    private Leg[] equivalentLegs;
+    private LegGroup leg;
+    private Leg[] legs;
     private LegTime[] legTimes;
     private int[] times;
     private int walkTime;
-    public Level(Leg leg) {
+    public Level(LegGroup leg) {
       super();
       this.leg = leg;
     }
@@ -60,18 +51,18 @@ public class SequenceSchedule {
       return walkTime;
     }
     void compute(ScheduleFactory scheduleFactory, RouteManager routeManager) {
-      if ( equivalentLegs == null) {
-        equivalentLegs = findEquivalentLegs(routeManager, leg);
-      }
+      legs = leg.getEquivalentLegs(routeManager);
       List<LegTime> timeList = new ArrayList<LegTime>();
-      for(int i = 0; i < equivalentLegs.length; i++ ) {
-        Leg leg = equivalentLegs[i];
+      for(int i = 0; i < legs.length; i++ ) {
+        Leg leg = legs[i];
         Schedule schedule = routeManager.getSchedule(leg.getRouteId());
         DaySchedule daySchedule = scheduleFactory.getSchedule(schedule);
-        int[] times = daySchedule.getTimes();
-        for( int time: times ) {
-          LegTime legTime = new LegTime(leg, time, routeManager);
-          timeList.add(legTime);
+        if ( daySchedule != null) {
+          int[] times = daySchedule.getTimes();
+          for( int time: times ) {
+            LegTime legTime = new LegTime(leg, time, routeManager);
+            timeList.add(legTime);
+          }
         }
       }
       legTimes = timeList.toArray(new LegTime[0]);
@@ -95,14 +86,14 @@ public class SequenceSchedule {
   }
   
   public SequenceSchedule(Sequence sequence, ScheduleFactory scheduleFactory, RouteManager routeManager) {
-    List<Leg> legs = sequence.getLegs();
+    List<LegGroup> legs = sequence.getLegs();
     levels = new Level[legs.size()];
     Metric metric = routeManager.getMetric();
     for( int i = 0; i < levels.length; i++ ) {
       levels[i] = new Level(legs.get(i));
     }
     for( int i = 1; i < levels.length; i++ ) {
-      float distance = metric.distance(levels[i-1].leg.getStop2(), levels[i].leg.getStop1());
+      float distance = metric.distance(levels[i-1].leg.getLeg().getStop2(), levels[i].leg.getLeg().getStop1());
       levels[i].setWalkDistance(distance);
     }
     for(Level level: levels ) {

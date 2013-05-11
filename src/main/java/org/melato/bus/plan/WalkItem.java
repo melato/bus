@@ -4,7 +4,7 @@ import org.melato.bus.client.Formatting;
 import org.melato.gps.GlobalDistance;
 import org.melato.gps.Point2D;
 
-public class WalkItem implements LegItem {
+public class WalkItem implements SequenceItem {
   private float distance;
   public WalkItem(Point2D point1, Point2D point2) {
     super();
