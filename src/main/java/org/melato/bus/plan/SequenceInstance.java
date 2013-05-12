@@ -82,14 +82,19 @@ public class SequenceInstance implements Serializable {
   public SequenceInstanceLeg[] getLegInstances() {
     List<SequenceInstanceLeg> legs = new ArrayList<SequenceInstanceLeg>(); 
     LegTime previous = null;
+    LegTime previous2 = null;
+    LegTime[] previousLegs = null;
     for( int i = 0; i < levelIndexes.length; i++ ) {
-      LegTime leg = schedule.levels[i].legTimes[levelIndexes[i]];
+      LegTime[] levelLegs = schedule.levels[i].legTimes;
+      LegTime leg = levelLegs[levelIndexes[i]];
       if ( i > 0 ) {
-        LegTime[] previousLegs = schedule.levels[i-1].legTimes;
         for( int j = levelIndexes[i-1] + 1; j < previousLegs.length; j++ ) {
           LegTime t = previousLegs[j];
           if ( t.getTime2() < leg.getTime1()) {
-            legs.add(new LegInstance(t, previous));
+            legs.add(new LegInstance(t, previous2));
+          }
+          if ( t.getTime1() > leg.getTime1()) {
+            break;
           }
         }
       }
@@ -97,7 +102,9 @@ public class SequenceInstance implements Serializable {
         legs.add(new WalkInstance(previous, leg));
       }
       legs.add(new LegInstance(leg, previous));
+      previous2 = previous;
       previous = leg;
+      previousLegs = levelLegs;
     }
     return legs.toArray(new SequenceInstanceLeg[0]);
   }
