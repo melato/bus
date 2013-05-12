@@ -2,7 +2,6 @@ package org.melato.bus.plan;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.melato.bus.client.Formatting;
@@ -15,9 +14,10 @@ public class SequenceInstance implements Serializable {
   private static final long serialVersionUID = 1L;
   int startTime;
   int endTime;
-  List<SequenceInstanceLeg> legs;
+  SequenceSchedule schedule;
+  int[] levelIndexes;
   
-  public static interface SequenceInstanceLeg {
+  public static interface SequenceInstanceLeg extends Serializable{
     
   }
   public static class LegInstance implements SequenceInstanceLeg, Serializable {
@@ -60,27 +60,15 @@ public class SequenceInstance implements Serializable {
     }    
   }
   
-  
-  public SequenceInstance( List<LegTime> legTimes) {
-    legs = new ArrayList<SequenceInstanceLeg>(); 
-    LegTime previous = null;
-    int size = legTimes.size();
-    for( int i = 0; i < size; i++ ) {
-      LegTime leg = legTimes.get(i);
-      if ( previous != null) {
-        legs.add(new WalkInstance(previous, leg));
-      }
-      legs.add(new LegInstance(leg, previous));
-      previous = leg;
-    }
-    startTime = legTimes.get(0).getTime1();
-    endTime = legTimes.get(size-1).getTime2();
+  public SequenceInstance(SequenceSchedule schedule, int[] indexes) {
+    this.schedule = schedule;
+    this.levelIndexes = indexes;
+    LegTime firstLeg = schedule.levels[0].legTimes[indexes[0]];
+    LegTime lastLeg = schedule.levels[indexes.length-1].legTimes[indexes[indexes.length-1]];
+    startTime = firstLeg.getTime1();
+    endTime = lastLeg.getTime2();
   }
-  
-  public SequenceInstance( LegTime[] timeArray, int start, int length) {
-    this(Arrays.asList(timeArray).subList(start, start + length));
-  }
-    
+      
   /** Start time in seconds. */
   public int getStartTime() {
     return startTime;
@@ -91,8 +79,27 @@ public class SequenceInstance implements Serializable {
     return endTime;
   }
 
-  public List<SequenceInstanceLeg> getLegInstances() {
-    return legs;
+  public SequenceInstanceLeg[] getLegInstances() {
+    List<SequenceInstanceLeg> legs = new ArrayList<SequenceInstanceLeg>(); 
+    LegTime previous = null;
+    for( int i = 0; i < levelIndexes.length; i++ ) {
+      LegTime leg = schedule.levels[i].legTimes[levelIndexes[i]];
+      if ( i > 0 ) {
+        LegTime[] previousLegs = schedule.levels[i-1].legTimes;
+        for( int j = levelIndexes[i-1] + 1; j < previousLegs.length; j++ ) {
+          LegTime t = previousLegs[j];
+          if ( t.getTime2() < leg.getTime1()) {
+            legs.add(new LegInstance(t, previous));
+          }
+        }
+      }
+      if ( previous != null) {
+        legs.add(new WalkInstance(previous, leg));
+      }
+      legs.add(new LegInstance(leg, previous));
+      previous = leg;
+    }
+    return legs.toArray(new SequenceInstanceLeg[0]);
   }
 
   @Override

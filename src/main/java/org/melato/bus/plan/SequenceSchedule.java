@@ -30,14 +30,14 @@ import org.melato.bus.model.Schedule.ScheduleFactory;
 import org.melato.gps.Metric;
 
 public class SequenceSchedule {
-  private Level[] levels;
+  public Level[] levels;
   private List<SequenceInstance> instances;
 
   /** Helper class for scheduling one leg and equivalent legs */
-  static class Level {
+  public static class Level {
     private LegGroup leg;
     private Leg[] legs;
-    private LegTime[] legTimes;
+    public LegTime[] legTimes;
     private int[] times;
     private int walkTime;
     public Level(LegGroup leg) {
@@ -148,12 +148,7 @@ public class SequenceSchedule {
         }
       }      
       if ( complete ) {
-        List<LegTime> legTimes = new ArrayList<LegTime>();
-        for( int i = 0; i < levels.length; i++ ) {
-          int index = indexes[i];
-          legTimes.add(levels[i].legTimes[index]);
-        }
-        SequenceInstance instance = new SequenceInstance(legTimes);
+        SequenceInstance instance = new SequenceInstance(this, indexes.clone());
         instances.add(instance);        
       } else {
         break;
