@@ -24,19 +24,6 @@ public class Sequence implements Serializable {
     this.legs = legs;
   }
 
-  public List<SequenceItem> getSequenceItems() {
-    List<SequenceItem> items = new ArrayList<SequenceItem>();
-    Leg previous = null;
-    for(LegGroup leg: legs ) {
-      if ( previous != null) {
-        items.add(new WalkItem(previous.getStop2(), leg.getLeg().getStop1()));
-      }
-      items.add(leg);
-      previous = leg.getLeg();
-    }
-    return items;
-  }
-  
   public Sequence() {
     super();
     legs = new ArrayList<LegGroup>();

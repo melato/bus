@@ -6,7 +6,7 @@ import java.util.List;
 import org.melato.bus.model.RouteManager;
 
 /** A leg is a portion of a route between two stops. */ 
-public class LegGroup implements SequenceItem, Serializable {
+public class LegGroup implements Serializable {
   private static final long serialVersionUID = 1L;
   public Leg leg;
   public Leg[] equivalentLegs;
