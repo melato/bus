@@ -12,6 +12,7 @@
         <dependency org="org.melato" name="org.melato.geometry" rev="latest.integration"/>
         <dependency org="org.melato" name="org.melato.gps" rev="latest.integration"/>
         <dependency org="org.melato" name="org.melato.util" rev="latest.integration"/>
+        <dependency org="org.json" name="json" rev="1" conf="compile->default"/>        
         <dependency org="org.junit" name="junit" rev="4.4" conf="test->default"/>
     </dependencies>
 </ivy-module>
