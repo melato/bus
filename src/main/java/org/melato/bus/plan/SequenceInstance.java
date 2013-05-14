@@ -51,6 +51,10 @@ public class SequenceInstance implements Serializable {
   public static class WalkInstance implements SequenceInstanceLeg, Serializable {
     private static final long serialVersionUID = 1L;
     private float distance;
+    
+    public float getDistance() {
+      return distance;
+    }
     public WalkInstance(LegTime leg1, LegTime leg2) {
       distance = new GlobalDistance().distance(leg1.getLeg().getStop2(), leg2.getLeg().getStop1());
     }
