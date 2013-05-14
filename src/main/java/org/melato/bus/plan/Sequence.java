@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.melato.bus.model.RStop;
+import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Stop;
@@ -41,7 +42,7 @@ public class Sequence implements Serializable {
       legs.add(new LegGroup(new Leg(stop)));
       return;
     }
-    Leg lastLeg = legs.get(legs.size()-1).getLeg();
+    LegGroup lastLeg = legs.get(legs.size()-1);
     if ( lastLeg.getRouteId().equals(stop.getRouteId())) {
       // if the last leg is for the same route.
       if ( lastLeg.getStop1().isBefore(stop.getStop())) {
@@ -106,5 +107,20 @@ public class Sequence implements Serializable {
     if ( minIndex == -1 )
       return stop;
     return stops[minIndex];    
+  }
+  
+  
+  public String getLabel(RouteManager routeManager) {
+    StringBuilder buf = new StringBuilder();
+    boolean first = true;
+    for(LegGroup leg: legs ) {
+      if ( ! first ) {
+        buf.append("-");
+      }
+      first = false;
+      Route route = routeManager.getRoute(leg.leg.getRouteId());      
+      buf.append(route.getLabel());
+    }
+    return buf.toString();
   }  
 }
