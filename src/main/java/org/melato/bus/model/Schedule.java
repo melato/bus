@@ -69,7 +69,11 @@ public class Schedule {
   
   public static class ScheduleIdScheduleFactory implements ScheduleFactory {
     private ScheduleId scheduleId;
-        
+            
+    public ScheduleId getScheduleId() {
+      return scheduleId;
+    }
+
     public ScheduleIdScheduleFactory(ScheduleId scheduleId) {
       super();
       this.scheduleId = scheduleId;
@@ -78,7 +82,13 @@ public class Schedule {
     @Override
     public DaySchedule getSchedule(Schedule schedule) {
       return schedule.getSchedule(scheduleId);
+    }
+
+    @Override
+    public String toString() {
+      return scheduleId.toString();
     }      
+    
   }
   
   
@@ -302,5 +312,5 @@ public class Schedule {
 
   public void setDayChange(int dayChange) {
     this.dayChange = dayChange;
-  }  
+  }
 }
