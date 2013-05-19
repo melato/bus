@@ -24,6 +24,7 @@ public class SequenceInstance implements Serializable {
     private static final long serialVersionUID = 1L;
     private LegTime legTime;
     private int     waitSeconds;
+    private String waitString = "wait";
 
     public LegInstance(LegTime legTime, LegTime previous) {
       super();
@@ -38,12 +39,16 @@ public class SequenceInstance implements Serializable {
     public RStop getRStop() {
       return legTime.leg.getRStop1();
     }    
+    
+    public void setWaitString(String waitString) {
+      this.waitString = waitString;
+    }
 
     @Override
     public String toString() {
       String s = legTime.toString();
       if ( waitSeconds >= 0 ) {
-        s += " (wait " + Schedule.formatDuration(waitSeconds) + ")";
+        s += " (" + waitString + " " + Schedule.formatDuration(waitSeconds) + ")";
       }
       return s;
     }    
