@@ -24,10 +24,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.melato.bus.model.DaySchedule;
+import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 import org.melato.bus.model.Schedule.ScheduleFactory;
 import org.melato.gps.Metric;
+import org.melato.progress.ProgressGenerator;
 
 public class SequenceSchedule {
   public Level[] levels;
@@ -51,6 +53,9 @@ public class SequenceSchedule {
       return walkTime;
     }
     void compute(ScheduleFactory scheduleFactory, RouteManager routeManager) {
+      ProgressGenerator progress = ProgressGenerator.get();
+      Route route = routeManager.getRoute(leg.getLeg().getRouteId());
+      progress.setText(route.getLabel());
       legs = leg.getEquivalentLegs(routeManager);
       List<LegTime> timeList = new ArrayList<LegTime>();
       for(int i = 0; i < legs.length; i++ ) {
@@ -96,8 +101,11 @@ public class SequenceSchedule {
       float distance = metric.distance(levels[i-1].leg.getLeg().getStop2(), levels[i].leg.getLeg().getStop1());
       levels[i].setWalkDistance(distance);
     }
-    for(Level level: levels ) {
-      level.compute(scheduleFactory, routeManager);
+    ProgressGenerator progress = ProgressGenerator.get();
+    progress.setLimit(levels.length);
+    for( int i = 0; i < levels.length; i++ ) {
+      progress.setPosition(i);
+      levels[i].compute(scheduleFactory, routeManager);
     }
     instances = createInstances(levels);
   }
