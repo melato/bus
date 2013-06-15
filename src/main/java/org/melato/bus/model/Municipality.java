@@ -118,4 +118,8 @@ public class Municipality implements Serializable {
       return false;
     return true;
   }
+  
+  public boolean hasDetails() {
+    return mayor != null;
+  }
 }
