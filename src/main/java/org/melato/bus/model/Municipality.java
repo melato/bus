@@ -5,9 +5,10 @@ import java.io.Serializable;
 import org.melato.gps.Point2D;
 
 public class Municipality implements Serializable {
+  private static final long serialVersionUID = 1L;
   public String name;
   public String mayor;
-  public String police;
+  public String phone;
   public String website;
   public String address;
   public String postalCode;
@@ -22,21 +23,17 @@ public class Municipality implements Serializable {
     return mayor;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 
   public void setMayor(String mayor) {
     this.mayor = mayor;
   }
-
-
-  public String getPolice() {
-    return police;
-  }
-
-
-  public void setPolice(String police) {
-    this.police = police;
-  }
-
 
   public String getWebsite() {
     return website;
