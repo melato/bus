@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.melato.gps.Point2D;
 
-public class Municipality implements Serializable {
+public class Municipality implements Serializable, Comparable<Municipality> {
   private static final long serialVersionUID = 1L;
   public String name;
   public String mayor;
@@ -119,4 +119,11 @@ public class Municipality implements Serializable {
   public boolean hasDetails() {
     return mayor != null;
   }
+
+  @Override
+  public int compareTo(Municipality o) {
+    return name.compareTo(o.name);
+  }
+  
+  
 }
