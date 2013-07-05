@@ -1,17 +1,12 @@
 package org.melato.bus.client;
 
 public class Menu {
-  public String name;
   public String label;
   public String icon;
   public String type;
   public String target;
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
+  public int startDate;
+  public int endDate;
   public String getLabel() {
     return label;
   }
@@ -36,8 +31,27 @@ public class Menu {
   public void setTarget(String target) {
     this.target = target;
   }
+  public int getStartDate() {
+    return startDate;
+  }
+  public void setStartDate(int startDate) {
+    this.startDate = startDate;
+  }
+  public int getEndDate() {
+    return endDate;
+  }
+  public void setEndDate(int endDate) {
+    this.endDate = endDate;
+  }
+  public void setDate(int date) {
+    this.startDate = date;
+    this.endDate = date;
+  }
+  public boolean isActive(int dateId) {
+    return (startDate == 0 || startDate <= dateId) && (startDate == 0 || dateId <= endDate);
+  }
   @Override
   public String toString() {
-    return name + " type=" + type + " target=" + target;
+    return label + " type=" + type + " target=" + target;
   }
 }
