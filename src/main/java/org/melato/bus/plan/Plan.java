@@ -147,6 +147,17 @@ public class Plan implements Comparable<Plan>{
     return buf.toString();
   }
 
+  public String getLabel() {
+    StringBuilder buf = new StringBuilder();
+    for(PlanLeg leg: getLegs()) {
+      if ( buf.length() > 0 ) {
+        buf.append( " -> " );        
+      }
+      buf.append(leg.getRoute().getLabel());
+    }
+    return buf.toString();
+  }
+  
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
