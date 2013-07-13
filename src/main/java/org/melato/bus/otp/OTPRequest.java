@@ -88,11 +88,16 @@ public class OTPRequest {
     return buf.toString();
   }
   private static String[] formatDateTime(Date date) {
+    System.out.println( "formatDateTime: " + date );
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
     String[] fields = new String[2];
-    fields[0] = cal.get((Calendar.DAY_OF_MONTH ) + 1) + "/" + cal.get(Calendar.MONTH ) + "/" + cal.get(Calendar.YEAR );
-    fields[1] = cal.get(Calendar.HOUR) + (cal.get(Calendar.AM_PM) == Calendar.PM ? "pm" : "am"); 
+    fields[0] = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH ) + "/" + cal.get(Calendar.YEAR );
+    int hour = cal.get(Calendar.HOUR);
+    if ( hour == 0 )
+      hour = 12;
+    String ampm = cal.get(Calendar.AM_PM) == Calendar.PM ? "pm" : "am";
+    fields[1] = hour + ampm;  
     return fields;
   }
   private static String format(Point2D point) {
