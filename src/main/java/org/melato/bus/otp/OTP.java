@@ -37,9 +37,16 @@ public class OTP {
   }
   public static class WalkLeg extends Leg {    
   }
+  public static class Stop {
+    public String name;
+    public String stopCode;
+    public String id;
+    public String agencyId;
+  }
   public static class TransitLeg extends Leg { 
     public String routeId;
-    public String fromStopId;
-    public String toStopId;
+    public String label;
+    public Stop from;
+    public Stop to;
   }
 }

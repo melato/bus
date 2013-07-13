@@ -107,7 +107,7 @@ public class PlanLeg {
   }
   @Override
   public String toString() {
-    // 17:50 1260(1223,36) 140-2 ΓΕΝΙΚΟ ΚΡΑΤΙΚΟ -> ΣΚΑΛΑΚΙΑ
+    // 140 ΓΕΝΙΚΟ ΚΡΑΤΙΚΟ (350) -> ΣΚΑΛΑΚΙΑ
     return getRoute().getLabel()
         + formatTimes()
         + " " + getStop1().getName()
