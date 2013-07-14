@@ -20,15 +20,10 @@
  */
 package org.melato.bus.plan;
 
-import java.util.Date;
-
 import org.melato.bus.model.RouteManager;
-import org.melato.gps.Point2D;
 
 public interface Planner {
   void setRouteManager(RouteManager routeManager);
-  void setDepartureTime(Date date);
-  void setArrivalTime(Date date);
-  Plan[] plan(Point2D origin, Point2D destination);
+  Plan[] plan(PlanRequest request);
 
 }

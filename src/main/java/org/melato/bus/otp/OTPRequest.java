@@ -20,62 +20,15 @@
  */
 package org.melato.bus.otp;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.melato.bus.plan.PlanRequest;
 import org.melato.gps.Point2D;
 
-/*
-http://localhost:8080/opentripplanner-api-webapp/ws/plan
-  ?fromPlace=37.9890,23.7906
-  &toPlace=37.939693,23.656956
-  &mode=BUS,WALK
-  &min=TRANSFERS
-  &maxWalkDistance=1260
-  &walkSpeed=1.341
-  &time=9:00pm
-  &date=7/7/2013
-  &arriveBy=true
-  
-  &itinID=1
-  &wheelchair=false
-  &preferredRoutes=
-  &unpreferredRoutes=
- */
 public class OTPRequest {
-  public static final String BUS = "BUS";
-  public static final String WALK = "WALK";
-  public static final String MIN_TRANSFERS = "TRANSFERS";
-  Point2D fromPlace;
-  Point2D toPlace;
-  int maxWalkDistance = 1000;
-  float walkSpeed = 5 / 3.6f;
-  Date date = new Date();
-  boolean arriveBy;
-  private List<String> mode = new ArrayList<String>();
-  private String min = MIN_TRANSFERS;
-  
-  public OTPRequest() {
-    super();
-    mode.add(BUS);
-    mode.add(WALK);
-  }
-  public List<String> getMode() {
-    return mode;
-  }
-  public void setMode(List<String> mode) {
-    this.mode = mode;
-  }
-  
-  public String getMin() {
-    return min;
-  }
-  public void setMin(String min) {
-    this.min = min;
-  }
   private static String formatMode(List<String> modes) {
     StringBuilder buf = new StringBuilder();
     int size = modes.size();
@@ -112,56 +65,18 @@ public class OTPRequest {
     buf.append( String.valueOf(value));
   }
   
-  public String queryString() {
+  public static String queryString(PlanRequest q) {
     StringBuilder buf = new StringBuilder();
-    append(buf, "fromPlace", format(fromPlace));
-    append(buf, "toPlace", format(toPlace));
-    append(buf, "maxWalkDistance", maxWalkDistance);
-    append(buf, "walkSpeed", walkSpeed);
-    String[] dt = formatDateTime(date);
+    append(buf, "fromPlace", format(q.getFromPlace()));
+    append(buf, "toPlace", format(q.getToPlace()));
+    append(buf, "maxWalkDistance", q.getMaxWalkDistance());
+    append(buf, "walkSpeed", q.getWalkSpeed());
+    String[] dt = formatDateTime(q.getDate());
     append(buf, "time", dt[1]);
     append(buf, "date", dt[0]);
-    append(buf, "arriveBy", arriveBy);
-    append(buf, "mode", formatMode(mode));
-    append(buf, "min", min);
+    append(buf, "arriveBy", q.isArriveBy());
+    append(buf, "mode", formatMode(q.getMode()));
+    append(buf, "min", q.getMin());
     return buf.toString();
   }
-  public Point2D getFromPlace() {
-    return fromPlace;
-  }
-  public void setFromPlace(Point2D fromPlace) {
-    this.fromPlace = fromPlace;
-  }
-  public Point2D getToPlace() {
-    return toPlace;
-  }
-  public void setToPlace(Point2D toPlace) {
-    this.toPlace = toPlace;
-  }
-  public int getMaxWalkDistance() {
-    return maxWalkDistance;
-  }
-  public void setMaxWalkDistance(int maxWalkDistance) {
-    this.maxWalkDistance = maxWalkDistance;
-  }
-  public float getWalkSpeed() {
-    return walkSpeed;
-  }
-  public void setWalkSpeed(float walkSpeed) {
-    this.walkSpeed = walkSpeed;
-  }
-  public Date getDate() {
-    return date;
-  }
-  public void setDate(Date date) {
-    this.date = date;
-  }
-  public boolean isArriveBy() {
-    return arriveBy;
-  }
-  public void setArriveBy(boolean arriveBy) {
-    this.arriveBy = arriveBy;
-  }
-  
-  
 }

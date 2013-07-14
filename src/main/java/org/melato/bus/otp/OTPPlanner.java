@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.melato.bus.model.Route;
@@ -15,6 +14,7 @@ import org.melato.bus.otp.OTP.Leg;
 import org.melato.bus.otp.OTP.TransitLeg;
 import org.melato.bus.plan.Plan;
 import org.melato.bus.plan.PlanLeg;
+import org.melato.bus.plan.PlanRequest;
 import org.melato.bus.plan.Planner;
 import org.melato.gps.Point2D;
 import org.melato.log.Log;
@@ -36,15 +36,6 @@ public class OTPPlanner implements Planner {
     this.routeManager = routeManager;
   }
 
-  @Override
-  public void setDepartureTime(Date date) {
-  }
-
-  @Override
-  public void setArrivalTime(Date date) {
-  }
-  
-  
   private Stop findStop(RouteId route, Stop[] stops, int offset, String code) throws MismatchException {
     for( int i = offset; i < stops.length; i++ ) {
       Stop stop = stops[i];
@@ -74,11 +65,11 @@ public class OTPPlanner implements Planner {
     }
     return new Plan(origin, destination, legs.toArray(new PlanLeg[0]));
   }
-  public Plan[] convertPlan(OTP.Plan otp, Point2D origin, Point2D destination) {
+  public Plan[] convertPlan(OTP.Plan otp, PlanRequest request) {
     List<Plan> plans = new ArrayList<Plan>();
     for(OTP.Itinerary it: otp.itineraries) {
       try {
-        Plan plan = convertItinerary(it, origin, destination);
+        Plan plan = convertItinerary(it, request.getFromPlace(), request.getToPlace());
         plans.add(plan);
       } catch(MismatchException e) {
         System.out.println(e);
@@ -87,17 +78,14 @@ public class OTPPlanner implements Planner {
     return plans.toArray(new Plan[0]);
   }
   @Override
-  public Plan[] plan(Point2D origin, Point2D destination) {
-    OTPRequest request = new OTPRequest();
-    request.setFromPlace(origin);
-    request.setToPlace(destination);
+  public Plan[] plan(PlanRequest request) {
     try {
-      URL url = new URL(this.url + "?" + request.queryString());
+      URL url = new URL(this.url + "?" + OTPRequest.queryString(request));
       Log.info(url);
       String data = Streams.copyToString(url);
       Log.info("data.length: " + data.length());
       OTP.Plan otp = OTPParser.parse(data);
-      return convertPlan(otp, origin, destination);
+      return convertPlan(otp, request);
     } catch (MalformedURLException e) {
       throw new RuntimeException( e );
     } catch (IOException e) {
