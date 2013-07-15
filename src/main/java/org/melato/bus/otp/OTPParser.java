@@ -54,6 +54,7 @@ public class OTPParser {
     } else if ( "BUS".equals(mode)) {
       TransitLeg transit = new TransitLeg();
       transit.routeId = json.getString("routeId");
+      transit.label = json.getString("routeShortName");
       transit.from = getStop(json, "from");
       transit.to = getStop(json, "to");
       leg = transit;
@@ -68,6 +69,8 @@ public class OTPParser {
     JSONArray legs = json.getJSONArray("legs");
     Itinerary itinerary = new Itinerary();
     itinerary.legs = new Leg[legs.length()];
+    itinerary.startTime = new Date(json.getLong("startTime"));    
+    itinerary.endTime = new Date(json.getLong("endTime"));    
     for( int i = 0; i < itinerary.legs.length; i++ ) {
       itinerary.legs[i] = parseLeg(legs.getJSONObject(i));
     }

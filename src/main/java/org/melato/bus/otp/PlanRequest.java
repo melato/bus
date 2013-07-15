@@ -18,16 +18,20 @@
  * along with Athens Next Bus.  If not, see <http://www.gnu.org/licenses/>.
  *-------------------------------------------------------------------------
  */
-package org.melato.bus.plan;
+package org.melato.bus.otp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.melato.gps.Point2D;
 
 /** A plan request.  It has fields used by OTP, but could be used by other planners as well. */
-public class PlanRequest {
+public class PlanRequest implements Serializable {
+  private static final long serialVersionUID = 1L;
   public static final String BUS = "BUS";
   public static final String WALK = "WALK";
   public static final String MIN_TRANSFERS = "TRANSFERS";
@@ -36,7 +40,6 @@ public class PlanRequest {
   private int maxWalkDistance = 1000;
   private float walkSpeed = 5 / 3.6f;
   private Date date = new Date();
-  private int time = -1;
   private boolean arriveBy;
   private List<String> mode = new ArrayList<String>();
   private String min = MIN_TRANSFERS;
@@ -89,9 +92,6 @@ public class PlanRequest {
   public void setDate(Date date) {
     this.date = date;
   }  
-  public void setTime(int time) {
-    this.time = time;
-  }
   public boolean isArriveBy() {
     return arriveBy;
   }
@@ -99,5 +99,13 @@ public class PlanRequest {
     this.arriveBy = arriveBy;
   }
   
-  
+  public static Date replaceTime(Date date, int seconds) {
+    Calendar cal = new GregorianCalendar();
+    cal.setTime(date);
+    cal.set(Calendar.HOUR_OF_DAY, seconds / 3600);
+    cal.set(Calendar.MINUTE, (seconds / 3600) / 60);
+    cal.set(Calendar.SECOND, seconds % 60);
+    cal.set(Calendar.MILLISECOND, 0);
+    return cal.getTime();
+  }
 }

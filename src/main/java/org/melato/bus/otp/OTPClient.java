@@ -20,15 +20,25 @@
  */
 package org.melato.bus.otp;
 
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.melato.bus.plan.PlanRequest;
+import org.melato.bus.client.Formatting;
+import org.melato.bus.otp.OTP.Plan;
 import org.melato.gps.Point2D;
+import org.melato.log.Log;
+import org.melato.update.Streams;
 
-public class OTPRequest {
+/** Interfaces with the Open Trip Planner server, via HTTP.
+ * Creates a query string for the request, gets the reply and returns an OTP.Plan
+ * */
+public class OTPClient implements OTP.Planner {
+  public static String URL = "http://192.168.2.9:8080/opentripplanner-api-webapp/ws/plan";
+  private String url;
+    
   private static String formatMode(List<String> modes) {
     StringBuilder buf = new StringBuilder();
     int size = modes.size();
@@ -40,17 +50,24 @@ public class OTPRequest {
     }
     return buf.toString();
   }
+    
+  public OTPClient() {
+    this(URL);
+  }
+
+
+  public OTPClient(String url) {
+    super();
+    this.url = url;
+  }
+  
   private static String[] formatDateTime(Date date) {
     System.out.println( "formatDateTime: " + date );
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
     String[] fields = new String[2];
     fields[0] = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH ) + "/" + cal.get(Calendar.YEAR );
-    int hour = cal.get(Calendar.HOUR);
-    if ( hour == 0 )
-      hour = 12;
-    String ampm = cal.get(Calendar.AM_PM) == Calendar.PM ? "pm" : "am";
-    fields[1] = hour + ampm;  
+    fields[1] = Formatting.formatTime(date);  
     return fields;
   }
   private static String format(Point2D point) {
@@ -79,4 +96,13 @@ public class OTPRequest {
     append(buf, "min", q.getMin());
     return buf.toString();
   }
+  @Override
+  public Plan plan(PlanRequest request) throws Exception {
+    URL url = new URL(this.url + "?" + OTPClient.queryString(request));
+    Log.info(url);
+    String data = Streams.copyToString(url);
+    Log.info("data.length: " + data.length());
+    OTP.Plan otp = OTPParser.parse(data);
+    return otp;
+  }  
 }
