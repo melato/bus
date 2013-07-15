@@ -21,6 +21,7 @@
 package org.melato.bus.plan;
 
 import org.melato.bus.model.RouteManager;
+import org.melato.bus.otp.PlanRequest;
 
 public interface Planner {
   void setRouteManager(RouteManager routeManager);
