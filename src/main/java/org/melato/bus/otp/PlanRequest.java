@@ -103,7 +103,7 @@ public class PlanRequest implements Serializable {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
     cal.set(Calendar.HOUR_OF_DAY, seconds / 3600);
-    cal.set(Calendar.MINUTE, (seconds / 3600) / 60);
+    cal.set(Calendar.MINUTE, (seconds % 3600) / 60);
     cal.set(Calendar.SECOND, seconds % 60);
     cal.set(Calendar.MILLISECOND, 0);
     return cal.getTime();
