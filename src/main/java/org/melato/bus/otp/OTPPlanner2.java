@@ -63,7 +63,7 @@ public class OTPPlanner2 implements Planner {
     }
     return new Plan(origin, destination, legs.toArray(new PlanLeg[0]));
   }
-  public Plan[] convertPlan(OTP.Plan otp, PlanRequest request) {
+  public Plan[] convertPlan(OTP.Plan otp, OTPRequest request) {
     List<Plan> plans = new ArrayList<Plan>();
     for(OTP.Itinerary it: otp.itineraries) {
       try {
@@ -76,7 +76,7 @@ public class OTPPlanner2 implements Planner {
     return plans.toArray(new Plan[0]);
   }
   @Override
-  public Plan[] plan(PlanRequest request) {
+  public Plan[] plan(OTPRequest request) {
     try {
       URL url = new URL(OTPClient.URL + "?" + OTPClient.queryString(request));
       Log.info(url);

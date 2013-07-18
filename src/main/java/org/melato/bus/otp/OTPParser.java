@@ -51,7 +51,7 @@ public class OTPParser {
     if ( "WALK".equals(mode)) {
       WalkLeg walk = new WalkLeg();
       leg = walk;
-    } else if ( "BUS".equals(mode)) {
+    } else {
       TransitLeg transit = new TransitLeg();
       transit.routeId = json.getString("routeId");
       transit.label = json.getString("routeShortName");

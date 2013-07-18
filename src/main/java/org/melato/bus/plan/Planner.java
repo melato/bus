@@ -21,10 +21,10 @@
 package org.melato.bus.plan;
 
 import org.melato.bus.model.RouteManager;
-import org.melato.bus.otp.PlanRequest;
+import org.melato.bus.otp.OTPRequest;
 
 public interface Planner {
   void setRouteManager(RouteManager routeManager);
-  Plan[] plan(PlanRequest request);
+  Plan[] plan(OTPRequest request);
 
 }

@@ -30,8 +30,9 @@ import java.util.List;
 import org.melato.gps.Point2D;
 
 /** A plan request.  It has fields used by OTP, but could be used by other planners as well. */
-public class PlanRequest implements Serializable {
+public class OTPRequest implements Serializable {
   private static final long serialVersionUID = 1L;
+  public static final String TRANSIT = "TRANSIT";
   public static final String BUS = "BUS";
   public static final String WALK = "WALK";
   public static final String MIN_TRANSFERS = "TRANSFERS";
@@ -44,9 +45,9 @@ public class PlanRequest implements Serializable {
   private List<String> mode = new ArrayList<String>();
   private String min = MIN_TRANSFERS;
   
-  public PlanRequest() {
+  public OTPRequest() {
     super();
-    mode.add(BUS);
+    mode.add(TRANSIT);
     mode.add(WALK);
   }
   public List<String> getMode() {

@@ -83,6 +83,6 @@ public class OTP {
     public Stop to;
   }
   public static interface Planner {
-    Plan plan(PlanRequest request) throws Exception;
+    Plan plan(OTPRequest request) throws Exception;
   }
 }

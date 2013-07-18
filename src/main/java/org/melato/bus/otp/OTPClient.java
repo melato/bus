@@ -82,7 +82,7 @@ public class OTPClient implements OTP.Planner {
     buf.append( String.valueOf(value));
   }
   
-  public static String queryString(PlanRequest q) {
+  public static String queryString(OTPRequest q) {
     StringBuilder buf = new StringBuilder();
     append(buf, "fromPlace", format(q.getFromPlace()));
     append(buf, "toPlace", format(q.getToPlace()));
@@ -97,7 +97,7 @@ public class OTPClient implements OTP.Planner {
     return buf.toString();
   }
   @Override
-  public Plan plan(PlanRequest request) throws Exception {
+  public Plan plan(OTPRequest request) throws Exception {
     URL url = new URL(this.url + "?" + OTPClient.queryString(request));
     Log.info(url);
     String data = Streams.copyToString(url);

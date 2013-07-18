@@ -86,7 +86,7 @@ public class PlanConverter {
     return new Plan(origin, destination, legs.toArray(new PlanLeg[0]));
   }
   
-  public Plan[] convertPlan(OTP.Plan otp, PlanRequest request) {
+  public Plan[] convertPlan(OTP.Plan otp, OTPRequest request) {
     List<Plan> plans = new ArrayList<Plan>();
     for(OTP.Itinerary it: otp.itineraries) {
       try {
