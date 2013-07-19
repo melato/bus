@@ -34,8 +34,11 @@ public class OTPRequest implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TRANSIT = "TRANSIT";
   public static final String BUS = "BUS";
+  public static final String TRAM = "TRAM";
   public static final String WALK = "WALK";
-  public static final String MIN_TRANSFERS = "TRANSFERS";
+  
+  public static final String OPT_TRANSFERS = "TRANSFERS";
+  public static final String OPT_QUICK = "QUICK";
   private Point2D fromPlace;
   private Point2D toPlace;
   private int maxWalkDistance = 1000;
@@ -43,7 +46,7 @@ public class OTPRequest implements Serializable {
   private Date date = new Date();
   private boolean arriveBy;
   private List<String> mode = new ArrayList<String>();
-  private String min = MIN_TRANSFERS;
+  private String min = OPT_QUICK;
   
   public OTPRequest() {
     super();
