@@ -35,6 +35,7 @@ public class OTPRequest implements Serializable {
   public static final String TRANSIT = "TRANSIT";
   public static final String BUS = "BUS";
   public static final String TRAM = "TRAM";
+  public static final String SUBWAY = "SUBWAY";
   public static final String WALK = "WALK";
   
   public static final String OPT_TRANSFERS = "TRANSFERS";
