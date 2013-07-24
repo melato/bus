@@ -64,7 +64,11 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public Point2D getCenter() {
     return null;
   }
-
+  
+  @Override
+  public String getPlannerUrl() {
+    return null;
+  }
 
   private ScheduleSummary toSummary(Schedule schedule) {
     DaySchedule[] schedules = schedule.getSchedules();

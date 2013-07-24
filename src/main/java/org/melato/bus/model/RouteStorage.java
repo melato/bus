@@ -71,6 +71,8 @@ public interface RouteStorage {
   List<Leg> loadLegsBetween(String stop1, String stop2);
   
   Point2D getCenter();
+
+  String getPlannerUrl();
   /**
    * Return the original web URL for the route at the route provider's web site.
    * @param route

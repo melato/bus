@@ -317,6 +317,10 @@ public class RouteManager {
     }
     return center;    
   }
+  
+  public String getPlannerUrl() {
+    return storage.getPlannerUrl();
+  }
 
   public Metric getMetric() {
     Point2D center = getCenter();

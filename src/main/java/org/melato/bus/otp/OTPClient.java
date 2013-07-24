@@ -36,7 +36,6 @@ import org.melato.update.Streams;
  * Creates a query string for the request, gets the reply and returns an OTP.Plan
  * */
 public class OTPClient implements OTP.Planner {
-  public static String URL = "http://192.168.2.9:8080/opentripplanner-api-webapp/ws/plan";
   private String url;
     
   private static String formatMode(List<String> modes) {
@@ -51,11 +50,6 @@ public class OTPClient implements OTP.Planner {
     return buf.toString();
   }
     
-  public OTPClient() {
-    this(URL);
-  }
-
-
   public OTPClient(String url) {
     super();
     this.url = url;
