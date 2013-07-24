@@ -54,6 +54,10 @@ public class OTP {
     public float distance;
     /** The leg duration from start to finish, in seconds. */
     public int duration;
+    
+    public int getDuration() {
+      return duration;
+    }
   }
   /** A leg using walking.  */
   public static class WalkLeg extends Leg {    
