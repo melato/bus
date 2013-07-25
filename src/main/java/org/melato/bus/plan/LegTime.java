@@ -80,8 +80,12 @@ public class LegTime implements Comparable<LegTime>, Serializable {
     buf.append( route.getLabel());
     buf.append( " " );
     buf.append( Schedule.formatTime(getTime1()/60));
+    buf.append( " " );
+    buf.append( leg.stop1.getName() );
     buf.append( " -> " );
     buf.append( Schedule.formatTime(getTime2()/60));
+    buf.append( " " );
+    buf.append( leg.stop2.getName() );
     return buf.toString();
   }
 }
