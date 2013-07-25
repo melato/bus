@@ -97,6 +97,7 @@ public class OTPClient implements OTP.Planner {
     String data = Streams.copyToString(url);
     Log.info("data.length: " + data.length());
     OTP.Plan otp = OTPParser.parse(data);
+    otp.postParse();
     return otp;
   }  
 }

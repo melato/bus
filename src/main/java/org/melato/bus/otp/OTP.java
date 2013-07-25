@@ -30,6 +30,12 @@ public class OTP {
   public static class Plan implements Serializable {
     private static final long serialVersionUID = 1L;
     public Itinerary[] itineraries;
+        
+    public void postParse() {
+      for(Itinerary it: itineraries) {
+        it.addTimeDifferences();
+      }
+    }
   }
   /** An itinerary is a series of legs with various modes (walk, bus, etc.) that go from A to B. */
   public static class Itinerary implements Serializable {
@@ -39,6 +45,19 @@ public class OTP {
     /** The end time. */
     public Date endTime;
     public Leg[] legs;
+    
+    public void addTimeDifferences() {
+      Date lastTime = null;
+      for(Leg leg: legs) {
+        if ( leg instanceof TransitLeg) {
+          TransitLeg t = (TransitLeg) leg;
+          if ( lastTime != null ) {
+            t.diffTime = (int) ((t.startTime.getTime() - lastTime.getTime()) / 1000L); 
+          }
+          lastTime = t.endTime;
+        }
+      }
+    }
   }
   
   /** A Leg is a portion of an itinerary at a particular time (and place).
@@ -85,6 +104,8 @@ public class OTP {
     public Stop from;
     /** The end stop. */
     public Stop to;
+    /** The time from the end of the previous transit leg, or -1, in seconds. */
+    public int diffTime = -1;
   }
   public static interface Planner {
     Plan plan(OTPRequest request) throws Exception;
