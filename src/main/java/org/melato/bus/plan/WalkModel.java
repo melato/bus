@@ -20,32 +20,35 @@
  */
 package org.melato.bus.plan;
 
-import java.text.DecimalFormat;
+import java.io.Serializable;
 
-import org.melato.bus.client.Formatting;
-import org.melato.gps.GlobalDistance;
-import org.melato.gps.Point2D;
 
-public class Walk {
-  public static final DecimalFormat D2 = new DecimalFormat("00");
-  private WalkModel model;
-  private float distance;
-  public Walk(Point2D point1, Point2D point2, WalkModel model) {
+public class WalkModel implements Serializable {
+  public static final float OVERHEAD = 1.3f;
+  /** walk speed in m/s */  
+  private float speed;
+    
+  /**
+   * 
+   * @param speed walking speed, in m/s
+   */
+  public WalkModel(float speed) {
     super();
-    this.model = model;
-    distance = new GlobalDistance().distance(point1, point2);
-  }
-  public static String formatDuration(float time) {
-    int seconds = (int) time;
-    if ( seconds >= 3600 ) {
-      return D2.format(seconds/3600) + ":" + D2.format(seconds%60);
-    } else {
-      return D2.format(seconds/60) + "'";
-    }
+    this.speed = speed;
   }
   
-  @Override
-  public String toString() {
-    return "Walk " + Formatting.straightDistance(distance) + " " + model.distanceDuration(distance);
+  
+
+  public WalkModel() {
+    this( 5000f/3600);
   }
+
+
+
+  public float duration(float distance) {
+    return distance*OVERHEAD/speed;
+  }
+  public String distanceDuration(float distance) {
+    return Walk.formatDuration(duration(distance));
+  }  
 }

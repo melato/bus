@@ -75,16 +75,18 @@ public class SequenceInstance {
   public static class WalkInstance implements SequenceInstanceLeg, Serializable {
     private static final long serialVersionUID = 1L;
     private float distance;
+    private int duration;
     
     public float getDistance() {
       return distance;
     }
-    public WalkInstance(LegTime leg1, LegTime leg2) {
+    public WalkInstance(WalkModel walkModel, LegTime leg1, LegTime leg2) {
       distance = new GlobalDistance().distance(leg1.getLeg().getStop2(), leg2.getLeg().getStop1());
+      duration = (int) walkModel.duration(distance);
     }
     @Override
     public String toString() {
-      return "Walk " + Formatting.straightDistance(distance) + " " + Walk.distanceDuration(distance);
+      return "Walk " + Formatting.straightDistance(distance) + " " + Walk.formatDuration(duration);
     }    
   }
   
@@ -127,7 +129,7 @@ public class SequenceInstance {
         }
       }
       if ( previous != null) {
-        legs.add(new WalkInstance(previous, leg));
+        legs.add(new WalkInstance(schedule.getWalkModel(), previous, leg));
       }
       legs.add(new LegInstance(leg, previous));
       previous2 = previous;

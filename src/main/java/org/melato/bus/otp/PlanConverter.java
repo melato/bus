@@ -27,7 +27,7 @@ import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Stop;
-import org.melato.bus.plan.Leg;
+import org.melato.bus.plan.RouteLeg;
 import org.melato.bus.plan.Plan;
 import org.melato.bus.plan.PlanLeg;
 import org.melato.bus.plan.Sequence;
@@ -64,7 +64,7 @@ public class PlanConverter {
     throw new MismatchException("cannot find stop: " + route + "(" + offset + ") -" + code + "-");
   }
 
-  public Leg convertLeg(OTP.TransitLeg t) throws MismatchException {
+  public RouteLeg convertLeg(OTP.TransitLeg t) throws MismatchException {
     RouteId routeId = new RouteId(t.routeId);
     if ( routeManager.getRoute(routeId) == null) {
       throw new MismatchException("Unknown route: " + t.routeId);
@@ -72,7 +72,7 @@ public class PlanConverter {
     Stop[] stops = routeManager.getStops(routeId);
     Stop stop1 = findStop(routeId, stops, 0, t.from.stopCode);
     Stop stop2 = findStop(routeId, stops, stop1.getIndex(), t.to.stopCode);
-    return new Leg(routeId, stop1, stop2);    
+    return new RouteLeg(routeId, stop1, stop2);    
   }
   
   public Sequence convertToSequence(OTP.Itinerary it) throws MismatchException {
