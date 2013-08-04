@@ -76,7 +76,7 @@ public class OTP {
     
     public int getDuration() {
       return duration;
-    }
+    }    
   }
   /** A leg using walking.  */
   public static class WalkLeg extends Leg {    
