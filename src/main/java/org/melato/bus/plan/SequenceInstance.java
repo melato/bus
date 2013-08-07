@@ -68,8 +68,8 @@ public class SequenceInstance {
     SequenceItinerary.WalkLeg leg = new SequenceItinerary.WalkLeg();
     leg.startTime = leg1.getTime2();
     leg.endTime = leg2.getTime1();
-    leg.duration = leg.endTime - leg.startTime;
     leg.distance = new GlobalDistance().distance(leg1.leg.getStop2(), leg2.leg.getStop1());
+    leg.duration = Math.round(walkModel.duration(leg.distance));
     return leg;
   }    
   
@@ -95,7 +95,7 @@ public class SequenceInstance {
       if ( previous != null) {
         legs.add(createWalkLeg(schedule.getWalkModel(), previous, leg));
       }
-      legs.add(createTransitLeg(leg, previous2));
+      legs.add(createTransitLeg(leg, previous));
       previous2 = previous;
       previous = leg;
       previousLegs = levelLegs;
