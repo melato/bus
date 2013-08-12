@@ -35,7 +35,7 @@ public class RouteGroup {
   }
   private void setRoutes(Route[] routes) {
     this.routes = routes;
-    this.title = routes[0].getLabel() + " " + routes[0].getTitle();
+    this.title = routes[0].getFullTitle();
     this.title = title.toUpperCase();  // just in case.  make sure search is case insensitive.
   }
   public RouteGroup(Route[] routes) {
