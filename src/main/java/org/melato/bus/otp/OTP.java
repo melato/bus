@@ -30,12 +30,19 @@ public class OTP {
   public static class Plan implements Serializable {
     private static final long serialVersionUID = 1L;
     public Itinerary[] itineraries;
+    public Error error;
         
     public void postParse() {
       for(Itinerary it: itineraries) {
         it.addTimeDifferences();
       }
     }
+  }
+  
+  public static class Error implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public int id;
+    public String msg;
   }
   /** An itinerary is a series of legs with various modes (walk, bus, etc.) that go from A to B. */
   public static class Itinerary implements Serializable {
