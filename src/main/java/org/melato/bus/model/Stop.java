@@ -39,6 +39,8 @@ public class Stop extends PointTime {
   public static final int FLAG_NO_DROPOFF = 0x4;
   /** Stop is for dropoff only */
   public static final int FLAG_NO_PICKUP = 0x8;
+  /** Stop is a station */
+  public static final int FLAG_STATION = 0x16;
   String name;
   String symbol;
   int   flags;
@@ -74,6 +76,12 @@ public class Stop extends PointTime {
   public int getFlags() {
     return flags;
   }
+  public void setFlag(int flag) {
+    this.flags = flags | flag;
+  }
+  public boolean isFlag(int flag) {
+    return (flags & flag) != 0;
+  }
   public void setFlags(int flags) {
     this.flags = flags;
   }
@@ -88,6 +96,9 @@ public class Stop extends PointTime {
   }
   public boolean isPickup() {
     return (flags & FLAG_NO_PICKUP) == 0; 
+  }
+  public boolean isStation() {
+    return isFlag(FLAG_STATION);
   }
   public String getSymbol() {
     return symbol;
