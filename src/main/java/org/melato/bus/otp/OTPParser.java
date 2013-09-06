@@ -76,17 +76,39 @@ public class OTPParser {
     }
     return itinerary;
   }
+  static JSONObject getObject(JSONObject json, String key) throws JSONException {
+    if ( json.has(key) && ! json.isNull(key)) {
+      return json.getJSONObject(key);
+    }
+    return null;
+  }
+  static OTP.Error parseError(JSONObject json) throws JSONException {
+    json = getObject(json, "error");
+    if (json == null) {
+      return null;
+    }
+    OTP.Error error = new OTP.Error();
+    error.id = json.getInt("id");
+    error.msg = json.getString("msg");
+    return error;
+  }
   public static Plan parse(String data) {
     try {
-      JSONObject json = new JSONObject(data);
-      JSONObject jsonPlan = json.getJSONObject("plan");
-      JSONArray jsonItineraries = jsonPlan.getJSONArray("itineraries");
-      Itinerary[] itineraries = new Itinerary[jsonItineraries.length()];
-      for( int i = 0; i < itineraries.length; i++ ) {
-        itineraries[i] = parseItinerary(jsonItineraries.getJSONObject(i));
-      }
       Plan plan = new Plan();
-      plan.itineraries = itineraries;
+      plan.itineraries = new Itinerary[0];
+      JSONObject json = new JSONObject(data);
+      JSONObject jsonPlan = getObject(json, "plan");
+      if ( jsonPlan != null) {
+        JSONArray jsonItineraries = jsonPlan.getJSONArray("itineraries");
+        if ( jsonItineraries != null) {
+          Itinerary[] itineraries = new Itinerary[jsonItineraries.length()];
+          for( int i = 0; i < itineraries.length; i++ ) {
+            itineraries[i] = parseItinerary(jsonItineraries.getJSONObject(i));
+          }
+          plan.itineraries = itineraries;
+        }
+      }
+      plan.error = parseError(json);
       return plan;
     } catch (JSONException e) {
       e.printStackTrace();

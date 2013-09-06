@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 
 public class WalkModel implements Serializable {
+  private static final long serialVersionUID = 1L;
   public static final float OVERHEAD = 1.3f;
   /** walk speed in m/s */  
   private float speed;

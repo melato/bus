@@ -22,14 +22,12 @@ package org.melato.bus.plan;
 
 import java.io.Serializable;
 
-import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Schedule;
 
 /** A Leg at a particular schedule time. */
 public class LegTime implements Comparable<LegTime>, Serializable {
   private static final long serialVersionUID = 1L;
-  private Route route;
   public RouteLeg leg;
   /** This is the scheduled time that the route starts from its starting point, in minutes. */
   int     time;
@@ -39,7 +37,6 @@ public class LegTime implements Comparable<LegTime>, Serializable {
     super();
     this.leg = leg;
     this.time = time;
-    this.route = routeManager.getRoute(leg.getRouteId());
   }
       
   @Override
@@ -61,10 +58,6 @@ public class LegTime implements Comparable<LegTime>, Serializable {
     }
   }
     
-  public Route getRoute() {
-    return route;
-  }
-
   public RouteLeg getLeg() {
     return leg;
   }
@@ -77,7 +70,7 @@ public class LegTime implements Comparable<LegTime>, Serializable {
   public String toString() {
     StringBuilder buf = new StringBuilder();
     //buf.append( (leg.index+1) + " " );
-    buf.append( route.getLabel());
+    buf.append( leg.routeId );
     buf.append( " " );
     buf.append( Schedule.formatTime(getTime1()/60));
     buf.append( " " );
