@@ -81,6 +81,8 @@ public class OTP {
     /** The leg duration from start to finish, in seconds. */
     public int duration;
     
+    public String mode;
+    
     public int getDuration() {
       return duration;
     }    
@@ -99,6 +101,13 @@ public class OTP {
     public String id;
     /** The agency id. */
     public String agencyId;
+  }
+  /** A transfer leg between two transit stops.  Uses walking, elevators, etc. */
+  public static class TransferLeg extends Leg {
+    private static final long serialVersionUID = 1L;
+    public Stop from;
+    /** The end stop. */
+    public Stop to;
   }
   /** A leg using transit. */
   public static class TransitLeg extends Leg {

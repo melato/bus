@@ -29,6 +29,7 @@ import org.melato.bus.otp.OTP.Itinerary;
 import org.melato.bus.otp.OTP.Leg;
 import org.melato.bus.otp.OTP.Plan;
 import org.melato.bus.otp.OTP.Stop;
+import org.melato.bus.otp.OTP.TransferLeg;
 import org.melato.bus.otp.OTP.TransitLeg;
 import org.melato.bus.otp.OTP.WalkLeg;
 
@@ -48,9 +49,15 @@ public class OTPParser {
   static Leg parseLeg(JSONObject json) throws JSONException {
     String mode = json.getString("mode");
     Leg leg = null;
+    System.out.println("mode: " + mode );
     if ( "WALK".equals(mode)) {
       WalkLeg walk = new WalkLeg();
       leg = walk;
+    } else if ( "TRANSFER".equals(mode)) {
+      TransferLeg transfer = new TransferLeg();
+      transfer.from = getStop(json, "from");
+      transfer.to = getStop(json, "to");
+      leg = transfer;
     } else {
       TransitLeg transit = new TransitLeg();
       transit.routeId = json.getString("routeId");
@@ -63,6 +70,7 @@ public class OTPParser {
     leg.duration = (int) (json.getLong("duration")/1000L);
     leg.startTime = new Date(json.getLong("startTime"));
     leg.endTime = new Date(json.getLong("endTime"));
+    leg.mode = mode;
     return leg;    
   }
   static Itinerary parseItinerary(JSONObject json) throws JSONException {
