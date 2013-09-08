@@ -49,7 +49,6 @@ public class OTPParser {
   static Leg parseLeg(JSONObject json) throws JSONException {
     String mode = json.getString("mode");
     Leg leg = null;
-    System.out.println("mode: " + mode );
     if ( "WALK".equals(mode)) {
       WalkLeg walk = new WalkLeg();
       leg = walk;
