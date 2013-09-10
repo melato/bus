@@ -42,6 +42,8 @@ public class OTPRequest implements Serializable {
   public static final String OPT_QUICK = "QUICK";
   private Point2D fromPlace;
   private Point2D toPlace;
+  private int minTransferTime = 300;
+  private int maxTransfers = 5;
   private int maxWalkDistance = 1000;
   private float walkSpeed = 5 / 3.6f;
   private Date date = new Date();
@@ -103,7 +105,18 @@ public class OTPRequest implements Serializable {
   public void setArriveBy(boolean arriveBy) {
     this.arriveBy = arriveBy;
   }
-  
+  public int getMinTransferTime() {
+    return minTransferTime;
+  }
+  public void setMinTransferTime(int minTransferTime) {
+    this.minTransferTime = minTransferTime;
+  }  
+  public int getMaxTransfers() {
+    return maxTransfers;
+  }
+  public void setMaxTransfers(int maxTransfers) {
+    this.maxTransfers = maxTransfers;
+  }
   public static Date replaceTime(Date date, int seconds) {
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);

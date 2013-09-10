@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.melato.bus.otp.OTPRequest;
 import org.melato.bus.plan.RouteLeg;
 import org.melato.gps.Point2D;
 
@@ -72,6 +73,8 @@ public interface RouteStorage {
   
   Point2D getCenter();
 
+  void setOtpDefaults(OTPRequest request);
+  
   String getPlannerUrl();
   /**
    * Return the original web URL for the route at the route provider's web site.

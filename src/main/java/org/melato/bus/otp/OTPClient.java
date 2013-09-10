@@ -88,6 +88,8 @@ public class OTPClient implements OTP.Planner {
     append(buf, "arriveBy", q.isArriveBy());
     append(buf, "mode", formatMode(q.getMode()));
     append(buf, "min", q.getMin());
+    append(buf, "maxTransfers", q.getMaxTransfers());
+    append(buf, "minTransferTime", q.getMinTransferTime());
     return buf.toString();
   }
   @Override

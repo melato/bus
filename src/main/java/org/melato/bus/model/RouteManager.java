@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.melato.bus.model.cache.RoutePointCache;
 import org.melato.bus.model.cache.ScheduleCache;
+import org.melato.bus.otp.OTPRequest;
 import org.melato.bus.plan.RouteLeg;
 import org.melato.gps.Earth;
 import org.melato.gps.GlobalDistance;
@@ -320,6 +321,9 @@ public class RouteManager {
   
   public String getPlannerUrl() {
     return storage.getPlannerUrl();
+  }
+  public void setOtpDefaults(OTPRequest request) {
+    storage.setOtpDefaults(request);
   }
 
   public Metric getMetric() {

@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.melato.bus.otp.OTPRequest;
 import org.melato.gps.Point2D;
 
 /**
@@ -68,6 +69,10 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   @Override
   public String getPlannerUrl() {
     return null;
+  }
+  
+  @Override
+  public void setOtpDefaults(OTPRequest request) {
   }
 
   private ScheduleSummary toSummary(Schedule schedule) {
