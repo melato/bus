@@ -56,7 +56,6 @@ public class OTPClient implements OTP.Planner {
   }
   
   private static String[] formatDateTime(Date date) {
-    System.out.println( "formatDateTime: " + date );
     Calendar cal = new GregorianCalendar();
     cal.setTime(date);
     String[] fields = new String[2];
