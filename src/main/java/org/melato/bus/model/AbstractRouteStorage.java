@@ -72,7 +72,7 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   }
   
   @Override
-  public void setOtpDefaults(OTPRequest request) {
+  public void applyOtpDefaults(OTPRequest request) {
   }
 
   private ScheduleSummary toSummary(Schedule schedule) {

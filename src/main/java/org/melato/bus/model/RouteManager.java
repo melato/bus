@@ -323,7 +323,7 @@ public class RouteManager {
     return storage.getPlannerUrl();
   }
   public void setOtpDefaults(OTPRequest request) {
-    storage.setOtpDefaults(request);
+    storage.applyOtpDefaults(request);
   }
 
   public Metric getMetric() {

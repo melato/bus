@@ -73,7 +73,7 @@ public interface RouteStorage {
   
   Point2D getCenter();
 
-  void setOtpDefaults(OTPRequest request);
+  void applyOtpDefaults(OTPRequest request);
   
   String getPlannerUrl();
   /**
