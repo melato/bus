@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.melato.bus.client.Formatting;
 import org.melato.bus.otp.OTP.Plan;
-import org.melato.gps.Point2D;
 import org.melato.log.Log;
 import org.melato.update.Streams;
 
@@ -63,9 +62,6 @@ public class OTPClient implements OTP.Planner {
     fields[1] = Formatting.formatTime(date);  
     return fields;
   }
-  private static String format(Point2D point) {
-    return point.getLat() + "," + point.getLon();
-  }
   private static void append(StringBuilder buf, String key, Object value) {
     if ( buf.length() > 0 ) {
       buf.append( "&");     
@@ -77,8 +73,8 @@ public class OTPClient implements OTP.Planner {
   
   public static String queryString(OTPRequest q) {
     StringBuilder buf = new StringBuilder();
-    append(buf, "fromPlace", format(q.getFromPlace()));
-    append(buf, "toPlace", format(q.getToPlace()));
+    append(buf, "fromPlace", q.getFromPlace().format());
+    append(buf, "toPlace", q.getToPlace().format());
     append(buf, "maxWalkDistance", q.getMaxWalkDistance());
     append(buf, "walkSpeed", q.getWalkSpeed());
     String[] dt = formatDateTime(q.getDate());

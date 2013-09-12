@@ -40,8 +40,8 @@ public class OTPRequest implements Serializable {
   
   public static final String OPT_TRANSFERS = "TRANSFERS";
   public static final String OPT_QUICK = "QUICK";
-  private Point2D fromPlace;
-  private Point2D toPlace;
+  private Place fromPlace;
+  private Place toPlace;
   private int minTransferTime = 300;
   private int maxTransfers = 5;
   private int maxWalkDistance = 1000;
@@ -51,6 +51,30 @@ public class OTPRequest implements Serializable {
   private List<String> mode = new ArrayList<String>();
   private String min = OPT_QUICK;
   
+  public static class Place {
+    public Point2D point;
+    public String agency;
+    public String stop;
+    
+    public Place(Point2D point) {
+      super();
+      this.point = point;
+    }    
+
+    public Place(String agency, String stop) {
+      super();
+      this.agency = agency;
+      this.stop = stop;
+    }
+
+
+    public String format() {
+      if ( agency != null && stop != null) {
+        return agency + "_" + stop;
+      }
+      return point.getLat() + "," + point.getLon();
+    }
+  }  
   public OTPRequest() {
     super();
     mode.add(TRANSIT);
@@ -68,19 +92,31 @@ public class OTPRequest implements Serializable {
   }
   public void setMin(String min) {
     this.min = min;
-  }
-  public Point2D getFromPlace() {
+  }  
+  public Place getFromPlace() {
     return fromPlace;
   }
-  public void setFromPlace(Point2D fromPlace) {
-    this.fromPlace = fromPlace;
+  public Point2D getFromPoint() {
+    return fromPlace.point;
   }
-  public Point2D getToPlace() {
+  public void setFromPlace(Place fromPlace) {
+    this.fromPlace = fromPlace;
+  }  
+  public void setFromPlace(Point2D point) {
+    this.fromPlace = new Place(point);
+  }  
+  public Place getToPlace() {
     return toPlace;
   }
-  public void setToPlace(Point2D toPlace) {
+  public Point2D getToPoint() {
+    return toPlace.point;
+  }
+  public void setToPlace(Place toPlace) {
     this.toPlace = toPlace;
   }
+  public void setToPlace(Point2D point) {
+    this.toPlace = new Place(point);
+  }  
   public int getMaxWalkDistance() {
     return maxWalkDistance;
   }

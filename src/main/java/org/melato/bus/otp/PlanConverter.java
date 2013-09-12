@@ -110,7 +110,7 @@ public class PlanConverter {
     List<Plan> plans = new ArrayList<Plan>();
     for(OTP.Itinerary it: otp.itineraries) {
       try {
-        Plan plan = convertItinerary(it, request.getFromPlace(), request.getToPlace());
+        Plan plan = convertItinerary(it, request.getFromPoint(), request.getToPoint());
         plans.add(plan);
       } catch(MismatchException e) {
         System.out.println(e);
