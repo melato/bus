@@ -42,7 +42,7 @@ public class OTPRequest implements Serializable {
   public static final String OPT_QUICK = "QUICK";
   private Place fromPlace;
   private Place toPlace;
-  private int minTransferTime = 300;
+  private int minTransferTime = 0;
   private int maxTransfers = 5;
   private int maxWalkDistance = 1000;
   private float walkSpeed = 5 / 3.6f;
@@ -51,10 +51,19 @@ public class OTPRequest implements Serializable {
   private List<String> mode = new ArrayList<String>();
   private String min = OPT_QUICK;
   
+  /**
+   * A place can be specified in one of the following ways, in order of priority:
+   * spec
+   * agency + stop
+   * point
+   * @author alex
+   *
+   */
   public static class Place {
     public Point2D point;
     public String agency;
     public String stop;
+    public String spec;
     
     public Place(Point2D point) {
       super();
@@ -67,8 +76,15 @@ public class OTPRequest implements Serializable {
       this.stop = stop;
     }
 
+    public Place(String spec) {
+      super();
+      this.spec = spec;
+    }
 
     public String format() {
+      if ( spec != null ) {
+        return spec;
+      }
       if ( agency != null && stop != null) {
         return agency + "_" + stop;
       }
