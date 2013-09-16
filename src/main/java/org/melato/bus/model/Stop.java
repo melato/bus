@@ -40,12 +40,12 @@ public class Stop extends PointTime {
   /** Stop is for dropoff only */
   public static final int FLAG_NO_PICKUP = 0x8;
   /** Stop is a station */
-  public static final int FLAG_STATION = 0x16;
-  String name;
-  String symbol;
-  int   flags;
-  int   index;
-  float deviation = 1;
+  public static final int FLAG_STATION = 0x10;
+  private String name;
+  private String symbol;
+  private int   flags;
+  private int   index;
+  private float deviation = 1;
   
   public static class IndexComparator implements Comparator<Stop> {
     @Override
