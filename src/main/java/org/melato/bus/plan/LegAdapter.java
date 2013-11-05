@@ -30,6 +30,6 @@ public interface LegAdapter {
   
   int getDiffTime();
   float getDistance();
-  boolean isWalk();
+  boolean isTransit();
   boolean hasEnd();
 }
