@@ -84,5 +84,10 @@ public class OTPLegAdapter implements LegAdapter {
   public boolean isWalk() {
     return walk != null;
   }
+
+  @Override
+  public boolean hasEnd() {
+    return true;
+  }
 }
 
