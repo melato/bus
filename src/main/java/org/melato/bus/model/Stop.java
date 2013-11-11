@@ -41,6 +41,16 @@ public class Stop extends PointTime {
   public static final int FLAG_NO_PICKUP = 0x8;
   /** Stop is a station */
   public static final int FLAG_STATION = 0x10;
+
+  /** Do we know if the stop has seating? */
+  public static final int FLAG_KNOWN_SEAT = 0x20;
+  /** Does the stop has seating? */
+  public static final int FLAG_SEAT = 0x40;
+  /** Do we know if the stop has cover? */
+  public static final int FLAG_KNOWN_COVER = 0x80;
+  /** Does the stop has cover? */
+  public static final int FLAG_COVER = 0x100;
+  
   private String name;
   private String symbol;
   private int   flags;
