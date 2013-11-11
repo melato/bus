@@ -55,7 +55,6 @@ public class Stop extends PointTime {
   private String symbol;
   private int   flags;
   private int   index;
-  private float deviation = 1;
   
   public static class IndexComparator implements Comparator<Stop> {
     @Override
@@ -115,12 +114,6 @@ public class Stop extends PointTime {
   }
   public void setSymbol(String symbol) {
     this.symbol = symbol;
-  }
-  public float getDeviation() {
-    return deviation;
-  }
-  public void setDeviation(float deviation) {
-    this.deviation = deviation;
   }
   public int getIndex() {
     return index;
