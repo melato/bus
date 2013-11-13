@@ -184,23 +184,6 @@ public class Schedule {
     return DaySchedule.findSchedule(schedules, cal.get(Calendar.DAY_OF_WEEK));
   }
   
-  public List<RouteException> getExceptions(Date date) {
-    if ( exceptions.isEmpty() ) {
-      return exceptions;
-    }
-    Calendar cal = new GregorianCalendar();
-    cal.setTime(date);
-    cal.add(Calendar.MINUTE, -dayChange); // shift the day back.
-    int bitmap = DaySchedule.dayBitmap(Calendar.DAY_OF_WEEK);
-    List<RouteException> result = new ArrayList<RouteException>();
-    for(RouteException exception: exceptions) {
-      if ( (exception.getDays() & bitmap) != 0) {
-        result.add(exception);
-      }
-    }
-    return result;
-  }
-  
   public List<RouteException> getExceptions(ScheduleId scheduleId) {
     if ( exceptions.isEmpty() ) {
       return exceptions;
