@@ -135,6 +135,10 @@ public class Schedule {
     return schedules;
   }
   
+  public void setSchedules(DaySchedule[] schedules) {
+    this.schedules = schedules;
+  }
+
   public DaySchedule getSchedule1(ScheduleId id) {
     if (id == null)
       return null;
