@@ -27,9 +27,9 @@ import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
 import org.melato.bus.model.Stop;
-import org.melato.bus.plan.RouteLeg;
 import org.melato.bus.plan.Plan;
 import org.melato.bus.plan.PlanLeg;
+import org.melato.bus.plan.RouteLeg;
 import org.melato.bus.plan.Sequence;
 import org.melato.gps.Point2D;
 

@@ -117,4 +117,9 @@ public abstract class AbstractRouteStorage implements RouteStorage {
   public String getDefaultAgencyName() {
     return null;
   }
+  
+  @Override
+  public String getProperty(String name, String defaultValue) {
+    return defaultValue;
+  }
 }

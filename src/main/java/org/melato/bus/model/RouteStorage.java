@@ -34,6 +34,7 @@ import org.melato.gps.Point2D;
  *
  */
 public interface RouteStorage {
+  public static final String PROPERTY_UPLOAD_URL = "upload_url";
   /** Load a list of all route Ids. */
   List<RouteId> loadRouteIds();
 
@@ -76,6 +77,8 @@ public interface RouteStorage {
   void applyOtpDefaults(OTPRequest request);
   
   String getPlannerUrl();
+  
+  String getProperty(String name, String defaultValue);
   /**
    * Return the original web URL for the route at the route provider's web site.
    * @param route

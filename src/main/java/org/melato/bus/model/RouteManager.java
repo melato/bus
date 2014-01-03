@@ -322,6 +322,10 @@ public class RouteManager {
   public String getPlannerUrl() {
     return storage.getPlannerUrl();
   }
+  public String getUploadUrl() {
+    return storage.getProperty(RouteStorage.PROPERTY_UPLOAD_URL, null);
+  }
+  
   public void setOtpDefaults(OTPRequest request) {
     storage.applyOtpDefaults(request);
   }

@@ -31,6 +31,7 @@ import org.melato.bus.model.RStop;
 import org.melato.bus.model.Route;
 import org.melato.bus.model.RouteId;
 import org.melato.bus.model.RouteManager;
+import org.melato.client.Serialization;
 import org.melato.gps.Earth;
 import org.melato.gps.Metric;
 import org.melato.gps.Point2D;

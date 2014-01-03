@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 
-/** A schedule maintains departure information for one route and for all days of the week. */
+/** Specifies days of the week or a specific date for a schedule. */
 public class ScheduleId implements Comparable<ScheduleId>, Serializable {
   private static final long serialVersionUID = 1L;
   private int   days;  // days is a bitmap, bit 0 = sunday, bit 6 = saturday
