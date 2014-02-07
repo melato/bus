@@ -23,12 +23,18 @@ package org.melato.bus.otp;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.melato.bus.plan.NamedPoint;
+
 
 /** Contains various classes that represent an Open Trip Planner plan */
 public class OTP {
   /** A plan is the result of an OTP query, consisting of several alternate itineraries to go from A to B. */
   public static class Plan implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** The nearest street to the start. */
+    public NamedPoint from;
+    /** The nearest street to the destination. */
+    public NamedPoint to;
     public Itinerary[] itineraries;
     public Error error;
         

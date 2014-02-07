@@ -32,6 +32,7 @@ import org.melato.bus.otp.OTP.Stop;
 import org.melato.bus.otp.OTP.TransferLeg;
 import org.melato.bus.otp.OTP.TransitLeg;
 import org.melato.bus.otp.OTP.WalkLeg;
+import org.melato.bus.plan.NamedPoint;
 
 
 /** Parses OTP plan file from JSON */
@@ -83,6 +84,13 @@ public class OTPParser {
     }
     return itinerary;
   }
+  static NamedPoint parsePlace(JSONObject json) throws JSONException {
+    NamedPoint p = new NamedPoint();
+    p.setLat((float) json.getDouble("lat"));
+    p.setLon((float) json.getDouble("lon"));
+    p.setName(json.getString("name"));
+    return p;
+  }
   static JSONObject getObject(JSONObject json, String key) throws JSONException {
     if ( json.has(key) && ! json.isNull(key)) {
       return json.getJSONObject(key);
@@ -107,6 +115,8 @@ public class OTPParser {
       JSONObject jsonPlan = getObject(json, "plan");
       if ( jsonPlan != null) {
         JSONArray jsonItineraries = jsonPlan.getJSONArray("itineraries");
+        plan.from = parsePlace(jsonPlan.getJSONObject("from"));
+        plan.to = parsePlace(jsonPlan.getJSONObject("to"));
         if ( jsonItineraries != null) {
           Itinerary[] itineraries = new Itinerary[jsonItineraries.length()];
           for( int i = 0; i < itineraries.length; i++ ) {
