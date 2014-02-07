@@ -319,6 +319,11 @@ public class RouteManager {
     return center;    
   }
   
+  /** Get the default zoom level for the covered area. */
+  public int getZoomLevel() {
+    return Integer.parseInt(storage.getProperty(RouteStorage.ZOOM_LEVEL, "10"));
+  }
+  
   public String getPlannerUrl() {
     return storage.getPlannerUrl();
   }

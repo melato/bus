@@ -35,6 +35,7 @@ import org.melato.gps.Point2D;
  */
 public interface RouteStorage {
   public static final String PROPERTY_UPLOAD_URL = "upload_url";
+  public static final String ZOOM_LEVEL = "zoom_level";
   /** Load a list of all route Ids. */
   List<RouteId> loadRouteIds();
 
