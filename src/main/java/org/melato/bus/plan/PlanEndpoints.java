@@ -42,7 +42,7 @@ public class PlanEndpoints implements Serializable {
   
   public String getName() {
     if ( origin == null && destination == null) {
-      return "*";
+      return "";
     }
     if ( origin == null ) {
       return destination.toString();
