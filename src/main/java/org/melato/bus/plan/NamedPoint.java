@@ -35,6 +35,11 @@ public class NamedPoint extends Point2D {
     this.name = name;
   }
 
+  public NamedPoint(Point2D point, String name) {
+    super(point);
+    this.name = name;
+  }
+  
   public NamedPoint(Point2D point) {
     super(point);
   }
