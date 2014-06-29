@@ -107,6 +107,11 @@ public class OTP {
     public String id;
     /** The agency id. */
     public String agencyId;
+    @Override
+    public String toString() {
+      // TODO Auto-generated method stub
+      return super.toString();
+    }
   }
   /** A transfer leg between two transit stops.  Uses walking, elevators, etc. */
   public static class TransferLeg extends Leg {
@@ -122,6 +127,8 @@ public class OTP {
     public String routeId;
     /** The short label of the route */
     public String label;
+    /** The agency id */
+    public String agencyId;
     /** The starting stop. */
     public Stop from;
     /** The end stop. */

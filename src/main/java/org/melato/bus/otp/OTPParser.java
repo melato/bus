@@ -62,6 +62,7 @@ public class OTPParser {
       TransitLeg transit = new TransitLeg();
       transit.routeId = json.getString("routeId");
       transit.label = json.getString("routeShortName");
+      transit.agencyId = json.getString("agencyId");
       transit.from = getStop(json, "from");
       transit.to = getStop(json, "to");
       leg = transit;
