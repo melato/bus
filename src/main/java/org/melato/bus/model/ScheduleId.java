@@ -140,10 +140,12 @@ public class ScheduleId implements Comparable<ScheduleId>, Serializable {
   public static String bitmapToweekdays(int days) {
     char[] buf = new char[7];
     int n = 0;
-    for( int i = 0; i < 7; i++ ) {
-      int bitmap = 1 << i;
+    // start from 1, to avoid having a 0 first, which may be discarded when importing into a spreadsheet.
+    for( int i = 1; i < 8; i++ ) {
+      int d = i % 7;
+      int bitmap = 1 << d;
       if ( ( days & bitmap) != 0 ) {
-        buf[n++] = (char) ('0' + i); 
+        buf[n++] = (char) ('0' + d); 
       }
     }
     return new String(buf, 0, n);
