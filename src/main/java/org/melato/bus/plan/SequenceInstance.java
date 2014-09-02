@@ -31,6 +31,7 @@ public class SequenceInstance {
   int startTime;
   int endTime;
   SequenceSchedule schedule;
+  /** Contains the leg time index for each level. */
   int[] levelIndexes;
   
   public SequenceInstance(SequenceSchedule schedule, int[] indexes) {
@@ -73,6 +74,10 @@ public class SequenceInstance {
     return leg;
   }    
   
+  /**Assemble the itinerary.
+   * Include alternate legs.
+   * @return 
+   */
   public SequenceItinerary getItinerary() {
     List<SequenceItinerary.Leg> legs = new ArrayList<SequenceItinerary.Leg>(); 
     LegTime previous = null;
