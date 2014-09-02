@@ -21,9 +21,6 @@
 package org.melato.bus.plan;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 
 import org.melato.bus.model.RStop;
 import org.melato.bus.model.RouteId;
@@ -78,32 +75,6 @@ public class RouteLeg implements Serializable {
     }
     return buf.toString();
   }
-  
-  /**
-   * Find legs between two stops
-   * @param routeId
-   * @param stopList
-   * @param symbol1
-   * @param symbol2
-   * @param legs
-   */
-  public static void findLegs(RouteId routeId, Collection<Stop> stopList, String symbol1, String symbol2, Collection<RouteLeg> results ) {
-    Comparator<Stop> comparator = new Stop.IndexComparator();
-    Stop[] stops = stopList.toArray(new Stop[0]);
-    Arrays.sort(stops, comparator);
-    for( int i = 0; i < stops.length; i++ ) {
-      if ( stops[i].getSymbol().equals(symbol1)) {
-        for( int j = i + 1; j < stops.length; j++ ) {
-          if ( stops[i].getSymbol().equals(symbol1)) {
-            RouteLeg leg = new RouteLeg(routeId, stops[i], stops[j]);
-            results.add(leg);
-            break;
-          }
-        }
-      }
-    }
-  }
-  
   
 }
 
