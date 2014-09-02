@@ -32,7 +32,9 @@ import org.melato.bus.model.Stop;
 public class LegGroup implements Serializable {
   private static final long serialVersionUID = 1L;
   public RouteLeg leg;
-  private RouteLeg[] equivalentLegs;
+  // required time from the previous leg, in seconds.
+  public int wait;
+  transient private RouteLeg[] equivalentLegs;
   
   public RouteLeg getLeg() {
     return leg;
@@ -62,6 +64,15 @@ public class LegGroup implements Serializable {
     leg.setStop2(stop2);
     equivalentLegs = null;
   }
+
+  public void setWait(int wait) {
+    this.wait = wait;
+  }
+
+  public int getWait() {
+    return wait;
+  }
+  
   public RStop getRStop1() {
     return leg.getRStop1();
   }
@@ -81,7 +92,11 @@ public class LegGroup implements Serializable {
   }
   @Override
   public String toString() {
-    return leg.toString();
+    String s = leg.toString();
+    if ( wait != 0 ) {
+      s += " (wait " + wait + "\")";      
+    }
+    return s;
   }
   
 }

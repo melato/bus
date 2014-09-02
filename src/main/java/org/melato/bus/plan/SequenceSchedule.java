@@ -57,6 +57,9 @@ public class SequenceSchedule {
     public int getWalkTime() {
       return walkTime;
     }
+    public int getWaitTime() {
+      return leg.wait;
+    }
     public void setWalkDistance(WalkModel walk, float distance) {
       this.walkTime = (int) walk.duration(distance);
     }    
@@ -157,6 +160,7 @@ public class SequenceSchedule {
       boolean complete = true;
       for( int i = 1; i < levels.length; i++ ) {
         time += levels[i].getWalkTime();
+        time += levels[i].getWaitTime();
         int timeIndex = levels[i].findTimeIndex(time);
         if ( timeIndex >= 0 ) {
           indexes[i] = timeIndex;
