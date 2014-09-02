@@ -43,6 +43,7 @@ public class SequenceSchedule {
     private LegGroup leg;
     private RouteLeg[] legs;
     public LegTime[] legTimes;
+    /** Start times in seconds */
     private int[] times;
     private int walkTime;
     public Level(LegGroup leg) {
@@ -63,6 +64,8 @@ public class SequenceSchedule {
     public void setWalkDistance(WalkModel walk, float distance) {
       this.walkTime = (int) walk.duration(distance);
     }    
+    
+    /** Computes all the start/end times for this leg and its equivalent legs. */
     void compute(ScheduleFactory scheduleFactory, RouteManager routeManager) {
       ProgressGenerator progress = ProgressGenerator.get();
       Route route = routeManager.getRoute(leg.getLeg().getRouteId());
@@ -70,13 +73,14 @@ public class SequenceSchedule {
       legs = leg.getEquivalentLegs(routeManager);
       List<LegTime> timeList = new ArrayList<LegTime>();
       for(int i = 0; i < legs.length; i++ ) {
-        RouteLeg leg = legs[i];
-        Schedule schedule = routeManager.getSchedule(leg.getRouteId());
+        RouteLeg routeLeg = legs[i];
+        Schedule schedule = routeManager.getSchedule(routeLeg.getRouteId());
         DaySchedule daySchedule = scheduleFactory.getSchedule(schedule);
         if ( daySchedule != null) {
-          int[] times = daySchedule.getTimes();
-          for( int time: times ) {
-            LegTime legTime = new LegTime(leg, time, routeManager);
+          int[] scheduleTimes = daySchedule.getTimes();
+          for( int time: scheduleTimes ) {
+            LegTime legTime = new LegTime(routeLeg, time, routeManager);
+            //legTime.setLeadTime(leg.getWait());            
             timeList.add(legTime);
           }
         }
@@ -146,6 +150,7 @@ public class SequenceSchedule {
     return getTimePosition(Schedule.getTime(date));
   }  
   
+  /** Assembles individual leg times into sequence instances */
   private List<SequenceInstance> createInstances(Level[] levels) {
     List<SequenceInstance> instances = new ArrayList<SequenceInstance>();
     if ( levels.length == 0 )
@@ -166,7 +171,6 @@ public class SequenceSchedule {
           indexes[i] = timeIndex;
           LegTime leg = levels[i].legTimes[timeIndex];
           time = leg.getTime2();
-          //System.out.println( leg);
         } else {
           complete = false;
           break;
