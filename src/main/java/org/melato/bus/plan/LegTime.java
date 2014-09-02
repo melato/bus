@@ -30,7 +30,7 @@ public class LegTime implements Comparable<LegTime>, Serializable {
   private static final long serialVersionUID = 1L;
   public RouteLeg leg;
   /** This is the scheduled time that the route starts from its starting point, in minutes. */
-  int     time;
+  private int     time;
   /** Whether this is the last leg or not.  Provided as a convenience to a list display. */
   public boolean last;
   public LegTime(RouteLeg leg, int time, RouteManager routeManager) {
@@ -60,10 +60,6 @@ public class LegTime implements Comparable<LegTime>, Serializable {
     
   public RouteLeg getLeg() {
     return leg;
-  }
-
-  public int getTime() {
-    return time;
   }
 
   @Override
