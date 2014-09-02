@@ -29,14 +29,14 @@ import org.melato.bus.model.Schedule;
 public class LegTime implements Comparable<LegTime>, Serializable {
   private static final long serialVersionUID = 1L;
   public RouteLeg leg;
-  /** This is the scheduled time that the route starts from its starting point, in minutes. */
+  /** This is the scheduled time that the route starts from its starting point, in seconds. */
   private int     time;
   /** Whether this is the last leg or not.  Provided as a convenience to a list display. */
   public boolean last;
   public LegTime(RouteLeg leg, int time, RouteManager routeManager) {
     super();
     this.leg = leg;
-    this.time = time;
+    this.time = time * 60;
   }
       
   @Override
@@ -46,13 +46,13 @@ public class LegTime implements Comparable<LegTime>, Serializable {
 
   /** Seconds from midnight */
   int getTime1() {
-    return time * 60 + leg.getStop1().getSecondsFromStart();
+    return time + leg.getStop1().getSecondsFromStart();
   }
   
   /** Seconds from midnight */
   int getTime2() {
     if ( leg.getStop2() != null) {
-      return time * 60 + leg.getStop2().getSecondsFromStart();
+      return time + leg.getStop2().getSecondsFromStart();
     } else {
       return getTime1();
     }
