@@ -35,19 +35,19 @@ import org.melato.update.Streams;
  * */
 public class OTPClient implements OTP.Planner {
   private String url;
-    
-  private static String formatMode(List<String> modes) {
+
+  private static String joinComma(List<String> strings) {
     StringBuilder buf = new StringBuilder();
-    int size = modes.size();
+    int size = strings.size();
     for( int i = 0; i < size; i++ ) {
       if ( i > 0 ) {
         buf.append(",");        
       }
-      buf.append(modes.get(i));
+      buf.append(strings.get(i));
     }
     return buf.toString();
   }
-    
+  
   public OTPClient(String url) {
     super();
     this.url = url;
@@ -69,6 +69,11 @@ public class OTPClient implements OTP.Planner {
     buf.append("=");
     buf.append( String.valueOf(value));
   }
+  private static void appendList(StringBuilder buf, String key, List<String> strings, boolean includeEmpty) {
+    if ( strings.size() > 0 || includeEmpty ) {
+      append(buf, key, joinComma(strings));
+    }
+  }
   
   public static String queryString(OTPRequest q) {
     StringBuilder buf = new StringBuilder();
@@ -80,10 +85,12 @@ public class OTPClient implements OTP.Planner {
     append(buf, "time", dt[1]);
     append(buf, "date", dt[0]);
     append(buf, "arriveBy", q.isArriveBy());
-    append(buf, "mode", formatMode(q.getMode()));
+    appendList(buf, "mode", q.getMode(), true);
     append(buf, "min", q.getMin());
     append(buf, "maxTransfers", q.getMaxTransfers());
     append(buf, "minTransferTime", q.getMinTransferTime());
+    appendList(buf, "bannedRoutes", q.getBannedRoutes(), false);
+    appendList(buf, "bannedAgencies", q.getBannedAgencies(), false);
     return buf.toString();
   }
   @Override

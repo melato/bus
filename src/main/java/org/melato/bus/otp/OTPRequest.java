@@ -49,6 +49,8 @@ public class OTPRequest implements Serializable {
   private Date date = new Date();
   private boolean arriveBy;
   private List<String> mode = new ArrayList<String>();
+  private List<String> bannedRoutes = new ArrayList<String>();
+  private List<String> bannedAgencies = new ArrayList<String>();
   private String min = OPT_QUICK;
   
   /**
@@ -165,6 +167,12 @@ public class OTPRequest implements Serializable {
   }  
   public int getMaxTransfers() {
     return maxTransfers;
+  }
+  public List<String> getBannedRoutes() {
+    return bannedRoutes;
+  }
+  public List<String> getBannedAgencies() {
+    return bannedAgencies;
   }
   public void setMaxTransfers(int maxTransfers) {
     this.maxTransfers = maxTransfers;
