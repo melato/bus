@@ -29,7 +29,6 @@ public class GpsRectangle implements Cloneable {
   public float lonMin;
   /** The maximum displayed longitude */
   public float lonMax;
-  /** The routes currently displayed. */
   @Override
   public GpsRectangle clone() {
     try {
