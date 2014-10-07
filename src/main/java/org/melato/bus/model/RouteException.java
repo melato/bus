@@ -23,7 +23,7 @@ package org.melato.bus.model;
 /** A textual note about specific times of a route's schedule.
  * An exception may note a deviation from the published itinarary.
  * */
-public class RouteException {
+public class RouteException implements Cloneable {
   /** The text of the exception. */
   private String  note;
   /** The days bitmap of the exception. */
@@ -52,5 +52,15 @@ public class RouteException {
   @Override
   public String toString() {
     return note;
+  }
+  public RouteException clone() {
+    RouteException exception;
+    try {
+      exception = (RouteException) super.clone();
+      exception.times = exception.times.clone();
+      return exception;
+    } catch (CloneNotSupportedException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }
